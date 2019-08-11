@@ -1,0 +1,53 @@
+{
+    "0": {
+        "picture": "..............",
+        "name": "Quang Trung",
+        "address": "xxxxxxxxx",
+        "phone": "xxxxxxx",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    },
+    "1": {
+        "name": "Quang Trung",
+        "address": "xxxxxxxxx",
+        "phone": "xxxxxxx",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    },
+    "2": {
+        "name": "Quang Trung",
+        "address": "xxxxxxxxx",
+        "phone": "xxxxxxx",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    },
+    "3": {
+        "name": "Quang Trung",
+        "address": "xxxxxxxxx",
+        "phone": "xxxxxxx",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    },
+    "4": {
+        "name": "Quang Trung",
+        "address": "xxxxxxxxx",
+        "phone": "xxxxxxx",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    }
+}

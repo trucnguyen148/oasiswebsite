@@ -1,0 +1,102 @@
+{
+    "0": {
+        "title": "Lead Created",
+        "numberCard": "2", 
+        "numberAutomation": "0",
+        "email": "xxx@gmail.com",
+        "workflows": {
+            "0": {
+                "name": "Dan Smith", 
+                "task": {
+                    "0": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    },
+                    "1": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    }
+                }
+            },
+            "1": {
+                "name": "Dan Smith", 
+                "task": {
+                    "0": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    },
+                    "1": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    }
+                }
+            }
+        } 
+    },
+    "1": {
+        "title": "Contacted",
+        "numberCard": "2", 
+        "numberAutomation": "0",
+        "workflows": {
+            "0": {
+                "name": "Dan Smith", 
+                "task": {
+                    "0": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    },
+                    "1": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    }
+                }
+            },
+            "1": {
+                "name": "Dan Smith", 
+                "task": {
+                    "0": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    },
+                    "1": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    }
+                }
+            }
+        } 
+    },
+    "2": {
+        "title": "Price Quote Sent",
+        "numberCard": "2", 
+        "numberAutomation": "0",
+        "workflows": {
+            "0": {
+                "name": "Dan Smith", 
+                "task": {
+                    "0": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    },
+                    "1": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    }
+                }
+            },
+            "1": {
+                "name": "Dan Smith", 
+                "task": {
+                    "0": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    },
+                    "1": {
+                        "content":"Send a coupon to Kat for being such a great customer",
+                        "assigned": "Dai Trang"
+                    }
+                }
+            }
+        }
+    } 
+}

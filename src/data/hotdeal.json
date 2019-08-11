@@ -1,0 +1,26 @@
+{
+    "0": {
+        "picture": "Nguyen Thao Trang",
+        "description": "xxx@oasis.vn",
+        "discount": "buy 2 get 1",
+        "level": "diamond",
+        "startDate": "20-01-2019",
+        "endDate": "30-12-2019"
+    },
+    "1": {
+        "picture": "Nguyen Thao Trang",
+        "description": "xxx@oasis.vn",
+        "discount": "buy 2 get 1",
+        "level": "diamond",
+        "startDate": "20-01-2019",
+        "endDate": "30-12-2019"
+    },
+    "2": {
+        "picture": "Nguyen Thao Trang",
+        "description": "xxx@oasis.vn",
+        "discount": "buy 2 get 1",
+        "level": "diamond",
+        "startDate": "20-01-2019",
+        "endDate": "30-12-2019"
+    }
+}

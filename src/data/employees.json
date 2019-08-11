@@ -1,0 +1,29 @@
+{
+    "0": {
+        "name": "Ngoc Hoang",
+        "email": "xxxxxx@oasis.vn",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    },
+    "1": {
+        "name": "Ngoc Hoang",
+        "email": "xxxxxx@oasis.vn",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    },
+    "2": {
+        "name": "Ngoc Hoang",
+        "email": "xxxxxx@oasis.vn",
+        "staffemails": [
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"},
+            {"name": "Ngoc Nga", "email": "ngocnga@oasis.vn"}
+        ]
+    }
+}

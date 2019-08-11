@@ -1,0 +1,48 @@
+{
+    "0": {
+        "picture": "...............................",
+        "name": "Loremp", 
+        "email": "xxx@oasis.vn",
+        "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
+        "phone": "044 xxx xxxx",
+        "waitingbooking": {
+            "0": {"time": "08:00", "person": "Nguyen Truong An"},
+            "1": {"time": "08:00", "person": "Nguyen Truong An"}
+        },
+        "workflow": {
+            "0": {"task": "Send a price quote to Dan"},
+            "1": {"task": "Send a coupon to Kat for being such a great customer"}
+        }
+        
+    },
+    "1": {
+        "picture": "...............................",
+        "name": "Loremp", 
+        "email": "xxx@oasis.vn",
+        "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
+        "phone": "044 xxx xxxx"   ,
+        "waitingbooking": {
+            "0": {"time": "08:00", "person": "Nguyen Truong An"},
+            "1": {"time": "08:00", "person": "Nguyen Truong An"}
+        },
+        "workflow": {
+            "0": {"task": "Send a price quote to Dan"},
+            "1": {"task": "Send a coupon to Kat for being such a great customer"}
+        }
+    },
+    "2": {
+        "picture": "...............................",
+        "name": "Loremp", 
+        "email": "xxx@oasis.vn",
+        "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
+        "phone": "044 xxx xxxx",
+        "waitingbooking": {
+            "0": {"time": "08:00", "person": "Nguyen Truong An"},
+            "1": {"time": "08:00", "person": "Nguyen Truong An"}
+        },
+        "workflow": {
+            "0": {"task": "Send a price quote to Dan"},
+            "1": {"task": "Send a coupon to Kat for being such a great customer"}
+        }   
+    }
+}

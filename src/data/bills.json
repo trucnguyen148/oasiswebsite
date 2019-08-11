@@ -1,0 +1,83 @@
+{
+    "0": {
+        "picture": "xxxxxx",
+        "customer_name": "Loremp", 
+        "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
+        "phone": "044 xxx xxxx",
+        "email": "xxx@oasis.vn",
+        "bills": {
+            "0": {
+                "bill_id": "xxxxxxx1",
+                "date": "20 April 2019",
+                "branch": "Quang Trung",
+                "used_services": {
+                    "0": {
+                        "name": "Nails",
+                        "price": "20e"
+                    }
+                },
+                "bought_products": {
+                    "0": {
+                        "name": "OPI orange",
+                        "quantity": "2",
+                        "price": "20e"
+                    }
+                }
+            }
+        }
+    },
+    "1": {
+        "picture": "xxxxxx",
+        "customer_name": "Loremp", 
+        "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
+        "phone": "044 xxx xxxx",
+        "email": "xxx@oasis.vn",
+        "bills": {
+            "0": {
+                "bill_id": "xxxxxxx1",
+                "date": "20 April 2019",
+                "branch": "Quang Trung",
+                "used_services": {
+                    "0": {
+                        "name": "Nails",
+                        "price": "20e"
+                    }
+                },
+                "bought_products": {
+                    "0": {
+                        "name": "OPI orange",
+                        "quantity": "2",
+                        "price": "20e"
+                    }
+                }
+            }
+        }
+    },
+    "2": {
+        "picture": "xxxxxx",
+        "customer_name": "Loremp", 
+        "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
+        "phone": "044 xxx xxxx",
+        "email": "xxx@oasis.vn",
+        "bills": {
+            "0": {
+                "bill_id": "xxxxxxx1",
+                "date": "20 April 2019",
+                "branch": "Quang Trung",
+                "used_services": {
+                    "0": {
+                        "name": "Nails",
+                        "price": "20e"
+                    }
+                },
+                "bought_products": {
+                    "0": {
+                        "name": "OPI orange",
+                        "quantity": "2",
+                        "price": "20e"
+                    }
+                }
+            }
+        }
+    }
+}
