@@ -127,13 +127,9 @@
                     </md-field>
                 </div>
                 <!-- Button -->
-                <div class="middle">
-                    <md-button class="md-round md-success">
-                    GO TO STAFF
-                    </md-button>
-                    <md-button class="md-round md-success">
-                        GO TO PAYMENT
-                    </md-button>
+                <div class="ui button biggersize middle samerow">
+                    <sui-button         data-background-color="pink" positive @click.native="toggle"  >Go to Staff</sui-button>
+                    <sui-button         data-background-color="pink" positive @click.native="toggle"  >Go to Payment</sui-button>
                 </div>
                 
             </div>

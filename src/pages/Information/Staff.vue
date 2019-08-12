@@ -106,12 +106,11 @@
                             </div>
                         </sui-modal-content>
                         <sui-modal-actions>
-                            <sui-button positive @click.native="toggle" >
-                            Add
+                            <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">Add
                             </sui-button>
                         </sui-modal-actions>
                     </sui-modal>
-                        <div class="md-layout-item md-size-100">
+                    <div class="md-layout-item md-size-100">
                         <md-field>
                             <md-table md-card>
                                 <md-table-row
@@ -124,7 +123,7 @@
                                 >
                                     <md-table-cell md-label="Picture">{{data.picture}}</md-table-cell>
                                     <md-table-cell md-label="Name">{{data.name}}</md-table-cell>
-                                    <md-table-cell md-label="Address" >{{data.address}}</md-table-cell>
+                                    <md-table-cell md-label="Address" >{{data.addßress}}</md-table-cell>
                                     <md-table-cell md-label="Phone number" >{{data.phone}}</md-table-cell>
                                     <md-table-cell md-label="remove" class="edit_button" >
                                         <sui-button>

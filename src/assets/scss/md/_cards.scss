@@ -91,6 +91,9 @@
         
         color: black;
     }
+    .fitcontent{
+        width: 50%;
+    }
 
     .md-card-header{
         @include shadow-big();

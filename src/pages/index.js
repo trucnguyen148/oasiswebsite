@@ -52,8 +52,7 @@ import AddUser from "../pages/CRM/UserProfiles/AddUser.vue";
 export { UserCard, AddUser };
 
 // CRM - Workflows
-import Information from "../pages/CRM/Workflows/Information.vue";
-import TasksReminders from "../pages/CRM/Workflows/TasksReminders.vue";
+
 import Chat from "../pages/CRM/Workflows/Chat.vue";
 
-export { Information, TasksReminders, Chat };
+export { Chat };

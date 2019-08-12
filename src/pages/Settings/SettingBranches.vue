@@ -7,30 +7,28 @@
           <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle" /></sui-button>      
       </div>
       <sui-modal v-model="open">
-      <sui-modal-header class="form-header" >Add new email</sui-modal-header>
-      <sui-modal-content image>
-          <div class="md-layout">
-              <!-- Name -->
-            <div class="md-layout-item md-size-100">
-              <md-field>
-              <label>Staff</label>
-              <md-input v-model="staff" type="text" required></md-input>
-              </md-field>
+        <sui-modal-header class="form-header" >Add new email</sui-modal-header>
+        <sui-modal-content image>
+            <div class="md-layout">
+                <!-- Name -->
+              <div class="md-layout-item md-size-100">
+                <md-field>
+                  <label>Staff</label>
+                  <md-input v-model="staff" type="text" required></md-input>
+                </md-field>
+              </div>
+              <!-- Email -->
+              <div class="md-layout-item md-size-100">
+                <md-field>
+                  <label>Email Address</label>
+                  <md-input v-model="emailadress" type="email"></md-input>
+                </md-field>
+              </div>
             </div>
-            <!-- Email -->
-            <div class="md-layout-item md-size-100">
-              <md-field>
-              <label>Email Address</label>
-              <md-input v-model="emailadress" type="email"></md-input>
-              </md-field>
-            </div>
-          </div>
-      </sui-modal-content>
-      <sui-modal-actions>
-          <sui-button positive @click.native="toggle" >
-          Add
-          </sui-button>
-      </sui-modal-actions>
+        </sui-modal-content>
+        <sui-modal-actions>
+            <sui-button         data-background-color="pink" positive @click.native="toggleDetails"  class="ui button size middle space">Add</sui-button>
+        </sui-modal-actions>
       </sui-modal>
       <!-- Show after add -->
       <div class="md-layout-item md-size-100 md-size-50">

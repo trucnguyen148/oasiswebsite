@@ -1,17 +1,17 @@
 <template>
     <div class="content">
         <div class="md-layout">
-            <div class="md-layout-item md-size-100" style="display: flex; flex-direction: row; align-items: baseline">
+            <div class="md-layout-item md-small-size-100" style="display: flex; flex-direction: row; align-items: baseline">
                 <h3>Workflows:</h3>
                 <md-field class="md-layout-item md-small-size-100 md-size-30">
                     <md-input />
                 </md-field>
-                <md-button >New</md-button>
+                <sui-button class="md-layout-item md-small-size-100 md-size-5"><font-awesome-icon icon="plus-circle"/></sui-button>
             </div>
         </div>
         <p>Manage your sales, leads and contacts at a glance.</p>
         <!-- Workflow cards -->
-        <sui-card-group :items-per-row="3">
+        <sui-card-group :items-per-row="4">
             <sui-card style="padding: 2rem 1rem" v-for="data in myJson"
             v-bind:key="data.title"
             v-bind:title="data.title"
@@ -25,7 +25,7 @@
                         <h4>{{data.title}}</h4>
                         <p>{{data.numberCard}} Cards | {{data.numberAutomation}} Automation</p>
                     </div>
-                    <div style="float: right">
+                    <div >
                         <sui-dropdown
                             button
                             icon="ellipsis horizontal"
@@ -62,77 +62,77 @@
                         </sui-dropdown>
                     </div>
                 </div>
-                <div style="margin-left: auto; margin-right: auto; margin-top: 2rem">
-                <sui-card style="border: 2px solid pink">
-                    <sui-button icon="plus" v-on:click="toggleAddWorkFlow">Add</sui-button>
-                </sui-card>
-                <sui-card>
-                    <sui-button 
-                        @click.prevent="toggleDetails"
-                        style="display: flex; flex-direction: row; padding: 1.5rem">
-                        <div style="margin-right: 1rem">
-                            <sui-image size="mini" :src="email" />
-                        </div>
-                        <div>
-                            <h4>
-                                {{data.workflows[0].name}}
-                            </h4>
-                            <sui-card-meta>Via Contact</sui-card-meta>
-                        </div>
-                        <div style="float: right">
-                            <sui-dropdown
-                                button
-                                icon="ellipsis horizontal"
-                                floating
-                            >
-                                <sui-dropdown-menu>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                            Rename Card
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                            View Contact
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                    <sui-dropdown-divider/>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                            Add Task
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                        Send Message
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                            Send Price Quote
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                            Send Invoice
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                            Move to next card
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                    <sui-dropdown-divider/>
-                                    <sui-button>
-                                        <sui-dropdown-item>
-                                            Archive Card
-                                        </sui-dropdown-item>
-                                    </sui-button>
-                                </sui-dropdown-menu>
-                            </sui-dropdown>
-                        </div>
-                    </sui-button>
-                </sui-card>
+                <div class="space md-layout-item md-size-100">
+                    <sui-card style="border: 2px solid pink; margin-left: auto; margin-right: auto">
+                        <sui-button icon="plus" v-on:click="toggleAddWorkFlow">Add</sui-button>
+                    </sui-card>
+                    <sui-card style="margin-left: auto; margin-right: auto">
+                        <sui-button 
+                            @click.prevent="toggleDetails"
+                            style="display: flex; flex-direction: row; padding: 1.5rem">
+                            <div style="margin-right: 1rem">
+                                <sui-image size="mini" :src="email" />
+                            </div>
+                            <div>
+                                <h4>
+                                    {{data.workflows[0].name}}
+                                </h4>
+                                <sui-card-meta>Via Contact</sui-card-meta>
+                            </div>
+                            <div style="float: right">
+                                <sui-dropdown
+                                    button
+                                    icon="ellipsis horizontal"
+                                    floating
+                                >
+                                    <sui-dropdown-menu>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                                Rename Card
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                                View Contact
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                        <sui-dropdown-divider/>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                                Add Task
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                            Send Message
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                                Send Price Quote
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                                Send Invoice
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                                Move to next card
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                        <sui-dropdown-divider/>
+                                        <sui-button>
+                                            <sui-dropdown-item>
+                                                Archive Card
+                                            </sui-dropdown-item>
+                                        </sui-button>
+                                    </sui-dropdown-menu>
+                                </sui-dropdown>
+                            </div>
+                        </sui-button>
+                    </sui-card>
                 </div>
                 <!-- Open Add work flow -->
                 <sui-modal v-model="openWorkFlow">
@@ -164,11 +164,11 @@
                                     />
                                 </sui-grid-column>
                             </sui-grid-row>
-                            <div style="float: right">
-                                <sui-button style="background-color: pink">Save</sui-button>
-                            </div>
                         </sui-grid>
                     </sui-modal-content>
+                    <sui-modal-actions>
+                       <sui-button         data-background-color="pink" positive @click.native="toggleAddWorkFlow"  class="ui button size middle">Add</sui-button>
+                    </sui-modal-actions>
                 </sui-modal>
                 <!-- Open details: information, tasks and reminds and chatbox -->
                 <sui-modal v-model="openDetails">
@@ -182,8 +182,8 @@
                             </h3>
                         </div>
                     </sui-modal-header>
-                    
                     <sui-tab style="margin: 2rem"  :menu="{ secondary: true }">
+                        <!-- Information -->
                         <sui-tab-pane title="Information" icon="users">
                             <div>
                                 <sui-header>
@@ -216,41 +216,51 @@
                                 <sui-header>
                                     Labels
                                 </sui-header>
-                                <sui-dropdown
+                                <sui-content>
+                                    <sui-dropdown
                                     fluid
                                     multiple
                                     selection
                                     :options="labels"
                                     v-model="current"
                                     style="margin-top: 2.5rem"
-                                />
+                                    />
+                                </sui-content>
                             </div>
                             <sui-divider/>
                             <div>
                                 <sui-header>Attachment</sui-header>
-                                <div class="md-layout-item md-size-100">
-                                <md-field>
-                                    <md-file v-model="single" accept="image/*" required/>
-                                </md-field>
-                            </div>
+                                <sui-content>
+                                    <div class="md-layout-item md-size-100">
+                                        <md-field>
+                                            <md-file v-model="single" accept="image/*" required/>
+                                        </md-field>
+                                    </div>
+                                </sui-content>
+                                <sui-modal-actions>
+                                    <sui-button         data-background-color="pink" positive @click.native="toggleDetails"  class="ui button size middle">Add</sui-button>
+                                </sui-modal-actions>
                             </div>
                         </sui-tab-pane>
+                        <!-- Tasks and Reminders -->
                         <sui-tab-pane title="Tasks and Reminders" icon="inbox">
                             <div>
                                 <sui-header>
                                     Tasks and Reminders
                                 </sui-header>
-                                <div class="setting">
-                                    <p style="margin: 0 2rem 0 3rem"> Add </p>  
-                                    <sui-button v-on:click="toggleAddTask"><font-awesome-icon icon="plus-circle" /></sui-button>
-                                </div>
-                                <div v-if="openAddTask">
-                                    <div style="display: flex; align-items: center">
+                                <sui-content>
+                                    <div class="setting">
+                                        <p style="margin: 0 2rem 0 3rem"> Add </p>  
+                                        <sui-button v-on:click="toggleAddTask"><font-awesome-icon icon="plus-circle" /></sui-button>
+                                    </div>
+                                    <div v-if="openAddTask">
+                                        <div style="display: flex; align-items: center">
                                         <sui-checkbox value="..." style="margin-right: 1rem"/>
                                         <sui-input 
                                             v-model="name" 
                                             type="text"
-                                            required></sui-input>
+                                            required>
+                                        </sui-input>
                                     </div>
                                     <div class="samerow md-layout-item" style="margin-top: 1rem">
                                         <p>Assign to Contributor</p>
@@ -262,9 +272,11 @@
                                             v-model="current"
                                             style="width: 40%; margin-left: 1rem"
                                         />
+                                        </div>
+                                        <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle space">Add</sui-button>
                                     </div>
-                                    <sui-button >Done</sui-button>
-                                </div>
+                                </sui-content>
+                                
                                 <!-- Show after add tasks -->
                                 <sui-card style="padding: 2rem" class="md-layout-item md-size-100">
                                     <div style="display: flex; align-items: center">
@@ -283,6 +295,9 @@
                                         <p>{{data.workflows[0].task[0].content}} - Assign to Contributor: {{data.workflows[0].task[0].assigned}}</p>
                                     </div>
                             </div>
+                            <sui-modal-actions>
+                                <sui-button         data-background-color="pink" positive @click.native="toggleDetails"  class="ui button size middle space">Add</sui-button>
+                            </sui-modal-actions>
                         </sui-tab-pane>
                         <!-- Chat -->
                         <sui-tab-pane title="Chat" icon="magic">
@@ -290,10 +305,7 @@
                         </sui-tab-pane>
                     </sui-tab>
                 </sui-modal>
-
-                
             </sui-card>
-            
         </sui-card-group>
     </div>
 </template>

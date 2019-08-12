@@ -26,7 +26,7 @@
                         </div>
                     </sui-modal-content>
                     <sui-modal-actions>
-                        <sui-button positive @click.native="toggle" >
+                        <sui-button data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">
                         Add
                         </sui-button>
                     </sui-modal-actions>

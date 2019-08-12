@@ -82,7 +82,7 @@
                         </div>
                     </sui-modal-content>
                     <sui-modal-actions>
-                        <sui-button data-background-color="purple" positive @click.native="toggle" >
+                        <sui-button data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">
                         Create
                         </sui-button>
                     </sui-modal-actions>
