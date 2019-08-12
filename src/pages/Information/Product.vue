@@ -10,20 +10,16 @@
                 <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle"/></sui-button>
                 <sui-modal v-model="open">
                     <sui-modal-header class="form-header" >Add new categories</sui-modal-header>
-                    <sui-modal-content image>
-                        <div class="md-layout">
-                                <!-- Name -->
-                            <div class="md-layout-item md-size-100">
-                                <md-field>
-                                    <label>Name</label>
-                                    <md-input 
-                                        v-model="name" 
-                                        type="text"
-                                        required>
-                                    </md-input>
-                                </md-field>
-                            </div>
-                        </div>
+                    <sui-modal-content>
+                        <!-- Name -->
+                            <md-field>
+                                <label> Name </label>
+                                <md-input 
+                                    v-model="name" 
+                                    type="text"
+                                    required>
+                                </md-input>
+                            </md-field>
                     </sui-modal-content>
                     <sui-modal-actions>
                         <sui-button data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">
@@ -32,7 +28,6 @@
                     </sui-modal-actions>
                 </sui-modal>
             </div>
-
             <!-- Show after add PRODUCTS-->
             <detail></detail>
             <testing></testing>

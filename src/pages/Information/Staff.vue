@@ -18,7 +18,7 @@
                     </div>
                     <sui-modal v-model="open">
                         <sui-modal-header class="form-header" >Add new staff</sui-modal-header>
-                        <sui-modal-content image>
+                        <sui-modal-content>
                             <div class="md-layout">
                                     <!-- Name -->
                                 <div class="md-layout-item md-smal-size-100 md-size-50">
@@ -63,7 +63,7 @@
                                 <!-- Address -->
                                 <div class="md-layout-item md-small-size-100 md-size-100">
                                     <md-field>
-                                    <label>Adress</label>
+                                    <label>Address</label>
                                     <md-input v-model="address" type="text"></md-input>
                                     </md-field>
                                 </div>
@@ -98,7 +98,7 @@
                                             placeholder="Select service"
                                             selection
                                             :options="service"
-                                            v-model="current"
+                                            v-model="service"
                                             style="margin-top: 2.5rem"
                                         />
                                     </md-field>

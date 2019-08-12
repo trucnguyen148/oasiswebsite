@@ -21,7 +21,7 @@
                             </md-field>
                         </div>
                         <!-- Name -->
-                        <div class="md-layout-item md-smal-size-100 md-size-50">
+                        <div class="md-layout-item md-size-100">
                             <md-field>
                             <label>Name</label>
                             <md-input 

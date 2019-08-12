@@ -11,29 +11,27 @@
                         <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle" /></sui-button>
                         <sui-modal v-model="open">
                             <sui-modal-header class="form-header" >Add new service</sui-modal-header>
-                            <sui-modal-content image>
-                                <div class="md-layout">
-                                    <!-- Name -->
-                                    <div class="md-layout-item md-smal-size-100 md-size-50">
-                                        <md-field>
-                                        <label>Name</label>
-                                        <md-input 
-                                        v-model="name" 
-                                        type="text"
-                                        required></md-input>
-                                        </md-field>
-                                    </div>
-                                    <!-- Descriptions -->
-                                    <div class="md-layout-item md-size-100">
-                                        <md-field>
-                                            <label>Descriptions</label>
-                                            <md-textarea 
-                                                v-model="autogrow" 
-                                                md-autogrow 
-                                                md-counter="250" 
-                                                required></md-textarea>
-                                        </md-field>
-                                    </div>
+                            <sui-modal-content >
+                                <!-- Name -->
+                                <div class="md-layout-item md-size-100">
+                                    <md-field>
+                                    <label>Name</label>
+                                    <md-input 
+                                    v-model="name" 
+                                    type="text"
+                                    required></md-input>
+                                    </md-field>
+                                </div>
+                                <!-- Descriptions -->
+                                <div class="md-layout-item md-size-100">
+                                    <md-field>
+                                        <label>Descriptions</label>
+                                        <md-textarea 
+                                            v-model="autogrow" 
+                                            md-autogrow 
+                                            md-counter="250" 
+                                            required></md-textarea>
+                                    </md-field>
                                 </div>
                             </sui-modal-content>
                             <sui-modal-actions>
@@ -113,7 +111,7 @@
                                 </div>
                             </sui-modal-content>
                             <sui-modal-actions>
-                                <sui-button data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">Add</sui-button>
+                                <sui-button data-background-color="pink" positive @click.native="toggleService"  class="ui button size middle">Add</sui-button>
                             </sui-modal-actions>
                         </sui-modal>
                         <div class="md-layout-item md-size-100">

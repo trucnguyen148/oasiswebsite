@@ -8,8 +8,7 @@
                 <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle" /></sui-button>
                 <sui-modal v-model="open">
                     <sui-modal-header class="form-header" >Add new collection</sui-modal-header>
-                    <sui-modal-content image>
-                        <div class="md-layout">
+                    <sui-modal-content>
                             <!-- Name -->
                             <div class="md-layout-item md-size-100">
                                 <md-field>
@@ -38,7 +37,6 @@
                                     <md-file v-model="multiple" multiple accept="image/*" required/>
                                 </md-field>
                             </div>
-                        </div>
                     </sui-modal-content>
                     <sui-modal-actions>
                        <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">Add</sui-button>

@@ -9,21 +9,16 @@
                 <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle" /></sui-button>
                 <sui-modal v-model="open">
                     <sui-modal-header class="form-header" >Add new working time</sui-modal-header>
-                    <sui-modal-content image>
-                        <div class="md-layout">
-                            <!-- Working time -->
-                            <div class="md-layout-item md-size-100">
-                                <md-field>
-                                <label>Working Time</label>
-                                <md-input 
-                                v-model="workingTime" 
-                                type="text"
-                                required></md-input>
-                                </md-field>
-                            </div>
-                            
-                        </div>
-                    </sui-modal-content>
+                    <sui-modal-content>
+                        <!-- Working time -->
+                        <md-field>
+                            <label>Working Time</label>
+                            <md-input 
+                            v-model="workingTime" 
+                            type="text"
+                            required></md-input>
+                        </md-field>
+                </sui-modal-content>
                     <sui-modal-actions>
                         <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">Add</sui-button>
                     </sui-modal-actions>
@@ -73,7 +68,7 @@
                         </div>
                     </sui-modal-content>
                     <sui-modal-actions>
-                        <sui-button positive @click.native="toggle">Change</sui-button>
+                        <sui-button positive @click.native="toggleEdit">Change</sui-button>
                     </sui-modal-actions>
                 </sui-modal>
                 
