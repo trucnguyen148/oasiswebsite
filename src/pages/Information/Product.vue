@@ -35,7 +35,7 @@
 
             <!-- Show after add PRODUCTS-->
             <detail></detail>
-            <testing></testing>
+            
         </md-card-content>
         
     </md-card>
@@ -43,16 +43,16 @@
 </template>
 <script>
 
-import {Detail,Testing} from "@/pages";
+import {Detail} from "@/pages";
 
 export default {
-    components:{
+    components: {
         Detail
     },
     name: "product",
-        data(){
+    data(){
         return{
-            open: false
+            open: false,
         };
     },
     methods: {
@@ -60,7 +60,6 @@ export default {
         this.open = !this.open;
         },
     }
-    
 }
 </script>
 

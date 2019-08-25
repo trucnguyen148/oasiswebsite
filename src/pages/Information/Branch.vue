@@ -11,7 +11,7 @@
                     <sui-modal-header class="form-header" >Add new branch</sui-modal-header>
                     <sui-modal-content image>
                         <div class="md-layout">
-                            <!-- Name -->
+                        <!-- Name -->
                         <div class="md-layout-item md-size-100">
                             <md-field>
                             <label>Name</label>
@@ -90,52 +90,60 @@
             </div>
             <!-- Show after add -->
             <div class="md-layout-item md-size-100 md-size-50">
-            <md-field>
-                <md-table v-model="staffs" md-card>
-                <md-table-row
-                v-for="data in myJson"
-                v-bind:key="data.id"
-                v-bind:picture="data.picture"
-                v-bind:name="data.name"
-                v-bind:address="data.address"
-                >
-                    <md-table-cell md-label="Picture">{{ data.picture}}</md-table-cell>
-                    <md-table-cell md-label="Branch">{{ data.name}}</md-table-cell>
-                    <md-table-cell md-label="Address">{{ data.address }}</md-table-cell>
-                    <md-table-cell md-label="Phone">{{ data.phone }}</md-table-cell>
-                    <md-table-cell md-label="remove" class="edit_button">
-                    <sui-button>
-                        <font-awesome-icon icon="edit" />
-                    </sui-button>
-                    <sui-button>
-                        <font-awesome-icon icon="times-circle" />
-                    </sui-button> 
-                </md-table-cell>
-                </md-table-row>
-                </md-table>
-            </md-field>
+                <md-field>
+                    <md-table v-model="staffs" md-card>
+                    <md-table-row
+                    v-for="branch in branches"
+                    v-bind:key="branch.id"
+                    v-bind:name="branch.name"
+                    v-bind:address="branch.address"
+                    >
+                        <md-table-cell md-label="Picture"></md-table-cell>
+                        <md-table-cell md-label="Branch">{{ branch.name}}</md-table-cell>
+                        <md-table-cell md-label="Address">{{ branch.address }}</md-table-cell>
+                        <md-table-cell md-label="Phone">{{ branch.phone }}</md-table-cell>
+                        <md-table-cell md-label="remove" class="edit_button">
+                        <sui-button>
+                            <font-awesome-icon icon="edit" />
+                        </sui-button>
+                        <sui-button>
+                            <font-awesome-icon icon="times-circle" />
+                        </sui-button> 
+                    </md-table-cell>
+                    </md-table-row>
+                    </md-table>
+                </md-field>
             </div>
         </md-card-content>
     </md-card>
 </template>
 
 <script>
-import json from "./../../data/branches.json";
+import gql from 'graphql-tag'
 
 export default {
     name: "branch",
     data() {
-    return { 
-        open: false,
-        myJson: json
-        
-    };
+        return { 
+            open: false,
+            branches: []
+        };
   },
   methods: {
     toggle() {
       this.open = !this.open;
     },
   },
+    apollo: {
+        branches: gql`{
+            branches {
+                id 
+                name 
+                address
+                is_active
+            }
+        }`,
+    },
 };
 </script>
 

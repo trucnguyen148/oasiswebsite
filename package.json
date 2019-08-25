@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --open",
-    "dev": "npm run serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "dev": "npm run serve"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
@@ -19,6 +19,7 @@
     "semantic-ui-vue": "^0.8.1",
     "v-calendar": "^1.0.0-beta.16",
     "vue": "^2.6.10",
+    "vue-apollo": "^3.0.0-beta.11",
     "vue-clickaway": "2.2.2",
     "vue-ctk-date-time-picker": "^2.1.1",
     "vue-github-buttons": "3.1.0",
@@ -35,9 +36,11 @@
     "css-loader": "^3.0.0",
     "es6-promise": "4.2.8",
     "eslint-plugin-vue": "5.2.3",
+    "graphql-tag": "^2.9.0",
     "node-sass": "4.12.0",
     "sass-loader": "7.1.0",
     "semantic-ui": "^2.4.2",
+    "vue-cli-plugin-apollo": "^0.21.0",
     "vue-template-compiler": "2.6.10"
   },
   "eslint": "^4.15.0",
