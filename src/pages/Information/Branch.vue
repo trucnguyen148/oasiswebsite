@@ -53,7 +53,7 @@
                     v-bind:name="branch.name"
                     v-bind:address="branch.address"
                     >
-                        <md-table-cell md-label="Picture"></md-table-cell>
+                        <md-table-cell md-label=""></md-table-cell>
                         <md-table-cell md-label="Branch">{{ branch.name}}</md-table-cell>
                         <md-table-cell md-label="Address">{{ branch.address }}</md-table-cell>
                         <md-table-cell md-label="Phone">{{ branch.phone }}</md-table-cell>

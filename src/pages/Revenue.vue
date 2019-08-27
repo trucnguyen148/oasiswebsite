@@ -16,18 +16,12 @@
             >
               <template slot="content">
                 <h4>Total revenue</h4>
-                <p class="category">
-                  <span class="text-success"
-                    ><i class="fas fa-long-arrow-alt-up"></i> 55%
-                  </span>
-                  increase in today sales.
-                </p>
               </template>
 
               <template slot="footer">
                 <div class="stats">
                   <md-icon>access_time</md-icon>
-                  updated 4 minutes ago
+                  updated just now
                 </div>
               </template>
             </chart-card>
@@ -156,7 +150,7 @@
           <!--Revenue in each branch-->
           <div class="md-layout-item md-size-100">
             <chart-card
-              :chart-data="data_for_branch_chart"
+              :chart-data="revenueBranchChart.data"
               :chart-options="revenueBranchChart.options"
               :chart-responsive-options="revenueBranchChart.responsiveOptions"
               :chart-type="'Bar'"
@@ -350,6 +344,25 @@ export default {
       },
 
       revenueBranchChart: {
+        data: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "June",
+            "July",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ],
+          series: [
+            this.test_val
+          ]
+        },
         options: {
           axisX: {
             showGrid: false
@@ -381,25 +394,7 @@ export default {
       bookings: [],
       branches: [],
       branch_selected_from_dropdown_id: [],
-      data_for_branch_chart: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "June",
-            "July",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-          ],
-          series: [
-            [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-          ]
-        },
+      test_val: []
     };
   },
   watch: {
@@ -420,12 +415,10 @@ export default {
     },
     generate_props_for_branch_chart(branch_id){
       if(branch_id === undefined) {
-        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.test_val = [100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       }
       else{
-        var val = [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895];
-
-        return val;
+        this.test_val = [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895];
       }
     },
     calculate_revenue_service(){
