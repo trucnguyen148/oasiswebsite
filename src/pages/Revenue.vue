@@ -131,6 +131,8 @@
           </div>
         </md-card-content>
       </md-card>
+
+
       <!-- Revenue in each branch -->
       <md-card>
         <md-card-header data-background-color="black">
@@ -140,14 +142,12 @@
           <!-- Search branch -->
           <div class="md-layout-item md-size-100 ">
             <md-field>
-              <label>Branch</label>
+              <label>Select Branch</label>
               <sui-dropdown
                 fluid
-                multiple
-                placeholder="Select branch"
                 selection
-                :options="branch"
-                v-model="current"
+                :options="list_branch_name_and_id_for_dropdown()"
+                v-model="branch_selected_from_dropdown_id"
                 style="margin-top: 2.5rem"
               />
             </md-field>
@@ -156,26 +156,17 @@
           <!--Revenue in each branch-->
           <div class="md-layout-item md-size-100">
             <chart-card
-              :chart-data="revenueBranchChart.data"
+              :chart-data="data_for_branch_chart"
               :chart-options="revenueBranchChart.options"
               :chart-responsive-options="revenueBranchChart.responsiveOptions"
               :chart-type="'Bar'"
               data-background-color="red"
             >
-              <template slot="content">
-                <h4>Revenue in ....</h4>
-                <p class="category">
-                  <span class="text-success"
-                    ><i class="fas fa-long-arrow-alt-down"></i> 25%
-                  </span>
-                  increase in today sales.
-                </p>
-              </template>
 
               <template slot="footer">
                 <div class="stats">
                   <md-icon>access_time</md-icon>
-                  updated 10 days ago
+                  updated just now
                 </div>
               </template>
             </chart-card>
@@ -193,7 +184,7 @@
 
                 <template slot="content">
                   <p class="category">Services</p>
-                  <h3 class="title">€ 6000</h3>
+                  <h3 class="title">€ {{ calculate_revenue_service() }} </h3>
                 </template>
 
                 <template slot="footer">
@@ -215,7 +206,7 @@
 
                 <template slot="content">
                   <p class="category">Products</p>
-                  <h3 class="title">€ 6000</h3>
+                  <h3 class="title">€ {{ calculate_revenue_product() }} </h3>
                 </template>
 
                 <template slot="footer">
@@ -238,7 +229,7 @@
 
                 <template slot="content">
                   <p class="category">Course</p>
-                  <h3 class="title">€ 6000</h3>
+                  <h3 class="title">€ {{ calculate_revenue_course() }}</h3>
                 </template>
 
                 <template slot="footer">
@@ -256,7 +247,7 @@
             <md-card>
               <md-card-header data-background-color="orange">
                 <h4 class="title">Employees Stats</h4>
-                <p class="category">New employees on 15th September, 2016</p>
+                <p class="category"></p>
               </md-card-header>
               <md-card-content>
                 <ordered-table table-header-color="orange"></ordered-table>
@@ -271,6 +262,7 @@
 
 <script>
 import { StatsCard, ChartCard, OrderedTable } from "@/components";
+import gql from 'graphql-tag';
 
 export default {
   components: {
@@ -358,23 +350,6 @@ export default {
       },
 
       revenueBranchChart: {
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "June",
-            "July",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-          ],
-          series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
-        },
         options: {
           axisX: {
             showGrid: false
@@ -401,8 +376,118 @@ export default {
             }
           ]
         ]
-      }
+      },
+
+      bookings: [],
+      branches: [],
+      branch_selected_from_dropdown_id: [],
+      data_for_branch_chart: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "June",
+            "July",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+          ],
+          series: [
+            [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+          ]
+        },
     };
-  }
+  },
+  watch: {
+    branch_selected_from_dropdown: function (){
+      generate_props_for_branch_chart(this.branch_selected_from_dropdown_id);
+    }
+  },
+  methods: {
+    list_branch_name_and_id_for_dropdown(){
+      var branch_list_for_dropdown = [];
+      this.branches.forEach(branch => {
+        branch_list_for_dropdown.push({
+          value: branch.id,
+          text: branch.name
+        })
+      });
+      return branch_list_for_dropdown;
+    },
+    generate_props_for_branch_chart(branch_id){
+      if(branch_id === undefined) {
+        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      }
+      else{
+        var val = [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895];
+
+        return val;
+      }
+    },
+    calculate_revenue_service(){
+      var revenue_product = 0;
+      this.bookings.forEach(booking => {
+        booking.products.forEach(product => {
+          if(product.type == 2){
+            revenue_product += product.unit_price;
+          }
+        });
+      });
+      return revenue_product;
+    },
+    calculate_revenue_product(){
+      var revenue_product = 0;
+      this.bookings.forEach(booking => {
+        booking.products.forEach(product => {
+          if(product.type == 1){
+            revenue_product += product.unit_price;
+          }
+        });
+      });
+      return revenue_product;
+    },
+    calculate_revenue_course(){
+      var revenue_product = 0;
+      this.bookings.forEach(booking => {
+        booking.products.forEach(product => {
+          if(product.type == 3){
+            revenue_product += product.unit_price;
+          }
+        });
+      });
+      return revenue_product;
+    }
+  },
+  apollo: {
+    bookings: gql`{
+        bookings {
+          id 
+          products {
+            id 
+            name
+            type
+            unit_price
+          }
+        }
+    }`,
+    branches: gql`{
+        branches {
+          id
+          name
+          employees {
+            name
+            bookings {
+              products {
+                unit_price
+              }
+            }
+          }
+        }
+    }`,
+  },
 };
 </script>

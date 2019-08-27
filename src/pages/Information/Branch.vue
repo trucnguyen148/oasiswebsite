@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 const ADD_BRANCH = gql`
     mutation(
@@ -120,53 +120,53 @@ export default {
             open: false,
             branches: []
         };
-  },
-  methods: {
-    toggle() {
-      this.open = !this.open;
     },
-    addBranch() {
-        const name = this.addBranchParams.name
-        const address = this.addBranchParams.address
-        const phone = this.addBranchParams.phone
-        // We clear it early to give the UI a snappy feel
-        this.addBranchParams = {
-            name: "",
-            address: "",
-            phone: "",
-        } 
-        // Call to the graphql mutation
-        this.$apollo.mutate({
-            mutation: ADD_BRANCH,
-            variables: {
-                name: name,
-                address: address,
-                phone: phone
-            }
-        }).then((data) => {
-            console.log(data)
-            this.open = !this.open
-        }).catch((error) => {
-            console.log(error)
-        })
-        
-    },
-    deleteBranch(id) {
-        // Call to the graphql mutation
-        this.$apollo.mutate({
-            mutation: DELETE_BRANCH,
-            variables: {
-                id: id
-            }
-        }).then((data) => {
-            console.log(data)
-        }).catch((error) => {
-            console.log(error)
-        })
-        
-    },
+    methods: {
+        toggle() {
+            this.open = !this.open;
+        },
+        addBranch() {
+            const name = this.addBranchParams.name
+            const address = this.addBranchParams.address
+            const phone = this.addBranchParams.phone
+            // We clear it early to give the UI a snappy feel
+            this.addBranchParams = {
+                name: "",
+                address: "",
+                phone: "",
+            } 
+            // Call to the graphql mutation
+            this.$apollo.mutate({
+                mutation: ADD_BRANCH,
+                variables: {
+                    name: name,
+                    address: address,
+                    phone: phone
+                }
+            }).then((data) => {
+                console.log(data)
+                this.open = !this.open
+            }).catch((error) => {
+                console.log(error)
+            })
+            
+        },
+        deleteBranch(id) {
+            // Call to the graphql mutation
+            this.$apollo.mutate({
+                mutation: DELETE_BRANCH,
+                variables: {
+                    id: id
+                }
+            }).then((data) => {
+                console.log(data)
+            }).catch((error) => {
+                console.log(error)
+            })
+            
+        },
 
-  },
+    },
     apollo: {
         branches: gql`{
             branches {
