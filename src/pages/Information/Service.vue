@@ -130,9 +130,74 @@
                                     <md-table-cell md-label="Description" >{{data.description}}</md-table-cell>
                                     <md-table-cell md-label="Price" >{{data.price}}</md-table-cell>
                                     <md-table-cell md-label="remove" class="edit_button" >
-                                        <sui-button>
+                                        <sui-button @click.native="edit">
                                             <font-awesome-icon icon="edit" />
                                         </sui-button>
+                                        <!-- Show modal after click edit button -->
+                                        <sui-modal v-model="openEdit">
+                                            <sui-modal-header class="form-header" >Edit price list</sui-modal-header>
+                                            <sui-modal-content image>
+                                                <div class="md-layout">
+                                                        <!-- Photo -->
+                                                    <div class="md-layout-item md-size-100">
+                                                        <md-field>
+                                                            <label>Photo</label>
+                                                            <md-file v-model="single" accept="image/*" required/>
+                                                        </md-field>
+                                                    </div>
+                                                    <!-- Name -->
+                                                    <div class="md-layout-item md-smal-size-100 md-size-50">
+                                                        <md-field>
+                                                        <label>Name</label>
+                                                        <md-input 
+                                                        v-model="name" 
+                                                        type="text"
+                                                        required></md-input>
+                                                        </md-field>
+                                                    </div>
+                                                    <!-- Descriptions -->
+                                                    <div class="md-layout-item md-size-100">
+                                                        <md-field>
+                                                            <label>Descriptions</label>
+                                                            <md-textarea 
+                                                                v-model="autogrow" 
+                                                                md-autogrow 
+                                                                md-counter="250" 
+                                                                required></md-textarea>
+                                                        </md-field>
+                                                    </div>
+                                                    <!-- Price -->
+                                                    <div class="md-layout-item md-smal-size-100 md-size-50">
+                                                        <md-field>
+                                                        <label>Price</label>
+                                                        <md-input 
+                                                        v-model="discount" 
+                                                        type="text"
+                                                        required></md-input>
+                                                        </md-field>
+                                                    </div>
+                                                    <!-- Categories -->
+                                                    <div class="md-layout-item md-small-size-100 md-size-50">
+                                                        <md-field>
+                                                            <label>Categories</label>
+                                                            <sui-dropdown
+                                                                fluid
+                                                                placeholder="Select service"
+                                                                selection
+                                                                :options="options"
+                                                                v-model="current"
+                                                                style="margin-top: 2.5rem"
+                                                            />
+                                                        </md-field>
+                                                    </div>
+                                                </div>
+                                            </sui-modal-content>
+                                            <sui-modal-actions>
+                                                <sui-button positive @click.native="edit" >
+                                                Add
+                                                </sui-button>
+                                            </sui-modal-actions>
+                                        </sui-modal>
                                         <sui-button>
                                             <font-awesome-icon icon="times-circle" />
                                         </sui-button>
@@ -158,6 +223,7 @@ export default {
         return{
             open: false,
             openService: false,
+            openEdit: false,
             myJsonNails: json1,
             myJsonCategories: json2
         };
@@ -166,6 +232,9 @@ export default {
     methods: {
         toggle() {
             this.open = !this.open;
+        },
+        edit(){
+            this.openEdit = !this.openEdit;
         },
         toggleService(){
             this.openService = !this.openService

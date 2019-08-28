@@ -29,7 +29,6 @@
                 v-for="data in myJson"
                 v-bind:key="data.id"
                 v-bind:time="data.time"
-                v-bind:pictures="data.pictures"
             >
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field>
@@ -51,7 +50,7 @@
             </ul>
             <!-- Show edit -->
             <sui-modal v-model="openEdit">
-                    <sui-modal-header class="form-header" >Add new working time</sui-modal-header>
+                    <sui-modal-header class="form-header" >Change working time</sui-modal-header>
                     <sui-modal-content image>
                         <div class="md-layout">
                             <!-- Working time -->
@@ -71,8 +70,6 @@
                         <sui-button positive @click.native="toggleEdit">Change</sui-button>
                     </sui-modal-actions>
                 </sui-modal>
-                
-            
         </md-card-content>
     </md-card>
 </template>

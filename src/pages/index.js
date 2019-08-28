@@ -21,10 +21,9 @@ export {WaitingBills, CreateBill, SearchBill};
 // Setting
 import SettingRevenue from "../pages/Settings/SettingRevenue.vue";
 import SettingBranches from "../pages/Settings/SettingBranches.vue";
-import SettingSchedule from "../pages/Settings/SettingSchedule.vue";
-import SettingStaffs from "../pages/Settings/SettingStaffs.vue";
+import SettingContents from "../pages/Settings/SettingContents.vue";
 
-export {SettingRevenue, SettingBranches, SettingSchedule, SettingStaffs}
+export {SettingRevenue, SettingBranches, SettingContents}
 
 // Content
 import HotDeal from "../pages/Contents/HotDeal.vue";

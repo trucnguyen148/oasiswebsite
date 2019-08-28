@@ -1,6 +1,6 @@
 <template>
   <md-card>
-    <md-card-header style="background-color: black; color: white; text-align: center; font-size: 1.5rem">Branches Management</md-card-header>
+    <md-card-header style="background-color: black; color: white; text-align: center; font-size: 1.5rem">Branches and Schedule Management</md-card-header>
     <md-card-content>
       <div class="setting">
           <p style="margin: 0 2rem"> Add </p>
@@ -8,6 +8,7 @@
       </div>
       <sui-modal v-model="open">
         <sui-modal-header class="form-header" >Add new email</sui-modal-header>
+<<<<<<< Updated upstream
         <sui-modal-content >
             <!-- Name -->
           <div class="md-layout-item md-size-100">
@@ -26,6 +27,30 @@
         </sui-modal-content>
         <sui-modal-actions>
           <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle space">Add</sui-button>
+=======
+        <sui-modal-content image>
+            <div class="md-layout">
+                <!-- Name -->
+              <div class="md-layout-item md-size-100">
+                <md-field>
+                <label>Staff</label>
+                <md-input v-model="staff" type="text" required></md-input>
+                </md-field>
+              </div>
+              <!-- Email -->
+              <div class="md-layout-item md-size-100">
+                <md-field>
+                <label>Email Address</label>
+                <md-input v-model="emailadress" type="email"></md-input>
+                </md-field>
+              </div>
+            </div>
+        </sui-modal-content>
+        <sui-modal-actions>
+            <sui-button positive @click.native="toggle" >
+            Add
+            </sui-button>
+>>>>>>> Stashed changes
         </sui-modal-actions>
       </sui-modal>
       <!-- Show after add -->
@@ -41,9 +66,36 @@
               <md-table-cell md-label="Branch">{{ data.name}}</md-table-cell>
               <md-table-cell md-label="Email">{{ data.email }}</md-table-cell>
               <md-table-cell md-label="remove" class="edit_button" >
-                <sui-button>
+                <sui-button @click.native="edit">
                     <font-awesome-icon icon="edit" />
                 </sui-button>
+                <!-- Show after click edit button -->
+                <sui-modal v-model="openEdit">
+                  <sui-modal-header class="form-header" >Change email</sui-modal-header>
+                  <sui-modal-content image>
+                      <div class="md-layout">
+                          <!-- Name -->
+                        <div class="md-layout-item md-size-100">
+                          <md-field>
+                          <label>Staff</label>
+                          <md-input v-model="staff" type="text" required></md-input>
+                          </md-field>
+                        </div>
+                        <!-- Email -->
+                        <div class="md-layout-item md-size-100">
+                          <md-field>
+                          <label>Email Address</label>
+                          <md-input v-model="emailadress" type="email"></md-input>
+                          </md-field>
+                        </div>
+                      </div>
+                  </sui-modal-content>
+                  <sui-modal-actions>
+                      <sui-button positive @click.native="edit" >
+                      Edit
+                      </sui-button>
+                  </sui-modal-actions>
+                </sui-modal>
                 <sui-button>
                     <font-awesome-icon icon="times-circle" />
                 </sui-button> 
@@ -63,7 +115,8 @@ export default {
   data() {
     return { 
       open: false,
-      myJson: json
+      myJson: json,
+      openEdit: false,
     };
   },
   
@@ -71,6 +124,9 @@ export default {
     toggle() {
       this.open = !this.open;
     },
+    edit(){
+      this.openEdit = !this.openEdit;
+    }
   },
 };
 </script>

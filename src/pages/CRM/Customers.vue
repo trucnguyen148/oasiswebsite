@@ -38,34 +38,46 @@
                 <p>Name: {{data.customer_name}}</p>
                 <p>Phone: {{data.phone}}</p>
                 <p>Email: {{data.email}}</p>
-                <p>Address: {{data.address}}</p>       
+                <p>Address: {{data.address}}</p> 
+                <div class="sameRow">
+                <p>Used Service(s) and Bought Product(s): </p>
+                <sui-button style="width: 5%" @click.native="toggle" icon="angle down"></sui-button>
+                </div>
+                <sui-modal v-model="open">
+                  <sui-modal-header>Used Service(s) and Bought Product(s)</sui-modal-header>
+                  <sui-modal-content>
+                    <md-table md-card>
+                        <md-table-row
+                        v-for="item in data"
+                        v-bind:key="item.bill_id"
+                        v-bind:bill_id="item.bill_id"
+                        v-bind:date="item.date"
+                        v-bind:branch="item.branch"
+                        v-bind:used_services="item.used_services"
+                        v-bind:bought_products="item.bought_products">
+                          <md-table-cell md-label="Bill ID">{{data.bills[0].bill_id}}</md-table-cell>
+                          <md-table-cell md-label="Date">{{data.bills[0].date}}</md-table-cell>
+                          <md-table-cell md-label="Branch" >{{data.bills[0].branch}}</md-table-cell>
+                          <md-table-cell md-label="Used Services" >{{data.bills[0].used_services.name}}</md-table-cell>
+                          <md-table-cell md-label="Bought Product" >{{data.bills[0].bought_products.name}}</md-table-cell>
+                          <md-table-cell md-label="remove" class="edit_button" >
+                              <sui-button>
+                                  <font-awesome-icon icon="edit" />
+                                  </sui-button>
+                              <sui-button>
+                                  <font-awesome-icon icon="times-circle" />
+                              </sui-button>
+                          </md-table-cell>
+                        </md-table-row>
+                      </md-table>
+                  </sui-modal-content>
+                  <sui-modal-actions>
+                  <sui-button positive @click.native="toggle">
+                    OK
+                  </sui-button>
+                </sui-modal-actions>
+                </sui-modal>   
               </li>
-              <md-field>
-                <md-table md-card>
-                  <md-table-row
-                  v-for="item in data"
-                  v-bind:key="item.bill_id"
-                  v-bind:bill_id="item.bill_id"
-                  v-bind:date="item.date"
-                  v-bind:branch="item.branch"
-                  v-bind:used_services="item.used_services"
-                  v-bind:bought_products="item.bought_products">
-                    <md-table-cell md-label="Bill ID">{{data.bills[0].bill_id}}</md-table-cell>
-                    <md-table-cell md-label="Date">{{data.bills[0].date}}</md-table-cell>
-                    <md-table-cell md-label="Branch" >{{data.bills[0].branch}}</md-table-cell>
-                    <md-table-cell md-label="Used Services" >{{data.bills[0].used_services.name}}</md-table-cell>
-                    <md-table-cell md-label="Bought Product" >{{data.bills[0].bought_products.name}}</md-table-cell>
-                    <md-table-cell md-label="remove" class="edit_button" >
-                        <sui-button>
-                            <font-awesome-icon icon="edit" />
-                            </sui-button>
-                        <sui-button>
-                            <font-awesome-icon icon="times-circle" />
-                        </sui-button>
-                    </md-table-cell>
-                  </md-table-row>
-                </md-table>
-              </md-field>
             </ul> 
         </md-card-content>
       </md-card>
@@ -85,8 +97,28 @@ export default {
   },
   data(){
     return{
-      myJson: json
+      myJson: json,
+      open: false
+    }
+  },
+  methods: {
+    toggle(){
+      this.open = !this.open
     }
   }
 };
 </script>
+
+<style>
+  .width{
+    width: 100%
+  }
+  .sameRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center
+  }
+  .widthButton{
+    width: 30%;
+  }
+</style>

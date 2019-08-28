@@ -1,12 +1,44 @@
 <template>
     <div class="content">
         <div class="md-layout">
+<<<<<<< Updated upstream
             <div class="md-layout-item md-small-size-100" style="display: flex; flex-direction: row; align-items: baseline">
                 <h3>Workflows:</h3>
                 <md-field class="md-layout-item md-small-size-100 md-size-30">
                     <md-input />
                 </md-field>
                 <sui-button class="md-layout-item md-small-size-100 md-size-5"><font-awesome-icon icon="plus-circle"/></sui-button>
+=======
+            <div class="md-layout-item md-size-100" style="display: flex; flex-direction: row; align-items: baseline">
+                <h3 style="margin-right: 1.5rem">Workflows:</h3>
+                <sui-dropdown
+                    fluid
+                    :options="workflow_name"
+                    placeholder="Select workflow"
+                    search
+                    selection
+                    v-model="current"
+                    style="margin-top: 2.5rem; width: 30%; margin-right: 1.5rem"
+                    />
+                <sui-button @click.native="toggle" style="width: 5%"><font-awesome-icon icon="plus-circle"/></sui-button>
+                <!-- Add more workflow name -->
+                <sui-modal v-model="open">
+                    <sui-modal-header>Add New Workflow</sui-modal-header>
+                    <sui-modal-content>
+                        <div class="md-layout"> 
+                            <div class="md-layout-item md-size-100">
+                                <md-field>
+                                    <label>Name</label>
+                                    <md-input 
+                                    v-model="name" 
+                                    type="text"
+                                    required></md-input>
+                                </md-field>
+                            </div>
+                        </div>
+                    </sui-modal-content>
+                </sui-modal>
+>>>>>>> Stashed changes
             </div>
         </div>
         <p>Manage your sales, leads and contacts at a glance.</p>
@@ -321,10 +353,14 @@ export default {
             openWorkFlow: false,
             openDetails: false,
             openTasks: false,
-            openAddTask: false
+            openAddTask: false,
+            open: false
         }
     },
     methods: {
+        toggle(){
+            this.open = !this.open
+        },
         toggleAddWorkFlow(){
             this.openWorkFlow = !this.openWorkFlow
         },

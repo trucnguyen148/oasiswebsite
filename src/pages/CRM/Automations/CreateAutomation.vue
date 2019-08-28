@@ -1,5 +1,6 @@
 <template>
     <div class="content">
+        <router-link to="crm" style="color: #EC407A"><sui-icon name="arrow left" />Back</router-link>
         <div class="md-layout">
             <div class="md-layout-item md-smal-size-100 md-size-50">
                 <md-field>

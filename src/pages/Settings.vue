@@ -5,14 +5,12 @@
         <sui-tab-pane title="Revenue Management" icon="chart line">
           <setting-revenue></setting-revenue>
         </sui-tab-pane>
-        <sui-tab-pane title="Branches Management" icon="code branch">
+        <sui-tab-pane title="Branches and Schedule Management" icon="code branch">
           <setting-branches></setting-branches>
         </sui-tab-pane>
-        <sui-tab-pane title="Schedule Management" icon="calendar alternate">
-          <setting-schedule></setting-schedule>
-        </sui-tab-pane>
-        <sui-tab-pane title="Staff Management" icon="users">
-          <setting-staffs></setting-staffs>
+        
+        <sui-tab-pane title="Content Management" icon="users">
+          <setting-contents></setting-contents>
         </sui-tab-pane>
       </sui-tab>
     </md-card>
@@ -20,14 +18,14 @@
 </template>
 
 <script>
-import { SettingRevenue, SettingBranches, SettingSchedule, SettingStaffs } from "@/pages";
+import { SettingRevenue, SettingBranches, SettingSchedule, SettingContents } from "@/pages";
 
 export default {
   components: {
     SettingRevenue,
     SettingBranches,
     SettingSchedule,
-    SettingStaffs
+    SettingContents
   }
 };
 </script>
