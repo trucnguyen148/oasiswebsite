@@ -41,7 +41,7 @@
         </sui-modal-content>
         <sui-modal-actions>
             <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle space">Add</sui-button>
-=======
+=======</sui-modal-actions>
         <sui-modal-content image>
             <div class="md-layout">
                 <!-- Name -->

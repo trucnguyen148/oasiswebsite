@@ -29,10 +29,6 @@
                 </sui-modal>
             </div>
             <!-- Show after add PRODUCTS-->
-<<<<<<< Updated upstream
-            <detail></detail>
-            <testing></testing>
-=======
             <div class="md-layout-item md-size-100">
                 <ul 
                     v-for="data in myJson1"
@@ -202,7 +198,6 @@
                 </ul>
             </div>
             
->>>>>>> Stashed changes
         </md-card-content>
         
     </md-card>
@@ -210,34 +205,19 @@
 </template>
 <script>
 
-<<<<<<< Updated upstream
-import {Detail,Testing} from "@/pages";
-=======
-import {Detail} from "@/pages";
-import json from "../../data/products.json";
 import json1 from "../../data/productCategories.json";
 import gql from "graphql-tag";
 
->>>>>>> Stashed changes
-
 export default {
-    components:{
-        Detail
-    },
     name: "product",
-        data(){
+    data(){
         return{
-<<<<<<< Updated upstream
-            open: false
-=======
             open: false,
             openProduct: false,
             openEdit: false,
-            myJson: json,
             myJson1: json1,
             products: []
->>>>>>> Stashed changes
-        };
+        }
     },
     methods: {
         toggle() {

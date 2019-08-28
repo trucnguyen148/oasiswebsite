@@ -45,6 +45,7 @@ Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faPlusCircle, faTimesCircle, faEdit, faPlus, faClock, faBox, faCog, faCodeBranch, faInbox, faMagic, faProjectDiagram } from "@fortawesome/free-solid-svg-icons";
+import { createProvider } from './vue-apollo'
 
 library.add(faPlusCircle, faTimesCircle, faEdit, faPlus, faClock, faBox, faCog, faCodeBranch, faInbox, faMagic, faProjectDiagram);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
@@ -67,6 +68,8 @@ new Vue({
   el: "#app",
   render: h => h(App),
   router,
+  apolloProvider: createProvider(),
+
   data: {
     Chartist: Chartist
   }

@@ -1,14 +1,13 @@
 <template>
     <div class="content">
         <div class="md-layout">
-<<<<<<< Updated upstream
             <div class="md-layout-item md-small-size-100" style="display: flex; flex-direction: row; align-items: baseline">
                 <h3>Workflows:</h3>
                 <md-field class="md-layout-item md-small-size-100 md-size-30">
                     <md-input />
                 </md-field>
                 <sui-button class="md-layout-item md-small-size-100 md-size-5"><font-awesome-icon icon="plus-circle"/></sui-button>
-=======
+            </div>
             <div class="md-layout-item md-size-100" style="display: flex; flex-direction: row; align-items: baseline">
                 <h3 style="margin-right: 1.5rem">Workflows:</h3>
                 <sui-dropdown
@@ -38,7 +37,6 @@
                         </div>
                     </sui-modal-content>
                 </sui-modal>
->>>>>>> Stashed changes
             </div>
         </div>
         <p>Manage your sales, leads and contacts at a glance.</p>

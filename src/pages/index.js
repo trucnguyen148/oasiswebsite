@@ -7,9 +7,6 @@ import Staff from "../pages/Information/Staff.vue";
 import WorkingTime from "../pages/Information/WorkingTime.vue"
 
 export { Branch, Product, Service, Staff, WorkingTime };
-    // Informationt - ProductPage
-    import Detail from "../pages/Information/ProductPage/Detail.vue";
-    export { Detail };
 
 // Bills
 import WaitingBills from "../pages/Bills/WaitingBills.vue";
