@@ -3,7 +3,7 @@
     <div class="md-layout">
       <md-card>
         <md-card-header data-background-color="black">
-          <h3 class="title">TOTAL REVENUE nam backup</h3>
+          <h3 class="title">TOTAL REVENUE</h3>
         </md-card-header>
         <md-card-content>
           <!-- Revenue in all branches -->
@@ -268,21 +268,10 @@ export default {
     return {
       dailySalesChart: {
         data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "June",
-            "July",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-          ],
-          series: [[800, 717, 127, 317, 253, 138, 438, 319, 251, 440, 221, 354]]
+          labels: this.generate_month_list_for_charts(),
+          series: [
+             this.generate_data_for_sales_chart(),
+          ]
         },
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
@@ -394,7 +383,7 @@ export default {
       bookings: [],
       branches: [],
       branch_selected_from_dropdown_id: [],
-      test_val: [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+      
     };
   },
   watch: {
@@ -403,8 +392,64 @@ export default {
     }
   },
   methods: {
+    generate_month_list_for_charts(){
+      let data_array = [];
+      let current_month = (new Date()).getMonth()+1;
+      
+      for(let i = current_month; i > 0; i--){
+        if(i == 1) {
+          data_array.push("Jan");
+        }
+        else if(i == 2) {
+          data_array.push("Feb");
+        }
+        else if(i == 3) {
+          data_array.push("Mar")
+        }
+        else if(i == 4) {
+          data_array.push("Apr");
+        }
+        else if(i == 5) {
+          data_array.push("May");
+        }
+        else if(i == 6) {
+          data_array.push("June")
+        }
+        else if(i == 7) {
+          data_array.push("July");
+        }
+        else if(i == 8) {
+          data_array.push("Aug")
+        }
+        else if(i == 9) {
+          data_array.push("Sep");
+        }
+        else if(i == 10) {
+          data_array.push("Oct");
+        }
+        else if(i == 11) {
+          data_array.push("Nov")
+        }
+        else if(i == 12) {
+          data_array.push("Dec");
+        }
+        else{
+          data_array.push("");
+        }
+      }
+      
+      return data_array.reverse();
+    },
+    generate_data_for_sales_chart(){
+      let data_array = [];
+      let current_month = (new Date()).getMonth()+1;
+
+      data_array = [800, 717, 127, 317, 253, 138, 0, 0];
+
+      return data_array;
+    },
     list_branch_name_and_id_for_dropdown(){
-      var branch_list_for_dropdown = [];
+      let branch_list_for_dropdown = [];
       this.branches.forEach(branch => {
         branch_list_for_dropdown.push({
           value: branch.id,
@@ -422,7 +467,7 @@ export default {
       }
     },
     calculate_revenue_service(){
-      var revenue_product = 0;
+      let revenue_product = 0;
       this.bookings.forEach(booking => {
         booking.products.forEach(product => {
           if(product.type == 2){
@@ -433,7 +478,7 @@ export default {
       return revenue_product;
     },
     calculate_revenue_product(){
-      var revenue_product = 0;
+      let revenue_product = 0;
       this.bookings.forEach(booking => {
         booking.products.forEach(product => {
           if(product.type == 1){
@@ -444,7 +489,7 @@ export default {
       return revenue_product;
     },
     calculate_revenue_course(){
-      var revenue_product = 0;
+      let revenue_product = 0;
       this.bookings.forEach(booking => {
         booking.products.forEach(product => {
           if(product.type == 3){
@@ -459,6 +504,7 @@ export default {
     bookings: gql`{
         bookings {
           id 
+          date_time
           products {
             id 
             name
