@@ -394,7 +394,7 @@ export default {
       bookings: [],
       branches: [],
       branch_selected_from_dropdown_id: [],
-      test_val: []
+      test_val: [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
     };
   },
   watch: {
@@ -415,7 +415,7 @@ export default {
     },
     generate_props_for_branch_chart(branch_id){
       if(branch_id === undefined) {
-        this.test_val = [100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        return [100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       }
       else{
         this.test_val = [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895];
