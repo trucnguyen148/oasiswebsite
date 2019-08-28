@@ -66,26 +66,12 @@
                                 v-bind:key="data.id"
                                 v-bind:picture="data.picture"
                                 v-bind:name="data.name"
-                                v-bind:waitingbooking="data.waitingbooking"
+                                v-bind:phone="data.phone"
                             >
                                 <md-table-cell md-label="Picture">{{data.picture}}</md-table-cell>
-                                <md-table-cell md-label="Description" >{{data.name}}</md-table-cell>
-                                <md-table-cell md-label="Waiting Booking">
-                                    <ul>
-                                        <li>
-                                            {{data.waitingbooking[0].time}}: {{data.waitingbooking[0].person}} 
-                                        </li>
-
-                                    </ul>
-                                </md-table-cell>
-                                <md-table-cell md-label="remove"  class="edit_button">
-                                    <sui-button>
-                                        <font-awesome-icon icon="edit" />
-                                    </sui-button>
-                                    <sui-button>
-                                        <font-awesome-icon icon="times-circle" />
-                                    </sui-button>
-                                </md-table-cell>
+                                <md-table-cell md-label="Name" >{{data.name}}</md-table-cell>
+                                <md-table-cell md-label="Phone number" >{{data.phone}}</md-table-cell>
+                            
                             </md-table-row>
                             </md-table>
                         </md-field>

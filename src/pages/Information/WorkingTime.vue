@@ -91,8 +91,6 @@
                         <sui-button positive @click.native="updateWorkTime">Change</sui-button>
                     </sui-modal-actions>
                 </sui-modal>
-                
-            
         </md-card-content>
     </md-card>
 </template>

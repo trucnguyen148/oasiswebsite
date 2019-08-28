@@ -8,7 +8,9 @@
                 <p style="margin: 0 2rem 0 3rem"> Add </p>  
                 <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle"/></sui-button>
                 <sui-modal v-model="open">
+
                     <sui-modal-header class="form-header" >Add branch</sui-modal-header>
+                    <sui-modal-header class="form-header">Add branch</sui-modal-header>
                     <sui-modal-content image>
                         <div class="md-layout">
                             <!-- Name -->

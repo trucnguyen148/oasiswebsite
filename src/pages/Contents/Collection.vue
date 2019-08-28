@@ -8,8 +8,7 @@
                 <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle" /></sui-button>
                 <sui-modal v-model="open">
                     <sui-modal-header class="form-header" >Add new collection</sui-modal-header>
-                    <sui-modal-content image>
-                        <div class="md-layout">
+                    <sui-modal-content>
                             <!-- Name -->
                             <div class="md-layout-item md-size-100">
                                 <md-field>
@@ -38,12 +37,9 @@
                                     <md-file v-model="multiple" multiple accept="image/*" required/>
                                 </md-field>
                             </div>
-                        </div>
                     </sui-modal-content>
                     <sui-modal-actions>
-                        <sui-button positive @click.native="toggle" >
-                        Add
-                        </sui-button>
+                       <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">Add</sui-button>
                     </sui-modal-actions>
                 </sui-modal>
             </div>
@@ -71,9 +67,50 @@
                                 {{data.pictures[5]}}
                             </md-table-cell>
                             <md-table-cell md-label="remove" class="edit_button" >
-                                <sui-button>
+                                <sui-button @click.native="edit">
                                     <font-awesome-icon icon="edit" />
-                                    </sui-button>
+                                </sui-button>
+                                <!-- Show after click edit button -->
+                                <sui-modal v-model="openEdit">
+                                    <sui-modal-header class="form-header" >Change content of collection</sui-modal-header>
+                                    <sui-modal-content image>
+                                        <div class="md-layout">
+                                            <!-- Name -->
+                                            <div class="md-layout-item md-size-100">
+                                                <md-field>
+                                                <label>Name</label>
+                                                <md-input 
+                                                v-model="name" 
+                                                type="text"
+                                                required></md-input>
+                                                </md-field>
+                                            </div>
+                                            <!-- Descriptions -->
+                                            <div class="md-layout-item md-size-100">
+                                                <md-field>
+                                                    <label>Descriptions</label>
+                                                    <md-textarea 
+                                                        v-model="autogrow" 
+                                                        md-autogrow 
+                                                        md-counter="250" 
+                                                        required></md-textarea>
+                                                </md-field>
+                                            </div>   
+                                            <!-- Photo -->
+                                            <div class="md-layout-item md-size-100">
+                                                <md-field>
+                                                    <label>Photo</label>
+                                                    <md-file v-model="multiple" multiple accept="image/*" required/>
+                                                </md-field>
+                                            </div>
+                                        </div>
+                                    </sui-modal-content>
+                                    <sui-modal-actions>
+                                        <sui-button positive @click.native="edit" >
+                                        Change
+                                        </sui-button>
+                                    </sui-modal-actions>
+                                </sui-modal>
                                 <sui-button>
                                     <font-awesome-icon icon="times-circle" />
                                 </sui-button>
@@ -98,14 +135,18 @@ export default {
     data(){
         return{
             open: false,
-            myJson: json
+            myJson: json,
+            openEdit: false,
         };
         
     },
     methods: {
         toggle() {
-        this.open = !this.open;
+            this.open = !this.open;
         },
+        edit(){
+            this.openEdit = !this.openEdit
+        }
     },
 }
 </script>

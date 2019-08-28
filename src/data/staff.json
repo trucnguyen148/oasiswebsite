@@ -5,6 +5,7 @@
         "email": "xxx@oasis.vn",
         "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
         "phone": "044 xxx xxxx",
+        "position": "Nails",
         "waitingbooking": {
             "0": {"time": "08:00", "person": "Nguyen Truong An"},
             "1": {"time": "08:00", "person": "Nguyen Truong An"}
@@ -20,7 +21,8 @@
         "name": "Loremp", 
         "email": "xxx@oasis.vn",
         "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
-        "phone": "044 xxx xxxx"   ,
+        "phone": "044 xxx xxxx",
+        "position": "Permanent Make-up",
         "waitingbooking": {
             "0": {"time": "08:00", "person": "Nguyen Truong An"},
             "1": {"time": "08:00", "person": "Nguyen Truong An"}
@@ -36,6 +38,7 @@
         "email": "xxx@oasis.vn",
         "address": "Kajaanintie 32 C 35/1, 90130 Oulu, Finland",
         "phone": "044 xxx xxxx",
+        "position": "Eyelasher extension",
         "waitingbooking": {
             "0": {"time": "08:00", "person": "Nguyen Truong An"},
             "1": {"time": "08:00", "person": "Nguyen Truong An"}

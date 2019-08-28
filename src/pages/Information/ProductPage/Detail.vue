@@ -21,7 +21,7 @@
                             </md-field>
                         </div>
                         <!-- Name -->
-                        <div class="md-layout-item md-smal-size-100 md-size-50">
+                        <div class="md-layout-item md-size-100">
                             <md-field>
                             <label>Name</label>
                             <md-input 
@@ -68,8 +68,8 @@
                     </div>
                 </sui-modal-content>
                 <sui-modal-actions>
-                    <sui-button positive @click.native="toggle" >
-                    Add
+                    <sui-button data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">
+                        Add
                     </sui-button>
                 </sui-modal-actions>
             </sui-modal>

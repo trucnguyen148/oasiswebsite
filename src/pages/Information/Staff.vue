@@ -1,24 +1,32 @@
 <template>
     <div class="content md-layout">
-        
         <md-card>
             <md-card-header data-background-color="black">
                 <h3 class="title">Staffs</h3>
             </md-card-header>
             <md-card-content>
-                <!-- Add more staff -->
-                <ul 
-                    v-for="data in myJsonCategories"
-                    v-bind:key="data.name"
-                    v-bind:picture="data.name"     
-                >
-                    <div class="setting">
-                        <li style="margin: 0 2rem"><label>{{data.name}}</label></li>  
-                        <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle" /></sui-button>
-                    </div>
+                <div class="md-layout-item">
+                      <md-field>
+                      <label>Search staff:</label>
+                      <sui-dropdown
+                          fluid
+                          :options="staff_name"
+                          placeholder="Select staff"
+                          search
+                          selection
+                          v-model="current"
+                          style="margin-top: 2.5rem"
+                          />
+                      </md-field>
+                  </div>
+                <div class="setting">
+                    <p style="margin: 0 2rem 0 3rem"> Add </p>  
+                    <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle"/></sui-button>
+                </div>
+                    <!-- Add more staff -->
                     <sui-modal v-model="open">
                         <sui-modal-header class="form-header" >Add new staff</sui-modal-header>
-                        <sui-modal-content image>
+                        <sui-modal-content>
                             <div class="md-layout">
                                     <!-- Name -->
                                 <div class="md-layout-item md-smal-size-100 md-size-50">
@@ -63,7 +71,7 @@
                                 <!-- Address -->
                                 <div class="md-layout-item md-small-size-100 md-size-100">
                                     <md-field>
-                                    <label>Adress</label>
+                                    <label>Address</label>
                                     <md-input v-model="address" type="text"></md-input>
                                     </md-field>
                                 </div>
@@ -89,16 +97,44 @@
                                     </md-field>
                                 </div>
 
-                                <!-- Select field -->
+                                <!-- Select position -->
                                 <div class="md-layout-item md-small-size-100 md-size-50">
                                     <md-field>
-                                        <label>Service</label>
+                                        <label>Position</label>
                                         <sui-dropdown
                                             fluid
-                                            placeholder="Select service"
+                                            placeholder="Select position"
+                                            selection
+                                            :options="position"
+                                            v-model="current"
+                                            style="margin-top: 2.5rem"
+                                        />
+                                    </md-field>
+                                </div>
+                                <!-- Select branch -->
+                                <div class="md-layout-item md-small-size-100 md-size-50">
+                                    <md-field>
+                                        <label>Branch</label>
+                                        <sui-dropdown
+                                            fluid
+                                            placeholder="Select branch"
+                                            selection
+                                            :options="branch"
+                                            v-model="current"
+                                            style="margin-top: 2.5rem"
+                                        />
+                                    </md-field>
+                                </div>
+                                <!-- Select working hour -->
+                                <div class="md-layout-item md-small-size-100 md-size-50">
+                                    <md-field>
+                                        <label>Working hours</label>
+                                        <sui-dropdown
+                                            fluid
+                                            placeholder="Select working hours"
                                             selection
                                             :options="service"
-                                            v-model="current"
+                                            v-model="service"
                                             style="margin-top: 2.5rem"
                                         />
                                     </md-field>
@@ -106,12 +142,11 @@
                             </div>
                         </sui-modal-content>
                         <sui-modal-actions>
-                            <sui-button positive @click.native="toggle" >
-                            Add
+                            <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle">Add
                             </sui-button>
                         </sui-modal-actions>
                     </sui-modal>
-                        <div class="md-layout-item md-size-100">
+                    <div class="md-layout-item md-size-100">
                         <md-field>
                             <md-table md-card>
                                 <md-table-row
@@ -124,7 +159,7 @@
                                 >
                                     <md-table-cell md-label="Picture">{{data.picture}}</md-table-cell>
                                     <md-table-cell md-label="Name">{{data.name}}</md-table-cell>
-                                    <md-table-cell md-label="Address" >{{data.address}}</md-table-cell>
+                                    <md-table-cell md-label="Address" >{{data.addßress}}</md-table-cell>
                                     <md-table-cell md-label="Phone number" >{{data.phone}}</md-table-cell>
                                     <md-table-cell md-label="remove" class="edit_button" >
                                         <sui-button>
@@ -146,15 +181,14 @@
 </template>
 <script>
 import json from './../../data/staff.json';
-import json1 from './../../data/categories.json'
 
 export default {
     name: "staff",
     data(){
     return{
         open: false,
+        openEdit: false,
         myJson: json,
-        myJsonCategories: json1
     };
         
     },
@@ -162,6 +196,9 @@ export default {
         toggle() {
         this.open = !this.open;
         },
+        edit(){
+            this.openEdit = !this.openEdit;
+        }
     }
 }
 </script>
