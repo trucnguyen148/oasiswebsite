@@ -51,7 +51,7 @@
                                 <md-table-cell md-label="Picture">
                                     <li style="margin: 0 2rem">{{workTime.start}} - {{workTime.end}}</li></md-table-cell>
                                 <md-table-cell md-label="remove" class="edit_button" >
-                                    <sui-button @click.native="toggleEdit(workTime.id, workTime.start, workTime.end)">
+                                    <sui-button @click.native="toggleEdit(workTime)">
                                         <font-awesome-icon icon="edit" />
                                     </sui-button>
                                     
@@ -63,7 +63,7 @@
             </ul>
             <!-- Show edit -->
             <sui-modal v-model="openEdit">
-                    <sui-modal-header class="form-header" >Change working time</sui-modal-header>
+                    <sui-modal-header class="form-header" >Update working time</sui-modal-header>
                     <sui-modal-content image>
                         <div class="md-layout">
                             <!-- Working time -->
@@ -88,7 +88,7 @@
                         </div>
                     </sui-modal-content>
                     <sui-modal-actions>
-                        <sui-button positive @click.native="updateWorkTime">Change</sui-button>
+                        <sui-button positive @click.native="updateWorkTime">Update</sui-button>
                     </sui-modal-actions>
                 </sui-modal>
         </md-card-content>
@@ -156,10 +156,10 @@ export default {
         toggle() {
             this.open = !this.open;
         },
-        toggleEdit(id, start, end){
-            this.updateWorkTimeParams.id = id;
-            this.updateWorkTimeParams.start = start;
-            this.updateWorkTimeParams.end = end;
+        toggleEdit(workTime){
+            this.updateWorkTimeParams.id = workTime.id;
+            this.updateWorkTimeParams.start = workTime.start;
+            this.updateWorkTimeParams.end = workTime.end;
             this.openEdit = !this.openEdit;
         },
         addWorkTime() {
