@@ -163,12 +163,12 @@
               :chart-data="{
                 labels: this.generate_month_list(),
                 series: [
-                  [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+                 this.get_branch_revenue()
                 ]
               }"
               :chart-options="revenueBranchChart.options"
               :chart-responsive-options="revenueBranchChart.responsiveOptions"
-              :chart-type="'Bar'"
+              :chart-type="'Line'"
               data-background-color="red"
             >
 
@@ -315,87 +315,32 @@ export default {
 
       revenueBranchChart: {
         options: {
-          axisX: {
-            showGrid: false
-          },
+          lineSmooth: this.$Chartist.Interpolation.cardinal({
+            tension: 0
+          }),
           low: 0,
-          high: 1000,
+          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
-            right: 5,
+            right: 0,
             bottom: 0,
             left: 0
           }
-        },
-        responsiveOptions: [
-          [
-            "screen and (max-width: 640px)",
-            {
-              seriesBarDistance: 5,
-              axisX: {
-                labelInterpolationFnc: function(value) {
-                  return value[0];
-                }
-              }
-            }
-          ]
-        ]
+        }
       },
 
       bookings: [],
       branches: [],
-      selected_branch_id: "1",
+      selected_branch_id: "0",
+      branch: [],
     };
   },
   watch: {
-    // selected_branch_id: function (){
-
-    //   function get_selected_branch(branch_id, branches){
-    //     let selected_branch = (branches).filter(branch => {
-    //       return branch.id == branch_id
-    //     });
-
-    //     return selected_branch;
-    //   }
-
-    //   function get_bookings_from_selected_branch(selected_branch){
-    //     let bookings = []
-
-    //     (branch.employees).forEach(employee => {
-    //       (employee.bookings).forEach(booking => {
-    //         bookings.push(booking)
-    //       });
-    //     });
-
-    //     return bookings;
-    //   }
-
-    //   function get_product_revenue(type){
-    //     let revenue = 0;
-
-    //     (this.bookings).forEach(booking => {
-    //       let filtered_products = (booking.products).filter(filtered_product => {
-    //         return (filtered_product.type) == type
-    //       });
-    //       filtered_products.forEach(product => {
-    //         revenue += product.unit_price
-    //       });
-    //     });
-    //     return revenue;
-    //   }
-
-    //   get_selected_branch(this.selected_branch_id, this.branches)
-      
-    // }
+    selected_branch_id: function (){
+      this.$apollo.queries.branch.refetch()
+    }
   },
   computed: {
-    branch(){
-      let selected_branch = (this.branches).filter(branch => {
-        return branch.id == this.selected_branch_id
-      });
-
-      return selected_branch;
-    },
   },
   methods: {
     generate_month_list(){
@@ -513,29 +458,76 @@ export default {
 
     get_product_revenue(type){
       let revenue = 0;
+      
+      if(this.branch !== null && this.branch !== undefined){
+        if(this.branch.employees !== null && this.branch.employees !== undefined){
+          (this.branch.employees).forEach(employee => {
+            if(employee.bookings !== null && employee.bookings !== undefined){
+              (employee.bookings).forEach(booking => {
+                let filtered_products = (booking.products).filter(filtered_product => {
+                  return (filtered_product.type) == type
+                });
+                filtered_products.forEach(product => {
+                  revenue += product.unit_price
+                });
+              });
+            }
+          });
+        }
+      }
 
-      function get_bookings_from_selected_branch(selected_branch){
+      return revenue;
+    },
+    get_branch_revenue(){
+      let data_array = [];
+      let current_month = (new Date()).getMonth()+1;
+      
+      function get_bookings_from_branch(branch){
         let bookings = [];
 
-        (selected_branch.employees).forEach(employee => {
-          (employee.bookings).forEach(booking => {
-            bookings.push(booking)
+        if(branch.employees !== null && branch.employees !== undefined){
+          (branch.employees).forEach(employee => {
+            if(employee.bookings !== null && employee.bookings !== undefined){
+              (employee.bookings).forEach(booking => {
+                bookings.push(booking);
+              });
+            }
           });
-        });
-
+        }
         return bookings;
       }
 
-      get_bookings_from_selected_branch(this.branch).forEach(booking => {
-        let filtered_products = (booking.products).filter(filtered_product => {
-          return (filtered_product.type) == type
+      function get_bookings_each_month(month, bookings){
+        let bookings_each_month = [];
+
+        bookings_each_month = bookings.filter(booking => {
+          return new Date(booking.date_time).getMonth()+1 == month
         });
-        filtered_products.forEach(product => {
-          revenue += product.unit_price
-        });
-      });
-      return revenue;
-    },
+
+        return bookings_each_month
+      }
+
+      function get_revenue_each_month(bookings_each_month){
+          let revenue_each_month = 0;
+          
+          bookings_each_month.forEach(booking => {
+            (booking.products).forEach(product => {
+              revenue_each_month += product.unit_price;
+            });
+          });
+
+          return revenue_each_month
+      }
+
+      if(this.branch !== null && this.branch !== undefined){
+        for(let i = current_month; i > 0; i--){
+          data_array.push(get_revenue_each_month(get_bookings_each_month(i, get_bookings_from_branch(this.branch))));
+        }
+        return data_array.reverse();
+      }else{
+       return []
+      }
+    }
   },
   apollo: {
     bookings: gql`{
@@ -568,6 +560,33 @@ export default {
           }
         }
     }`,
+    branch: {
+        query: gql`query($id: ID!){
+          branch(id: $id){
+            id 
+            name
+            employees {
+              id
+              name
+              email
+              bookings {
+                id
+                date_time
+                products {
+                  id 
+                  type
+                  unit_price
+                }
+              }
+            }
+          }
+        }`,
+        variables() {
+          return {
+            id: this.selected_branch_id,
+          }
+        },
+      },
   },
 };
 </script>
