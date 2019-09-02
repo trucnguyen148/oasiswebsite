@@ -444,7 +444,7 @@ export default {
       let data_array = [];
       let current_month = (new Date()).getMonth()+1;
 
-      data_array = [800, 717, 127, 317, 253, 138, 0, 0];
+      data_array = [800, 717, 127, 317, 253, 138, 0, 0, 0];
 
       return data_array;
     },
