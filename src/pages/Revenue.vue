@@ -163,7 +163,7 @@
         </md-card-header>
         <md-card-content>
           <!-- Search branch -->
-          <!-- <div class="md-layout-item md-size-100 ">
+          <div class="md-layout-item md-size-100 ">
             <md-field>
               <label>Select Branch</label>
               <sui-dropdown
@@ -174,15 +174,15 @@
                 style="margin-top: 2.5rem"
               />
             </md-field>
-          </div> -->
+          </div>
 
           <!--Revenue in each branch-->
-          <div class="md-layout-item md-size-100">
-            <chart-card
+          <div v-if="show_branch" class="md-layout-item md-size-100">
+            <chart-card 
               :chart-data="{
                 labels: this.generate_month_list(),
                 series: [
-                 this.get_sale_or_service_revenue('SALE'),
+                 this.get_branch_revenue(),
                 ]
               }"
               :chart-options="dailySalesChart.options"
@@ -300,6 +300,7 @@ export default {
   data() {
     return {
       show: true,
+      show_branch: true,
       open: true,
       dailySalesChart: {
         options: {
@@ -326,10 +327,15 @@ export default {
   watch: {
     selected_branch_id: function (){
       this.$apollo.queries.branch.refetch()
+      this.show_branch = false
+
+      setTimeout(this.change_state, 700)
+
     },
     show: function(){
       this.open = false
-    }
+    },
+    
   },
   computed: {
   },
@@ -337,10 +343,15 @@ export default {
     
   },
   methods: {
+    change_state(){
+        this.show_branch = true
+    },
     rerender(){
       this.show = false
+      this.show_branch = false
       this.$nextTick(() => {
         this.show = true
+        this.show_branch = true
       })
       
 
