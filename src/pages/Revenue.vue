@@ -157,7 +157,7 @@
 
 
       <!-- Revenue in each branch -->
-      <md-card>
+      <md-card> 
         <md-card-header data-background-color="black">
           <h3 class="title">REVENUE BASED ON BRANCH</h3>
         </md-card-header>
