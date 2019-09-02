@@ -348,41 +348,45 @@ export default {
     };
   },
   watch: {
-    selected_branch_id: function (){
+    // selected_branch_id: function (){
 
-      function get_selected_branch(branch_id, branches){
-        let selected_branch = (branches).filter(branch => {
-          return branch.id == branch_id
-        });
+    //   function get_selected_branch(branch_id, branches){
+    //     let selected_branch = (branches).filter(branch => {
+    //       return branch.id == branch_id
+    //     });
 
-        return selected_branch;
-      }
+    //     return selected_branch;
+    //   }
 
-      function get_bookings_from_branch(branch){
-        let bookings = []
+    //   function get_bookings_from_selected_branch(selected_branch){
+    //     let bookings = []
 
-        (branch.employees).forEach(employee => {
+    //     (branch.employees).forEach(employee => {
+    //       (employee.bookings).forEach(booking => {
+    //         bookings.push(booking)
+    //       });
+    //     });
 
-        });
-      }
+    //     return bookings;
+    //   }
 
-      function get_product_revenue(type){
-        let revenue = 0;
+    //   function get_product_revenue(type){
+    //     let revenue = 0;
 
-        (this.bookings).forEach(booking => {
-          let filtered_products = (booking.products).filter(filtered_product => {
-            return (filtered_product.type) == type
-          });
-          filtered_products.forEach(product => {
-            revenue += product.unit_price
-          });
-        });
-        return revenue;
-      }
+    //     (this.bookings).forEach(booking => {
+    //       let filtered_products = (booking.products).filter(filtered_product => {
+    //         return (filtered_product.type) == type
+    //       });
+    //       filtered_products.forEach(product => {
+    //         revenue += product.unit_price
+    //       });
+    //     });
+    //     return revenue;
+    //   }
 
-      get_selected_branch(this.selected_branch_id, this.branches)
+    //   get_selected_branch(this.selected_branch_id, this.branches)
       
-    }
+    // }
   },
   computed: {
     branch(){
@@ -510,7 +514,19 @@ export default {
     get_product_revenue(type){
       let revenue = 0;
 
-      (this.bookings).forEach(booking => {
+      function get_bookings_from_selected_branch(selected_branch){
+        let bookings = [];
+
+        (selected_branch.employees).forEach(employee => {
+          (employee.bookings).forEach(booking => {
+            bookings.push(booking)
+          });
+        });
+
+        return bookings;
+      }
+
+      get_bookings_from_selected_branch(this.branch).forEach(booking => {
         let filtered_products = (booking.products).filter(filtered_product => {
           return (filtered_product.type) == type
         });
