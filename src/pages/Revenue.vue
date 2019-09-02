@@ -8,6 +8,9 @@
         <md-card-content>
           <!-- Revenue in all branches -->
           <div class="md-layout-item md-size-100">
+            <div v-if="show">
+              <sui-button @click="rerender">Click</sui-button>
+            </div>
             <chart-card
               :chart-data="dailySalesChart.data"
               :chart-options="dailySalesChart.options"
@@ -266,6 +269,7 @@ export default {
   },
   data() {
     return {
+      show: true,
       dailySalesChart: {
         data: {
           labels: this.generate_month_list_for_charts(),
@@ -391,8 +395,35 @@ export default {
       generate_props_for_branch_chart(this.branch_selected_from_dropdown_id);
     }
   },
+<<<<<<< Updated upstream
   methods: {
     generate_month_list_for_charts(){
+=======
+  computed: {
+    branch(){
+      let selected_branch = (this.branches).filter(branch => {
+        return branch.id == this.selected_branch_id
+      });
+
+      return selected_branch;
+    },
+  },
+  mounted() {
+    this.rerender();
+  },
+  methods: {
+    rerender(){
+        this.show = false
+        this.$nextTick(() => {
+            this.show = true
+            console.log('re-render start')
+            this.$nextTick(() => {
+                console.log('re-render end')
+            })
+        })
+    },
+    generate_month_list(){
+>>>>>>> Stashed changes
       let data_array = [];
       let current_month = (new Date()).getMonth()+1;
       
