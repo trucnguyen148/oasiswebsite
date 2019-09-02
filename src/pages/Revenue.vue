@@ -10,9 +10,9 @@
           <div class="md-layout-item md-size-100">
             <chart-card
               :chart-data="{
-                labels: this.generate_month_list(),
+                labels: this.get_sale_or_service_revenue('SALE'),
                 series: [
-                 this.get_sale_or_service_revenue('SALE'),
+                 this.test,
                 ]
               }"
               :chart-options="dailySalesChart.options"
@@ -374,7 +374,17 @@ export default {
       // });
       
       // return data_array.reverse();
+      
     }
+  },
+  computed: {
+    branch(){
+      let selected_branch = (this.branches).filter(branch => {
+        return branch.id == this.selected_branch_id
+      });
+
+      return selected_branch;
+    },
   },
   methods: {
     generate_month_list(){
@@ -438,27 +448,37 @@ export default {
     get_sale_or_service_revenue(SALE_or_SERVICE){
       let data_array = [];
       let current_month = (new Date()).getMonth()+1;
+      
+      function get_bookings_each_month(month, bookings){
+        let bookings_each_month = [];
 
-      for(let i = current_month; i > 0; i--){
-        let bookings_each_month = this.bookings.filter(booking => {
-          return new Date(booking.date_time).getMonth()+1 == i
+        bookings_each_month = bookings.filter(booking => {
+          return new Date(booking.date_time).getMonth()+1 == month
         });
 
-        let revenue_each_month = 0;
+        return bookings_each_month
+      }
 
-        bookings_each_month.forEach(booking => {
-          (booking.products).forEach(product => {
-            if(SALE_or_SERVICE == "SERVICE"){
-              if(product.type == 2){
+      function get_revenue_each_month(bookings_each_month){
+          let revenue_each_month = 0;
+
+          bookings_each_month.forEach(booking => {
+            (booking.products).forEach(product => {
+              if(SALE_or_SERVICE == "SERVICE"){
+                if(product.type == 2){
+                  revenue_each_month += product.unit_price;
+                }
+              }else if(SALE_or_SERVICE == "SALE"){
                 revenue_each_month += product.unit_price;
               }
-            }else if(SALE_or_SERVICE == "SALE"){
-              revenue_each_month += product.unit_price;
-            }
+            });
           });
-        });
 
-        data_array.push(revenue_each_month);
+          return revenue_each_month
+      }
+
+      for(let i = current_month; i > 0; i--){
+        data_array.push(get_revenue_each_month(get_bookings_each_month(i, this.bookings)) );
       }
 
       return data_array.reverse();
@@ -479,6 +499,7 @@ export default {
     
       return revenue;
     },
+
     get_product_revenue(type){
       let revenue = 0;
 
@@ -492,7 +513,6 @@ export default {
       });
       return revenue;
     },
-    
   },
   apollo: {
     bookings: gql`{
