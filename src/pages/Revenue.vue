@@ -1,5 +1,23 @@
 <template>
   <div class="content">
+    <keep-alive>
+      <sui-modal v-model="open">
+        <sui-modal-header>Select a Photo</sui-modal-header>
+        <sui-modal-content image>
+          <sui-image wrapped size="medium" src="static/images/avatar/large/rachel.png" />
+          <sui-modal-description>
+            <sui-header>Default Profile Image</sui-header>
+            <p>We've found the following gravatar image associated with your e-mail address.</p>
+            <p>Is it okay to use this photo?</p>
+          </sui-modal-description>
+        </sui-modal-content>
+        <sui-modal-actions>
+          <sui-button positive @click="rerender">
+            OK
+          </sui-button>
+        </sui-modal-actions>
+      </sui-modal>
+    </keep-alive>
     <div class="md-layout">
       <md-card>
         <md-card-header data-background-color="black">
@@ -7,18 +25,19 @@
         </md-card-header>
         <md-card-content>
           <!-- Revenue in all branches -->
-          <div class="md-layout-item md-size-100">
-            <chart-card
-              :chart-data="{
-                labels: this.generate_month_list(),
-                series: [
-                 this.get_sale_or_service_revenue('SALE')
-                ]
-              }"
-              :chart-options="dailySalesChart.options"
-              :chart-type="'Line'"
-              data-background-color="pink"
-            >
+          <div v-if="show" class="md-layout-item md-size-100">
+              <!-- <sui-button @click="rerender" ref="myBtn">Click</sui-button> -->
+              <chart-card
+                :chart-data="{
+                  labels: this.generate_month_list(),
+                  series: [
+                  this.get_sale_or_service_revenue('SALE')
+                  ]
+                }"
+                :chart-options="dailySalesChart.options"
+                :chart-type="'Line'"
+                data-background-color="pink"
+              />
               <template slot="content">
                 <h4>Total revenue</h4>
               </template>
@@ -29,9 +48,9 @@
                   updated just now
                 </div>
               </template>
-            </chart-card>
+
           </div>
-          <div style="display: flex; flex-direction: row">
+          <div v-if="show" style="display: flex; flex-direction: row">
             <!-- Revenue of services -->
             <div
               class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
@@ -40,7 +59,7 @@
                 :chart-data="{
                     labels: this.generate_month_list(),
                     series: [
-                    this.get_sale_or_service_revenue('SERVICE'),
+                    this.get_sale_or_service_revenue('SALE'),
                     ]
                   }"
                 :chart-options="revenueOfServiceChart.options"
@@ -281,6 +300,8 @@ export default {
   },
   data() {
     return {
+      show: true,
+      open: true,
       dailySalesChart: {
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
@@ -348,40 +369,8 @@ export default {
     };
   },
   watch: {
-    selected_branch_id: function (){
-
-      function get_selected_branch(branch_id, branches){
-        let selected_branch = (branches).filter(branch => {
-          return branch.id == branch_id
-        });
-
-        return selected_branch;
-      }
-
-      function get_bookings_from_branch(branch){
-        let bookings = []
-
-        (branch.employees).forEach(employee => {
-
-        });
-      }
-
-      function get_product_revenue(type){
-        let revenue = 0;
-
-        (this.bookings).forEach(booking => {
-          let filtered_products = (booking.products).filter(filtered_product => {
-            return (filtered_product.type) == type
-          });
-          filtered_products.forEach(product => {
-            revenue += product.unit_price
-          });
-        });
-        return revenue;
-      }
-
-      get_selected_branch(this.selected_branch_id, this.branches)
-      
+    show: function(){
+      this.open = false
     }
   },
   computed: {
@@ -393,7 +382,18 @@ export default {
       return selected_branch;
     },
   },
+  mounted(){
+    
+  },
   methods: {
+    rerender(){
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+      
+
+  },        
     generate_month_list(){
       let data_array = [];
       let current_month = (new Date()).getMonth()+1;
