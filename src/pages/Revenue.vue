@@ -9,7 +9,12 @@
           <!-- Revenue in all branches -->
           <div class="md-layout-item md-size-100">
             <chart-card
-              :chart-data="dailySalesChart.data"
+              :chart-data="{
+                labels: this.generate_month_list(),
+                series: [
+                 this.get_sale_or_service_revenue('SALE'),
+                ]
+              }"
               :chart-options="dailySalesChart.options"
               :chart-type="'Line'"
               data-background-color="pink"
@@ -32,7 +37,12 @@
               class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
             >
               <chart-card
-                :chart-data="revenueOfServiceChart.data"
+                :chart-data="{
+                    labels: this.generate_month_list(),
+                    series: [
+                    this.get_sale_or_service_revenue('SERVICE'),
+                    ]
+                  }"
                 :chart-options="revenueOfServiceChart.options"
                 :chart-type="'Line'"
                 data-background-color="orange"
@@ -66,7 +76,7 @@
 
                 <template slot="content">
                   <p class="category">Nails</p>
-                  <h3 class="title">€ 6000</h3>
+                  <h3 class="title">€ {{ get_category_revenue(9) }} </h3>
                 </template>
 
                 <template slot="footer">
@@ -87,8 +97,8 @@
                 </template>
 
                 <template slot="content">
-                  <p class="category">Eyelasher extension</p>
-                  <h3 class="title">€ 6000</h3>
+                  <p class="category">Tattoo</p>
+                  <h3 class="title">€ {{ get_category_revenue(10) }} </h3>
                 </template>
 
                 <template slot="footer">
@@ -110,8 +120,8 @@
                 </template>
 
                 <template slot="content">
-                  <p class="category">Permanent makeup</p>
-                  <h3 class="title">€ 6000</h3>
+                  <p class="category">Makeup</p>
+                  <h3 class="title">€ {{ get_category_revenue(11) }}</h3>
                 </template>
 
                 <template slot="footer">
@@ -140,8 +150,8 @@
               <sui-dropdown
                 fluid
                 selection
-                :options="list_branch_name_and_id_for_dropdown()"
-                v-model="branch_selected_from_dropdown_id"
+                :options="list_branches()"
+                v-model="selected_branch_id"
                 style="margin-top: 2.5rem"
               />
             </md-field>
@@ -150,7 +160,12 @@
           <!--Revenue in each branch-->
           <div class="md-layout-item md-size-100">
             <chart-card
-              :chart-data="revenueBranchChart.data"
+              :chart-data="{
+                labels: this.generate_month_list(),
+                series: [
+                  [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+                ]
+              }"
               :chart-options="revenueBranchChart.options"
               :chart-responsive-options="revenueBranchChart.responsiveOptions"
               :chart-type="'Bar'"
@@ -178,7 +193,7 @@
 
                 <template slot="content">
                   <p class="category">Services</p>
-                  <h3 class="title">€ {{ calculate_revenue_service() }} </h3>
+                  <h3 class="title">€ {{ get_product_revenue(2) }} </h3>
                 </template>
 
                 <template slot="footer">
@@ -200,7 +215,7 @@
 
                 <template slot="content">
                   <p class="category">Products</p>
-                  <h3 class="title">€ {{ calculate_revenue_product() }} </h3>
+                  <h3 class="title">€ {{ get_product_revenue(1) }} </h3>
                 </template>
 
                 <template slot="footer">
@@ -223,7 +238,7 @@
 
                 <template slot="content">
                   <p class="category">Course</p>
-                  <h3 class="title">€ {{ calculate_revenue_course() }}</h3>
+                  <h3 class="title">€ {{ get_product_revenue(3) }}</h3>
                 </template>
 
                 <template slot="footer">
@@ -244,7 +259,7 @@
                 <p class="category"></p>
               </md-card-header>
               <md-card-content>
-                <ordered-table table-header-color="orange"></ordered-table>
+                <ordered-table table-header-color="orange" :selected_branch_id="selected_branch_id"></ordered-table>
               </md-card-content>
             </md-card>
           </div>
@@ -267,12 +282,6 @@ export default {
   data() {
     return {
       dailySalesChart: {
-        data: {
-          labels: this.generate_month_list_for_charts(),
-          series: [
-             this.generate_data_for_sales_chart(),
-          ]
-        },
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
             tension: 0
@@ -289,34 +298,6 @@ export default {
       },
 
       revenueOfServiceChart: {
-        data: {
-          labels: ["June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
-
-          series: [[230, 750, 450, 300, 280, 240, 200]]
-        },
-
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          }
-        }
-      },
-
-      revenueOfProductChart: {
-        data: {
-          labels: ["June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
-
-          series: [[111, 231, 450, 300, 280, 240, 50]]
-        },
-
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
             tension: 0
@@ -333,25 +314,6 @@ export default {
       },
 
       revenueBranchChart: {
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "June",
-            "July",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-          ],
-          series: [
-            this.test_val
-          ]
-        },
         options: {
           axisX: {
             showGrid: false
@@ -382,17 +344,40 @@ export default {
 
       bookings: [],
       branches: [],
-      branch_selected_from_dropdown_id: [],
-      
+      selected_branch_id: "1",
     };
   },
   watch: {
-    branch_selected_from_dropdown: function (){
-      generate_props_for_branch_chart(this.branch_selected_from_dropdown_id);
+    selected_branch_id: function (){
+      // let data_array = [];
+      // let current_month = (new Date()).getMonth()+1;
+
+      // let branch = (this.branches).filter(filtered_branch => {
+      //     return filtered_branch.id == this.selected_branch_id
+      // });
+
+      // (branch.employees).forEach(employee => {
+      //   for(let i = current_month; i > 0; i--){
+      //     let bookings_each_month = employee.bookings.filter(booking => {
+      //       return new Date(booking.date_time).getMonth()+1 == i
+      //     });
+
+      //     let revenue_each_month = 0;
+
+      //     bookings_each_month.forEach(booking => {
+      //       (booking.products).forEach(product => {
+      //         revenue_each_month += product.unit_price;
+      //       });
+      //     });
+      //     data_array.push(revenue_each_month);
+      //   }
+      // });
+      
+      // return data_array.reverse();
     }
   },
   methods: {
-    generate_month_list_for_charts(){
+    generate_month_list(){
       let data_array = [];
       let current_month = (new Date()).getMonth()+1;
       
@@ -440,65 +425,74 @@ export default {
       
       return data_array.reverse();
     },
-    generate_data_for_sales_chart(){
-      let data_array = [];
-      let current_month = (new Date()).getMonth()+1;
-
-      data_array = [800, 717, 127, 317, 253, 138, 0, 0];
-
-      return data_array;
-    },
-    list_branch_name_and_id_for_dropdown(){
-      let branch_list_for_dropdown = [];
+    list_branches(){
+      let branch_list = [];
       this.branches.forEach(branch => {
-        branch_list_for_dropdown.push({
+        branch_list.push({
           value: branch.id,
           text: branch.name
         })
       });
-      return branch_list_for_dropdown;
+      return branch_list;
     },
-    generate_props_for_branch_chart(branch_id){
-      if(branch_id === undefined) {
-        return [100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    get_sale_or_service_revenue(SALE_or_SERVICE){
+      let data_array = [];
+      let current_month = (new Date()).getMonth()+1;
+
+      for(let i = current_month; i > 0; i--){
+        let bookings_each_month = this.bookings.filter(booking => {
+          return new Date(booking.date_time).getMonth()+1 == i
+        });
+
+        let revenue_each_month = 0;
+
+        bookings_each_month.forEach(booking => {
+          (booking.products).forEach(product => {
+            if(SALE_or_SERVICE == "SERVICE"){
+              if(product.type == 2){
+                revenue_each_month += product.unit_price;
+              }
+            }else if(SALE_or_SERVICE == "SALE"){
+              revenue_each_month += product.unit_price;
+            }
+          });
+        });
+
+        data_array.push(revenue_each_month);
       }
-      else{
-        this.test_val = [443, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895];
-      }
+
+      return data_array.reverse();
+      
     },
-    calculate_revenue_service(){
-      let revenue_product = 0;
-      this.bookings.forEach(booking => {
-        booking.products.forEach(product => {
-          if(product.type == 2){
-            revenue_product += product.unit_price;
-          }
+
+    get_category_revenue(id){
+      let revenue = 0;
+
+      (this.bookings).forEach(booking => {
+        let filtered_products = (booking.products).filter(filtered_product => {
+          return (filtered_product.category.id) == id
+        });
+        filtered_products.forEach(product => {
+          revenue += product.unit_price
         });
       });
-      return revenue_product;
+    
+      return revenue;
     },
-    calculate_revenue_product(){
-      let revenue_product = 0;
-      this.bookings.forEach(booking => {
-        booking.products.forEach(product => {
-          if(product.type == 1){
-            revenue_product += product.unit_price;
-          }
+    get_product_revenue(type){
+      let revenue = 0;
+
+      (this.bookings).forEach(booking => {
+        let filtered_products = (booking.products).filter(filtered_product => {
+          return (filtered_product.type) == type
+        });
+        filtered_products.forEach(product => {
+          revenue += product.unit_price
         });
       });
-      return revenue_product;
+      return revenue;
     },
-    calculate_revenue_course(){
-      let revenue_product = 0;
-      this.bookings.forEach(booking => {
-        booking.products.forEach(product => {
-          if(product.type == 3){
-            revenue_product += product.unit_price;
-          }
-        });
-      });
-      return revenue_product;
-    }
+    
   },
   apollo: {
     bookings: gql`{
@@ -510,6 +504,10 @@ export default {
             name
             type
             unit_price
+            category {
+              id 
+              name
+            }
           }
         }
     }`,

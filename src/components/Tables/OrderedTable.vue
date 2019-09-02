@@ -1,12 +1,12 @@
 <template>
   <div>
-    <md-table v-model="employees" :table-header-color="tableHeaderColor">
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell md-label="ID">{{ item.id }}</md-table-cell>
-        <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
-        <md-table-cell md-label="Branch">{{ item.branch.name }}</md-table-cell>
-        <md-table-cell md-label="Email">{{ item.email }}</md-table-cell>
-        <md-table-cell md-label="Total Booking">{{ item.bookings.length }}</md-table-cell>
+    <md-table :table-header-color="tableHeaderColor">
+      <md-table-row v-for="employee in branch.employees"
+                    v-bind:key="employee.id">
+        <md-table-cell md-label="ID">{{ employee.id }}</md-table-cell>
+        <md-table-cell md-label="Name">{{ employee.name }}</md-table-cell>
+        <md-table-cell md-label="Email">{{ employee.email }}</md-table-cell>
+        <md-table-cell md-label="Total Booking">{{ employee.bookings.length }}</md-table-cell>
       </md-table-row>
     </md-table>
   </div>
@@ -21,28 +21,44 @@ export default {
     tableHeaderColor: {
       type: String,
       default: ""
+    },
+    selected_branch_id: {
+      type: String,
+      default: ""
     }
   },
   data() {
     return {
-      employees: [],
+      branch: []
     };
   },
+  watch: {
+    selected_branch_id: function(){
+      this.$apollo.queries.branch.refetch()
+    }
+  },
   apollo: {
-      employees: gql`{
-          employees {
-            id
+      branch: {
+        query: gql`query($id: ID!){
+          branch(id: $id){
+            id 
             name
-            email
-            branch {
-              id 
-              name
-            }
-            bookings {
+            employees {
               id
+              name
+              email
+              bookings {
+                id
+              }
             }
           }
-      }`
+        }`,
+        variables() {
+          return {
+            id: this.selected_branch_id,
+          }
+        },
+      },
   },
 };
 </script>
