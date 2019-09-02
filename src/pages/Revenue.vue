@@ -10,9 +10,9 @@
           <div class="md-layout-item md-size-100">
             <chart-card
               :chart-data="{
-                labels: this.get_sale_or_service_revenue('SALE'),
+                labels: this.generate_month_list(),
                 series: [
-                 this.test,
+                 this.get_sale_or_service_revenue('SALE')
                 ]
               }"
               :chart-options="dailySalesChart.options"
@@ -349,31 +349,38 @@ export default {
   },
   watch: {
     selected_branch_id: function (){
-      // let data_array = [];
-      // let current_month = (new Date()).getMonth()+1;
 
-      // let branch = (this.branches).filter(filtered_branch => {
-      //     return filtered_branch.id == this.selected_branch_id
-      // });
+      function get_selected_branch(branch_id, branches){
+        let selected_branch = (branches).filter(branch => {
+          return branch.id == branch_id
+        });
 
-      // (branch.employees).forEach(employee => {
-      //   for(let i = current_month; i > 0; i--){
-      //     let bookings_each_month = employee.bookings.filter(booking => {
-      //       return new Date(booking.date_time).getMonth()+1 == i
-      //     });
+        return selected_branch;
+      }
 
-      //     let revenue_each_month = 0;
+      function get_bookings_from_branch(branch){
+        let bookings = []
 
-      //     bookings_each_month.forEach(booking => {
-      //       (booking.products).forEach(product => {
-      //         revenue_each_month += product.unit_price;
-      //       });
-      //     });
-      //     data_array.push(revenue_each_month);
-      //   }
-      // });
-      
-      // return data_array.reverse();
+        (branch.employees).forEach(employee => {
+
+        });
+      }
+
+      function get_product_revenue(type){
+        let revenue = 0;
+
+        (this.bookings).forEach(booking => {
+          let filtered_products = (booking.products).filter(filtered_product => {
+            return (filtered_product.type) == type
+          });
+          filtered_products.forEach(product => {
+            revenue += product.unit_price
+          });
+        });
+        return revenue;
+      }
+
+      get_selected_branch(this.selected_branch_id, this.branches)
       
     }
   },
