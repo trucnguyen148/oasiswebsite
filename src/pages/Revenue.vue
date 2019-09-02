@@ -62,7 +62,7 @@
                     this.get_sale_or_service_revenue('SALE'),
                     ]
                   }"
-                :chart-options="revenueOfServiceChart.options"
+                :chart-options="dailySalesChart.options"
                 :chart-type="'Line'"
                 data-background-color="orange"
               >
@@ -163,7 +163,7 @@
         </md-card-header>
         <md-card-content>
           <!-- Search branch -->
-          <div class="md-layout-item md-size-100 ">
+          <!-- <div class="md-layout-item md-size-100 ">
             <md-field>
               <label>Select Branch</label>
               <sui-dropdown
@@ -174,7 +174,7 @@
                 style="margin-top: 2.5rem"
               />
             </md-field>
-          </div>
+          </div> -->
 
           <!--Revenue in each branch-->
           <div class="md-layout-item md-size-100">
@@ -182,11 +182,10 @@
               :chart-data="{
                 labels: this.generate_month_list(),
                 series: [
-                 this.get_branch_revenue()
+                 this.get_sale_or_service_revenue('SALE'),
                 ]
               }"
-              :chart-options="revenueBranchChart.options"
-              :chart-responsive-options="revenueBranchChart.responsiveOptions"
+              :chart-options="dailySalesChart.options"
               :chart-type="'Line'"
               data-background-color="red"
             >
@@ -318,41 +317,9 @@ export default {
         }
       },
 
-      revenueOfServiceChart: {
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          }
-        }
-      },
-
-      revenueBranchChart: {
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          }
-        }
-      },
-
       bookings: [],
       branches: [],
-      selected_branch_id: "0",
+      selected_branch_id: "3",
       branch: [],
     };
   },
