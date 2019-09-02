@@ -7,14 +7,28 @@
                         <label>Select Branches:</label>
                         <sui-dropdown
                             fluid
-                            placeholder="Select branch"
                             selection
-                            :options="branch"
-                            v-model="current"
+                            :options="list_branch_name_and_id_for_dropdown()"
+                            v-model="branch_selected_from_dropdown_id"
                             style="margin-top: 2.5rem"
                         />
                     </md-field>
             </div>
+            
+            <!-- Select Staff -->
+            <div class="md-layout-item md-size-100">
+                    <md-field>
+                    <label>Select Staffs:</label>
+                    <sui-dropdown
+                        fluid
+                        selection
+                        :options="list_emp_name_and_id_for_dropdown_based_on_branch_id"
+                        v-model="emp_selected_from_dropdown_id"
+                        style="margin-top: 2.5rem"
+                        />
+                    </md-field>
+            </div>
+
             <!-- Select date -->
             <div class="md-layout-item md-size-100">
                     <label>Select date:</label>
@@ -26,23 +40,10 @@
                         is-dark
                         is-inline  
                         style="display: block; margin-left: auto; margin-right: auto" 
+                        v-model="selected_date"
                     />  
             </div>
-            <!-- Select Staff -->
-            <div class="md-layout-item md-size-100">
-                    <md-field>
-                    <label>Select Staffs:</label>
-                    <sui-dropdown
-                        fluid
-                        placeholder="Select staff"
-                        selection
-                        :options="staff"
-                        v-model="current"
-                        style="margin-top: 2.5rem"
-                        />
-                    </md-field>
-            </div>
-
+            
             <!-- Show after selected -->
             <ul
                 v-for="data in myJson"
@@ -86,6 +87,7 @@
 import json from "./../data/workingtime.json";
 import json1 from "./../data/staff.json";
 import json2 from "./../data/categories.json";
+import gql from 'graphql-tag';
 
 export default {
     data(){
@@ -93,14 +95,83 @@ export default {
             open: false,
             myJson: json,
             myJson1: json1,
-            myJson2: json2
+            myJson2: json2,
+            branches: [],
+            branch_selected_from_dropdown_id: [],
+            list_emp_name_and_id_for_dropdown_based_on_branch_id: [],
+            emp_selected_from_dropdown_id: [],
+            selected_date: [],
+            formated_selected_date: [],
         };
         
     },
+    watch: {
+        branch_selected_from_dropdown_id: function(){
+            this.list_emp_name_and_id_for_dropdown_based_on_branch_id = this.list_emp_name_and_id_for_dropdown(this.branch_selected_from_dropdown_id);
+        },
+        selected_date: function(){
+            var start_date = this.formatDate(this.selected_date.start);
+            var end_date = this.formatDate(this.selected_date.end);
+
+            this.formated_selected_date.push({
+                start: start_date,
+                end: end_date
+            });
+        }
+    },
     methods: {
         toggle() {
-        this.open = !this.open;
+            this.open = !this.open;
         },
-    }
+        formatDate(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            return year + "-" + month + "-" + day + " 00:00:00";
+        },
+        list_branch_name_and_id_for_dropdown(){
+            var branch_list_for_dropdown = [];
+            this.branches.forEach(branch => {
+                branch_list_for_dropdown.push({
+                    value: branch.id,
+                    text: branch.name
+                })
+            });
+            return branch_list_for_dropdown;
+        },
+        list_emp_name_and_id_for_dropdown(id){
+            var emp_list_for_dropdown = [];
+
+            this.branches.forEach(branch => {
+                if(branch.id == id){
+                    branch.employees.forEach(employee => {
+                        emp_list_for_dropdown.push({
+                            value: employee.id,
+                            text: employee.name
+                        });
+                    });
+                    
+                }
+            });
+            return emp_list_for_dropdown;
+        },
+    },
+    apollo: {
+        branches: gql`{
+            branches {
+            id
+            name
+            employees {
+                id
+                name
+                bookings {
+                products {
+                    unit_price
+                }
+                }
+            }
+            }
+        }`,
+    },
 }
 </script>

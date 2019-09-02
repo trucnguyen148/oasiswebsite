@@ -48,8 +48,12 @@ export default {
       type: Object,
       default: () => {
         return {
-          labels: [],
-          series: []
+          labels: [
+            
+          ],
+          series: [
+            
+          ]
         };
       }
     },
