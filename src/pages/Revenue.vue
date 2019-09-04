@@ -17,6 +17,7 @@
           </sui-button>
         </sui-modal-actions>
       </sui-modal>
+
     </keep-alive>
     <div class="md-layout">
       <md-card>
@@ -59,7 +60,7 @@
                 :chart-data="{
                     labels: this.generate_month_list(),
                     series: [
-                    this.get_sale_or_service_revenue('SALE'),
+                    this.get_sale_or_service_revenue('SERVICE'),
                     ]
                   }"
                 :chart-options="dailySalesChart.options"
