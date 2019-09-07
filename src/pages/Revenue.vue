@@ -292,6 +292,9 @@
 import { StatsCard, ChartCard, OrderedTable } from "@/components";
 import gql from 'graphql-tag';
 
+const CURRENT_MONTH = (new Date()).getMonth()+1;
+const MONTH_ARRAY = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export default {
   components: {
     StatsCard,
@@ -329,19 +332,11 @@ export default {
     selected_branch_id: function (){
       this.$apollo.queries.branch.refetch()
       this.show_branch = false
-
       setTimeout(this.change_state, 700)
-
     },
     show: function(){
       this.open = false
     },
-    
-  },
-  computed: {
-  },
-  mounted(){
-    
   },
   methods: {
     change_state(){
@@ -354,56 +349,15 @@ export default {
         this.show = true
         this.show_branch = true
       })
-      
-
-  },        
+    },        
     generate_month_list(){
-      let data_array = [];
-      let current_month = (new Date()).getMonth()+1;
-      
-      for(let i = current_month; i > 0; i--){
-        if(i == 1) {
-          data_array.push("Jan");
-        }
-        else if(i == 2) {
-          data_array.push("Feb");
-        }
-        else if(i == 3) {
-          data_array.push("Mar")
-        }
-        else if(i == 4) {
-          data_array.push("Apr");
-        }
-        else if(i == 5) {
-          data_array.push("May");
-        }
-        else if(i == 6) {
-          data_array.push("June")
-        }
-        else if(i == 7) {
-          data_array.push("July");
-        }
-        else if(i == 8) {
-          data_array.push("Aug")
-        }
-        else if(i == 9) {
-          data_array.push("Sep");
-        }
-        else if(i == 10) {
-          data_array.push("Oct");
-        }
-        else if(i == 11) {
-          data_array.push("Nov")
-        }
-        else if(i == 12) {
-          data_array.push("Dec");
-        }
-        else{
-          data_array.push("");
-        }
+      let current_month_array = [];
+
+      for (let i = 1; i <= CURRENT_MONTH; i++) {
+          current_month_array.push(MONTH_ARRAY[i-1]);
       }
-      
-      return data_array.reverse();
+
+      return current_month_array;
     },
     list_branches(){
       let branch_list = [];
@@ -417,38 +371,13 @@ export default {
     },
     get_sale_or_service_revenue(SALE_or_SERVICE){
       let data_array = [];
-      let current_month = (new Date()).getMonth()+1;
-      
-      function get_bookings_each_month(month, bookings){
-        let bookings_each_month = [];
 
-        bookings_each_month = bookings.filter(booking => {
-          return new Date(booking.date_time).getMonth()+1 == month
-        });
-
-        return bookings_each_month
-      }
-
-      function get_revenue_each_month(bookings_each_month){
-          let revenue_each_month = 0;
-
-          bookings_each_month.forEach(booking => {
-            (booking.products).forEach(product => {
-              if(SALE_or_SERVICE == "SERVICE"){
-                if(product.type == 2){
-                  revenue_each_month += product.unit_price;
-                }
-              }else if(SALE_or_SERVICE == "SALE"){
-                revenue_each_month += product.unit_price;
-              }
-            });
-          });
-
-          return revenue_each_month
-      }
-
-      for(let i = current_month; i > 0; i--){
-        data_array.push(get_revenue_each_month(get_bookings_each_month(i, this.bookings)) );
+      for(let i = CURRENT_MONTH; i > 0; i--){
+        if(SALE_or_SERVICE == "SALE"){
+          data_array.push(this.get_revenue_each_month(this.get_bookings_each_month(i, this.bookings)) );
+        }else{
+          data_array.push(this.get_product_revenue(2, this.get_bookings_each_month(i, this.bookings)) );
+        }
       }
 
       return data_array.reverse();
@@ -470,78 +399,77 @@ export default {
       return revenue;
     },
 
-    get_product_revenue(type){
+    get_product_revenue(type, bookings){
       let revenue = 0;
       
-      if(this.branch !== null && this.branch !== undefined){
-        if(this.branch.employees !== null && this.branch.employees !== undefined){
-          (this.branch.employees).forEach(employee => {
-            if(employee.bookings !== null && employee.bookings !== undefined){
-              (employee.bookings).forEach(booking => {
-                let filtered_products = (booking.products).filter(filtered_product => {
-                  return (filtered_product.type) == type
-                });
-                filtered_products.forEach(product => {
-                  revenue += product.unit_price
-                });
-              });
-            }
-          });
-        }
+      if(bookings == undefined){
+        bookings = this.get_bookings_from_branch(this.branch);
       }
+
+      (bookings).forEach(booking => {
+        let filtered_products = (booking.products).filter(filtered_product => {
+          return (filtered_product.type) == type
+        });
+        filtered_products.forEach(product => {
+          revenue += product.unit_price
+        });
+      });
 
       return revenue;
     },
     get_branch_revenue(){
       let data_array = [];
-      let current_month = (new Date()).getMonth()+1;
-      
-      function get_bookings_from_branch(branch){
-        let bookings = [];
 
-        if(branch.employees !== null && branch.employees !== undefined){
-          (branch.employees).forEach(employee => {
-            if(employee.bookings !== null && employee.bookings !== undefined){
-              (employee.bookings).forEach(booking => {
-                bookings.push(booking);
-              });
-            }
-          });
-        }
-        return bookings;
-      }
-
-      function get_bookings_each_month(month, bookings){
-        let bookings_each_month = [];
-
-        bookings_each_month = bookings.filter(booking => {
-          return new Date(booking.date_time).getMonth()+1 == month
-        });
-
-        return bookings_each_month
-      }
-
-      function get_revenue_each_month(bookings_each_month){
-          let revenue_each_month = 0;
-          
-          bookings_each_month.forEach(booking => {
-            (booking.products).forEach(product => {
-              revenue_each_month += product.unit_price;
-            });
-          });
-
-          return revenue_each_month
-      }
-
-      if(this.branch !== null && this.branch !== undefined){
-        for(let i = current_month; i > 0; i--){
-          data_array.push(get_revenue_each_month(get_bookings_each_month(i, get_bookings_from_branch(this.branch))));
+      if(this.is_not_null_or_undefined(this.branch)){
+        for(let i = CURRENT_MONTH; i > 0; i--){
+          data_array.push(this.get_revenue_each_month(this.get_bookings_each_month(i, this.get_bookings_from_branch(this.branch))));
         }
         return data_array.reverse();
       }else{
        return []
       }
-    }
+    },
+    get_bookings_from_branch(branch){
+      let bookings = [];
+
+      if(this.is_not_null_or_undefined(branch) && this.is_not_null_or_undefined(branch.employees)){
+        (branch.employees).forEach(employee => {
+          if(this.is_not_null_or_undefined(employee.bookings)){
+            (employee.bookings).forEach(booking => {
+              bookings.push(booking);
+            });
+          }
+        });
+      }
+      return bookings;
+    },
+    get_bookings_each_month(month, bookings){
+      let bookings_each_month = [];
+
+      bookings_each_month = bookings.filter(booking => {
+        return new Date(booking.date_time).getMonth()+1 == month
+      });
+
+      return bookings_each_month
+    },
+    get_revenue_each_month(bookings_each_month){
+      let revenue_each_month = 0;
+
+      bookings_each_month.forEach(booking => {
+        (booking.products).forEach(product => {
+          revenue_each_month += product.unit_price;
+        });
+      });
+
+      return revenue_each_month
+    },
+    is_not_null_or_undefined(array){
+      if(array !== null && array !== undefined){
+        return true;
+      }else {
+        return false;
+      }
+    },
   },
   apollo: {
     bookings: gql`{
