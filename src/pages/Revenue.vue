@@ -12,12 +12,9 @@
           </sui-modal-description>
         </sui-modal-content>
         <sui-modal-actions>
-          <sui-button positive @click="rerender">
-            OK
-          </sui-button>
+          <sui-button positive @click="rerender">OK</sui-button>
         </sui-modal-actions>
       </sui-modal>
-
     </keep-alive>
     <div class="md-layout">
       <md-card>
@@ -27,35 +24,31 @@
         <md-card-content>
           <!-- Revenue in all branches -->
           <div v-if="show" class="md-layout-item md-size-100">
-              <!-- <sui-button @click="rerender" ref="myBtn">Click</sui-button> -->
-              <chart-card
-                :chart-data="{
+            <!-- <sui-button @click="rerender" ref="myBtn">Click</sui-button> -->
+            <chart-card
+              :chart-data="{
                   labels: this.generate_month_list(),
                   series: [
                   this.get_sale_or_service_revenue('SALE')
                   ]
                 }"
-                :chart-options="dailySalesChart.options"
-                :chart-type="'Line'"
-                data-background-color="pink"
-              />
-              <template slot="content">
-                <h4>Total revenue</h4>
-              </template>
+              :chart-options="dailySalesChart.options"
+              :chart-type="'Line'"
+              data-background-color="pink"
+            />
+            <template slot="content">
+              <h4>Total revenue</h4>
+            </template>
 
-              <template slot="footer">
-                <div class="stats">
-                  <md-icon>access_time</md-icon>
-                  updated just now
-                </div>
-              </template>
-
+            <template slot="footer">
+              <div class="stats">
+                <md-icon>access_time</md-icon>updated just now
+              </div>
+            </template>
           </div>
           <div v-if="show" style="display: flex; flex-direction: row">
             <!-- Revenue of services -->
-            <div
-              class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
-            >
+            <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
               <chart-card
                 :chart-data="{
                     labels: this.generate_month_list(),
@@ -70,8 +63,8 @@
                 <template slot="content">
                   <h4>Revenue of service</h4>
                   <p class="category">
-                    <span class="text-success"
-                      ><i class="fas fa-long-arrow-alt-up"></i> 55%
+                    <span class="text-success">
+                      <i class="fas fa-long-arrow-alt-up"></i> 55%
                     </span>
                     increase in today sales.
                   </p>
@@ -79,16 +72,13 @@
 
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>access_time</md-icon>
-                    updated 26 minutes ago
+                    <md-icon>access_time</md-icon>updated 26 minutes ago
                   </div>
                 </template>
               </chart-card>
             </div>
             <!-- Revenue of Nails -->
-            <div
-              class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22"
-            >
+            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
               <stats-card data-background-color="orange">
                 <template slot="header">
                   <md-icon>store</md-icon>
@@ -96,21 +86,18 @@
 
                 <template slot="content">
                   <p class="category">Nails</p>
-                  <h3 class="title">€ {{ get_category_revenue(9) }} </h3>
+                  <h3 class="title">€ {{ get_category_revenue(9) }}</h3>
                 </template>
 
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>update</md-icon>
-                    Just Updated
+                    <md-icon>update</md-icon>Just Updated
                   </div>
                 </template>
               </stats-card>
             </div>
             <!-- Revenue of products -->
-            <div
-              class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22"
-            >
+            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
               <stats-card data-background-color="red">
                 <template slot="header">
                   <md-icon>shopping_basket</md-icon>
@@ -118,22 +105,19 @@
 
                 <template slot="content">
                   <p class="category">Tattoo</p>
-                  <h3 class="title">€ {{ get_category_revenue(10) }} </h3>
+                  <h3 class="title">€ {{ get_category_revenue(10) }}</h3>
                 </template>
 
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>update</md-icon>
-                    Just Updated
+                    <md-icon>update</md-icon>Just Updated
                   </div>
                 </template>
               </stats-card>
             </div>
 
             <!-- Revenue of tattoo -->
-            <div
-              class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22"
-            >
+            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
               <stats-card data-background-color="blue">
                 <template slot="header">
                   <md-icon>event_note</md-icon>
@@ -146,8 +130,7 @@
 
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>update</md-icon>
-                    Just Updated
+                    <md-icon>update</md-icon>Just Updated
                   </div>
                 </template>
               </stats-card>
@@ -156,15 +139,14 @@
         </md-card-content>
       </md-card>
 
-
       <!-- Revenue in each branch -->
-      <md-card> 
+      <md-card>
         <md-card-header data-background-color="black">
           <h3 class="title">REVENUE BASED ON BRANCH</h3>
         </md-card-header>
         <md-card-content>
           <!-- Search branch -->
-          <div class="md-layout-item md-size-100 ">
+          <div class="md-layout-item md-size-100">
             <md-field>
               <label>Select Branch</label>
               <sui-dropdown
@@ -179,7 +161,7 @@
 
           <!--Revenue in each branch-->
           <div v-if="show_branch" class="md-layout-item md-size-100">
-            <chart-card 
+            <chart-card
               :chart-data="{
                 labels: this.generate_month_list(),
                 series: [
@@ -190,11 +172,9 @@
               :chart-type="'Line'"
               data-background-color="red"
             >
-
               <template slot="footer">
                 <div class="stats">
-                  <md-icon>access_time</md-icon>
-                  updated just now
+                  <md-icon>access_time</md-icon>updated just now
                 </div>
               </template>
             </chart-card>
@@ -202,9 +182,7 @@
 
           <div style="display: flex; flex-direction: row">
             <!-- Revenue of services -->
-            <div
-              class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33"
-            >
+            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
               <stats-card data-background-color="orange">
                 <template slot="header">
                   <md-icon>store</md-icon>
@@ -212,21 +190,18 @@
 
                 <template slot="content">
                   <p class="category">Services</p>
-                  <h3 class="title">€ {{ get_product_revenue(2) }} </h3>
+                  <h3 class="title">€ {{ get_product_revenue(2) }}</h3>
                 </template>
 
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>update</md-icon>
-                    Just Updated
+                    <md-icon>update</md-icon>Just Updated
                   </div>
                 </template>
               </stats-card>
             </div>
             <!-- Revenue of products -->
-            <div
-              class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33"
-            >
+            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
               <stats-card data-background-color="red">
                 <template slot="header">
                   <md-icon>shopping_basket</md-icon>
@@ -234,22 +209,19 @@
 
                 <template slot="content">
                   <p class="category">Products</p>
-                  <h3 class="title">€ {{ get_product_revenue(1) }} </h3>
+                  <h3 class="title">€ {{ get_product_revenue(1) }}</h3>
                 </template>
 
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>update</md-icon>
-                    Just Updated
+                    <md-icon>update</md-icon>Just Updated
                   </div>
                 </template>
               </stats-card>
             </div>
 
             <!-- Revenue of courses -->
-            <div
-              class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33"
-            >
+            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
               <stats-card data-background-color="blue">
                 <template slot="header">
                   <md-icon>event_note</md-icon>
@@ -262,16 +234,13 @@
 
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>update</md-icon>
-                    Just Updated
+                    <md-icon>update</md-icon>Just Updated
                   </div>
                 </template>
               </stats-card>
             </div>
           </div>
-          <div
-            class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50"
-          >
+          <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
             <md-card>
               <md-card-header data-background-color="orange">
                 <h4 class="title">Employees Stats</h4>
@@ -290,10 +259,23 @@
 
 <script>
 import { StatsCard, ChartCard, OrderedTable } from "@/components";
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
-const CURRENT_MONTH = (new Date()).getMonth()+1;
-const MONTH_ARRAY = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const CURRENT_MONTH = new Date().getMonth() + 1;
+const MONTH_ARRAY = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+];
 
 export default {
   components: {
@@ -326,169 +308,192 @@ export default {
       branches: [],
       selected_branch_id: "3",
       branch: [],
+      test: ""
     };
   },
   watch: {
-    selected_branch_id: function (){
-      this.$apollo.queries.branch.refetch()
-      this.show_branch = false
-      setTimeout(this.change_state, 700)
+    selected_branch_id: function() {
+      this.$apollo.queries.branch.refetch();
+      this.show_branch = false;
+      setTimeout(this.change_state, 700);
     },
-    show: function(){
-      this.open = false
-    },
+    show: function() {
+      this.open = false;
+    }
   },
   methods: {
-    change_state(){
-        this.show_branch = true
+    change_state() {
+      this.show_branch = true;
     },
-    rerender(){
-      this.show = false
-      this.show_branch = false
+    rerender() {
+      this.show = false;
+      this.show_branch = false;
       this.$nextTick(() => {
-        this.show = true
-        this.show_branch = true
-      })
-    },        
-    generate_month_list(){
+        this.show = true;
+        this.show_branch = true;
+      });
+    },
+    generate_month_list() {
       let current_month_array = [];
 
       for (let i = 1; i <= CURRENT_MONTH; i++) {
-          current_month_array.push(MONTH_ARRAY[i-1]);
+        current_month_array.push(MONTH_ARRAY[i - 1]);
       }
 
       return current_month_array;
     },
-    list_branches(){
-      let branch_list = [];
-      this.branches.forEach(branch => {
-        branch_list.push({
+    list_branches() {
+      let branch_list = this.branches.map(branch => {
+        return {
           value: branch.id,
           text: branch.name
-        })
+        };
       });
       return branch_list;
     },
-    get_sale_or_service_revenue(SALE_or_SERVICE){
+    get_sale_or_service_revenue(SALE_or_SERVICE) {
       let data_array = [];
 
-      for(let i = CURRENT_MONTH; i > 0; i--){
-        if(SALE_or_SERVICE == "SALE"){
-          data_array.push(this.get_revenue_each_month(this.get_bookings_each_month(i, this.bookings)) );
-        }else{
-          data_array.push(this.get_product_revenue(2, this.get_bookings_each_month(i, this.bookings)) );
+      for (let i = CURRENT_MONTH; i > 0; i--) {
+        if (SALE_or_SERVICE == "SALE") {
+          data_array.push(
+            this.get_revenue_each_month(
+              this.get_bookings_each_month(i, this.bookings)
+            )
+          );
+        } else {
+          data_array.push(
+            this.get_revenue_each_month(
+              this.get_bookings_each_month(i, this.bookings), 2
+            )
+          );
         }
       }
 
       return data_array.reverse();
-      
     },
-
-    get_category_revenue(id){
-      let revenue = 0;
-
-      (this.bookings).forEach(booking => {
-        let filtered_products = (booking.products).filter(filtered_product => {
-          return (filtered_product.category.id) == id
-        });
-        filtered_products.forEach(product => {
-          revenue += product.unit_price
-        });
+    get_category_revenue(id) {
+      const revenue = this.bookings.map(booking => {
+        return (booking.products)
+          .filter(filtered_product => {
+            return filtered_product.category.id == id;
+          }).reduce((total, product) => total + product.unit_price, 0);
       });
-    
-      return revenue;
-    },
 
-    get_product_revenue(type, bookings){
-      let revenue = 0;
-      
-      if(bookings == undefined){
+      return revenue[0];
+    },
+    get_product_revenue(type, bookings) {
+      if (bookings === undefined) {
         bookings = this.get_bookings_from_branch(this.branch);
       }
 
-      (bookings).forEach(booking => {
-        let filtered_products = (booking.products).filter(filtered_product => {
-          return (filtered_product.type) == type
-        });
-        filtered_products.forEach(product => {
-          revenue += product.unit_price
-        });
+      const revenue = bookings.map(booking => {
+        return booking.products
+          .filter(filtered_product => {
+            return filtered_product.type == type;
+          }).reduce((total, product) => total + product.unit_price, 0);
       });
 
-      return revenue;
+      return revenue[0];
     },
-    get_branch_revenue(){
+    get_branch_revenue() {
       let data_array = [];
 
-      if(this.is_not_null_or_undefined(this.branch)){
-        for(let i = CURRENT_MONTH; i > 0; i--){
-          data_array.push(this.get_revenue_each_month(this.get_bookings_each_month(i, this.get_bookings_from_branch(this.branch))));
+      if (this.is_not_null_or_undefined(this.branch)) {
+        for (let i = CURRENT_MONTH; i > 0; i--) {
+          data_array.push(
+            this.get_revenue_each_month(
+              this.get_bookings_each_month(
+                i,
+                this.get_bookings_from_branch(this.branch)
+              )
+            )
+          );
         }
         return data_array.reverse();
-      }else{
-       return []
+      } else {
+        return [];
       }
     },
-    get_bookings_from_branch(branch){
+    get_bookings_from_branch(branch) {
       let bookings = [];
 
-      if(this.is_not_null_or_undefined(branch) && this.is_not_null_or_undefined(branch.employees)){
-        (branch.employees).forEach(employee => {
-          if(this.is_not_null_or_undefined(employee.bookings)){
-            (employee.bookings).forEach(booking => {
+      if (
+        this.is_not_null_or_undefined(branch) &&
+        this.is_not_null_or_undefined(branch.employees)
+      ) {
+        (branch.employees).map(employee => {
+          if (this.is_not_null_or_undefined(employee.bookings)) {
+            return employee.bookings.map(booking => {
               bookings.push(booking);
             });
           }
         });
       }
+
       return bookings;
     },
-    get_bookings_each_month(month, bookings){
+    get_bookings_each_month(month, bookings) {
       let bookings_each_month = [];
 
       bookings_each_month = bookings.filter(booking => {
-        return new Date(booking.date_time).getMonth()+1 == month
+        return new Date(booking.date_time).getMonth() + 1 == month;
       });
 
-      return bookings_each_month
+      return bookings_each_month;
     },
-    get_revenue_each_month(bookings_each_month){
-      let revenue_each_month = 0;
+    get_revenue_each_month(bookings_each_month, type) {
+      if (type === undefined) {
+        const revenue_each_month = bookings_each_month
+          .map(booking => {
+            return booking.products.map(product => {
+              return product.unit_price;
+            });
+          }).reduce((a, b) => a + b, 0);
 
-      bookings_each_month.forEach(booking => {
-        (booking.products).forEach(product => {
-          revenue_each_month += product.unit_price;
-        });
-      });
+        return revenue_each_month;
+      } else {
+        const revenue_each_month = bookings_each_month
+          .map(booking => {
+            return (booking.products).filter(filtered_product => {
+              return filtered_product.type == type;
+            }).map(product => {
+              return product.unit_price;
+            });
+          }).reduce((a, b) => a + b, 0);
 
-      return revenue_each_month
-    },
-    is_not_null_or_undefined(array){
-      if(array !== null && array !== undefined){
-        return true;
-      }else {
-        return false;
+        return revenue_each_month;
       }
     },
+    is_not_null_or_undefined(array) {
+      if (array !== null && array !== undefined) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   apollo: {
-    bookings: gql`{
+    bookings: gql`
+      {
         bookings {
-          id 
+          id
           date_time
           products {
-            id 
+            id
             name
             type
             unit_price
             category {
-              id 
+              id
               name
             }
           }
         }
-    }`,
-    branches: gql`{
+      }
+    `,
+    branches: gql`
+      {
         branches {
           id
           name
@@ -501,11 +506,13 @@ export default {
             }
           }
         }
-    }`,
+      }
+    `,
     branch: {
-        query: gql`query($id: ID!){
-          branch(id: $id){
-            id 
+      query: gql`
+        query($id: ID!) {
+          branch(id: $id) {
+            id
             name
             employees {
               id
@@ -515,20 +522,21 @@ export default {
                 id
                 date_time
                 products {
-                  id 
+                  id
                   type
                   unit_price
                 }
               }
             }
           }
-        }`,
-        variables() {
-          return {
-            id: this.selected_branch_id,
-          }
-        },
-      },
-  },
+        }
+      `,
+      variables() {
+        return {
+          id: this.selected_branch_id
+        };
+      }
+    }
+  }
 };
 </script>

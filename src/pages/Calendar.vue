@@ -8,23 +8,9 @@
                         <sui-dropdown
                             fluid
                             selection
-                            :options="list_branch_name_and_id_for_dropdown()"
-                            v-model="branch_selected_from_dropdown_id"
+                            :options="list_branches()"
+                            v-model="selected_branch_id"
                             style="margin-top: 2.5rem"
-                        />
-                    </md-field>
-            </div>
-            
-            <!-- Select Staff -->
-            <div class="md-layout-item md-size-100">
-                    <md-field>
-                    <label>Select Staffs:</label>
-                    <sui-dropdown
-                        fluid
-                        selection
-                        :options="list_emp_name_and_id_for_dropdown_based_on_branch_id"
-                        v-model="emp_selected_from_dropdown_id"
-                        style="margin-top: 2.5rem"
                         />
                     </md-field>
             </div>
@@ -33,8 +19,6 @@
             <div class="md-layout-item md-size-100">
                     <label>Select date:</label>
                     <vc-date-picker
-                        mode="range"
-                        :columns="$screens({ default: 1, lg: 2 })"
                         :value="null"
                         color="pink"
                         is-dark
@@ -46,33 +30,28 @@
             
             <!-- Show after selected -->
             <ul
-                v-for="data in myJson"
-                v-bind:key="data.id"
-                v-bind:time="data.time"
+                v-for="workTime in workTimes"
+                v-bind:key="workTime.id"
             >
-                <li>{{data.time}}</li>
+                <li>{{ workTime.start }} - {{ workTime.end }}</li>
                 <ul
-                    v-for="data in myJson2"
-                    v-bind:key="data.id"
-                    v-bind:name="data.name"
+                    v-for="position in positions"
+                    v-bind:key="position.id"
                 >
-                    <li>{{data.name}}</li>
+                    <li>{{position.name}}</li>
                     <!-- Show staffs -->
                     <div class="md-layout-item md-size-100">
                         <md-field>
                             <md-table md-card>
-                            <md-table-row
-                                v-for="data in myJson1"
-                                v-bind:key="data.id"
-                                v-bind:picture="data.picture"
-                                v-bind:name="data.name"
-                                v-bind:phone="data.phone"
-                            >
-                                <md-table-cell md-label="Picture">{{data.picture}}</md-table-cell>
-                                <md-table-cell md-label="Name" >{{data.name}}</md-table-cell>
-                                <md-table-cell md-label="Phone number" >{{data.phone}}</md-table-cell>
-                            
-                            </md-table-row>
+                                <md-table-row
+                                    v-for="emp in get_emp_with_position_and_worktime(workTime.id, position.id)"
+                                    v-bind:key="emp.id"
+                                >
+                                    <md-table-cell md-label="Picture"></md-table-cell>
+                                    <md-table-cell md-label="Name" >{{emp.name}}</md-table-cell>
+                                    <md-table-cell md-label="Phone number" >{{emp.phone}}</md-table-cell>
+                                
+                                </md-table-row>
                             </md-table>
                         </md-field>
                     </div>
@@ -84,40 +63,32 @@
 </template>
 
 <script>
-import json from "./../data/workingtime.json";
-import json1 from "./../data/staff.json";
-import json2 from "./../data/categories.json";
 import gql from 'graphql-tag';
 
 export default {
     data(){
         return{
             open: false,
-            myJson: json,
-            myJson1: json1,
-            myJson2: json2,
+            
+            workTimes: [],
+            positions: [],
+            
             branches: [],
-            branch_selected_from_dropdown_id: [],
-            list_emp_name_and_id_for_dropdown_based_on_branch_id: [],
-            emp_selected_from_dropdown_id: [],
+            selected_branch_id: "3",
             selected_date: [],
-            formated_selected_date: [],
         };
         
     },
-    watch: {
-        branch_selected_from_dropdown_id: function(){
-            this.list_emp_name_and_id_for_dropdown_based_on_branch_id = this.list_emp_name_and_id_for_dropdown(this.branch_selected_from_dropdown_id);
-        },
-        selected_date: function(){
-            var start_date = this.formatDate(this.selected_date.start);
-            var end_date = this.formatDate(this.selected_date.end);
+    computed: {
+        format_selected_date(){
+            let formated_date = "";
+            
+            if (this.selected_date != ""){
+                formated_date = this.formatDate(this.selected_date);
+            }
 
-            this.formated_selected_date.push({
-                start: start_date,
-                end: end_date
-            });
-        }
+            return formated_date;
+        },
     },
     methods: {
         toggle() {
@@ -129,31 +100,37 @@ export default {
             var day = date.getDate();
             return year + "-" + month + "-" + day + " 00:00:00";
         },
-        list_branch_name_and_id_for_dropdown(){
-            var branch_list_for_dropdown = [];
+        list_branches(){
+            let branch_list = [];
             this.branches.forEach(branch => {
-                branch_list_for_dropdown.push({
-                    value: branch.id,
-                    text: branch.name
+                branch_list.push({
+                value: branch.id,
+                text: branch.name
                 })
             });
-            return branch_list_for_dropdown;
+            return branch_list;
         },
-        list_emp_name_and_id_for_dropdown(id){
-            var emp_list_for_dropdown = [];
-
-            this.branches.forEach(branch => {
-                if(branch.id == id){
-                    branch.employees.forEach(employee => {
-                        emp_list_for_dropdown.push({
-                            value: employee.id,
-                            text: employee.name
-                        });
-                    });
-                    
-                }
+        is_not_null_or_undefined(array){
+            if(array !== null && array !== undefined){
+                return true;
+            }else {
+                return false;
+            }
+        },
+        get_emp_with_position_and_worktime(worktime_id, posistion_id){
+            let branch = this.get_selected_branch(this.selected_branch_id);
+            let emps = (branch[0].employees).filter(employee => {
+                return (employee.worktime.id == worktime_id && employee.position.id == posistion_id);
             });
-            return emp_list_for_dropdown;
+            
+            return emps;
+        },
+        get_selected_branch(branch_id){
+            let selected_branch = (this.branches).filter(branch => {
+                return branch.id == branch_id;
+            });
+
+            return selected_branch
         },
     },
     apollo: {
@@ -162,16 +139,42 @@ export default {
             id
             name
             employees {
-                id
-                name
-                bookings {
-                products {
-                    unit_price
+                    id
+                    name
+                    phone
+                    worktime{
+                        id
+                    }
+                    position{
+                        id
+                    }
                 }
-                }
-            }
             }
         }`,
+        workTimes: gql`{
+            workTimes{
+                id
+                start
+                end
+                employees {
+                    id 
+                    name
+                }
+            }
+        }`,
+        positions: {
+            query: gql`query($type: Int!){
+                positions(type: $type){
+                    id 
+                    name
+                }
+            }`,
+            variables() {
+                return {
+                    type: 2,
+                }
+            },
+        },
     },
 }
 </script>
