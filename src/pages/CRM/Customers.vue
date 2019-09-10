@@ -26,14 +26,13 @@
             v-bind:key="customer.id"
           >
             <li>
-              <p>Name: {{customer.name}}</p>
-              <p v-if="customer.gender == 2">Gender: Female</p>
-              <p v-else>Gender: Male</p>
-              <p>Phone: {{customer.phone}}</p>
-              <p>Email: {{customer.email}}</p>
-              <p>Facebook: {{customer.facebook}}</p>
-              <p>Date of Birth: {{customer.dob}}</p>
-              <p>Address: {{customer.address}}</p>
+              <p>Name: {{ customer.name }}</p>
+              <p>Gender: {{ customer.gender | gender  }}</p>
+              <p>Phone: {{ customer.phone }}</p>
+              <p>Email: {{ customer.email }}</p>
+              <p>Facebook: {{ customer.facebook }}</p>
+              <p>Date of Birth: {{ customer.dob }}</p>
+              <p>Address: {{ customer.address }}</p>
               <div class="sameRow">
                 <p>Used Service(s) and Bought Product(s):</p>
                 <sui-button style="width: 5%" @click.native="toggle" icon="angle down"></sui-button>
@@ -46,17 +45,17 @@
                       v-for="booking in customer.bookings"
                       v-bind:key="booking.id"
                     >
-                      <md-table-cell md-label="Bill ID">{{booking.id}}</md-table-cell>
-                      <md-table-cell md-label="Date">{{booking.date_time}}</md-table-cell>
+                      <md-table-cell md-label="Date">{{ booking.date_time }}</md-table-cell>
                       <md-table-cell md-label="Used Services">
                         <p 
                           v-for="product in booking.products"
                           v-bind:key="product.id"
                           >
-                          {{ product.name }}
-                        </p>
+                          {{  product.name  }} - {{  product.type | product_type }}
+                         </p>
                       </md-table-cell>
-                      <md-table-cell md-label="Bought Product"></md-table-cell>
+                      <md-table-cell md-label="Ratings">{{ booking.ratings }}</md-table-cell>
+                      <md-table-cell md-label="Progress">{{ booking.progress | progress }}</md-table-cell>
                     </md-table-row>
                   </md-table>
                   <md-table v-else md-card>
@@ -96,28 +95,37 @@ export default {
   },
   computed: {
     customer_list(){
-      let customer_list = this.customers.map(cus => {
+      return this.customers.map(cus => {
         return {
           text: cus.name + ' - ' + cus.phone,
           value: cus.id
         }
       });
-
-      return customer_list;
     },
     selected_customer(){
       if (this.selected_cus_id !== ""){
-        let customer = this.customers.filter(cus => {
+        return this.customers.filter(cus => {
           return cus.id == this.selected_cus_id
         });
-
-        return customer
       }
     }
   },
   methods: {
     toggle() {
       this.open = !this.open;
+    }
+  },
+  filters: {
+    product_type: type => {
+      return type == 1 ? "Product" : "Service"
+    },
+    gender: gender => {
+      return gender == 1 ? "Male" : "Female"
+    },
+    progress: progress => {
+      return progress == 1 ? "Waiting" 
+            : progress == 2 ? "Done"
+            : "Cancel";
     }
   },
   apollo: {
@@ -134,6 +142,8 @@ export default {
           bookings {
             id 
             date_time
+            ratings
+            progress
             products {
               id 
               type

@@ -343,13 +343,12 @@ export default {
       return current_month_array;
     },
     list_branches() {
-      let branch_list = this.branches.map(branch => {
+      return this.branches.map(branch => {
         return {
           value: branch.id,
           text: branch.name
         };
       });
-      return branch_list;
     },
     get_sale_or_service_revenue(SALE_or_SERVICE) {
       let data_array = [];
@@ -382,7 +381,7 @@ export default {
           .reduce((total, product) => total + product.unit_price, 0);
       });
 
-      return revenue[0];
+      return revenue[0] === undefined ? 0 : revenue[0];
     },
     get_product_revenue(type, bookings) {
       if (bookings === undefined) {
@@ -397,7 +396,7 @@ export default {
           .reduce((total, product) => total + product.unit_price, 0);
       });
 
-      return revenue[0];
+      return revenue[0] === undefined ? 0 : revenue[0];
     },
     get_branch_revenue() {
       let data_array = [];
@@ -437,26 +436,21 @@ export default {
       return bookings;
     },
     get_bookings_each_month(month, bookings) {
-      let bookings_each_month = [];
-
-      bookings_each_month = bookings.filter(booking => {
+      return bookings.filter(booking => {
         return new Date(booking.date_time).getMonth() + 1 == month;
       });
-
-      return bookings_each_month;
     },
     get_revenue_each_month(bookings_each_month, type) {
       if (type === undefined) {
-        const revenue_each_month = bookings_each_month.map(booking => {
+        return bookings_each_month.map(booking => {
           return booking.products
             .map(product => {
               return product.unit_price;
             })
             .reduce((a, b) => a + b, 0);
         });
-        return revenue_each_month;
       } else {
-        const revenue_each_month = bookings_each_month
+        return bookings_each_month
           .map(booking => {
             return booking.products
               .filter(filtered_product => {
@@ -467,16 +461,10 @@ export default {
               });
           })
           .reduce((a, b) => a + b, 0);
-
-        return revenue_each_month;
       }
     },
     is_not_null_or_undefined(array) {
-      if (array !== null && array !== undefined) {
-        return true;
-      } else {
-        return false;
-      }
+      return (array !== null && array !== undefined) ? true : false
     }
   },
   apollo: {
