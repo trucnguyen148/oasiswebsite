@@ -76,7 +76,6 @@
 
 <script>
 import { UserCard, AddUser } from "@/pages";
-import json from "./../../data/bills.json";
 import gql from "graphql-tag";
 
 export default {
