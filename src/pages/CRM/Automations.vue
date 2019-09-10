@@ -16,9 +16,6 @@
                     style="padding: 2.35rem">
                 <sui-card-content >
                 <sui-card-header>{{data.name}}</sui-card-header>
-                <sui-card-description>
-                    {{data.status}}
-                </sui-card-description>
                 </sui-card-content>
                 <sui-card-content extra>
                     <sui-checkbox label="Inactive" toggle v-model="value"/>

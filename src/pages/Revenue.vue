@@ -356,17 +356,18 @@ export default {
 
       for (let i = CURRENT_MONTH; i > 0; i--) {
         if (SALE_or_SERVICE == "SALE") {
-          data_array.push(
-            this.get_revenue_each_month(
+            var revenue = this.get_revenue_each_month(
               this.get_bookings_each_month(i, this.bookings)
-            )
-          );
+            )[0]
+            if (revenue === undefined) data_array.push(0)
+            else data_array.push(revenue);
         } else {
-          data_array.push(
-            this.get_revenue_each_month(
-              this.get_bookings_each_month(i, this.bookings), 2
-            )
-          );
+          var revenue = this.get_revenue_each_month(
+              this.get_bookings_each_month(i, this.bookings),
+              2
+            )[0]
+            if (revenue === undefined) data_array.push(0);
+            else data_array.push(revenue);
         }
       }
 
@@ -374,10 +375,11 @@ export default {
     },
     get_category_revenue(id) {
       const revenue = this.bookings.map(booking => {
-        return (booking.products)
+        return booking.products
           .filter(filtered_product => {
             return filtered_product.category.id == id;
-          }).reduce((total, product) => total + product.unit_price, 0);
+          })
+          .reduce((total, product) => total + product.unit_price, 0);
       });
 
       return revenue[0];
@@ -391,7 +393,8 @@ export default {
         return booking.products
           .filter(filtered_product => {
             return filtered_product.type == type;
-          }).reduce((total, product) => total + product.unit_price, 0);
+          })
+          .reduce((total, product) => total + product.unit_price, 0);
       });
 
       return revenue[0];
@@ -401,14 +404,14 @@ export default {
 
       if (this.is_not_null_or_undefined(this.branch)) {
         for (let i = CURRENT_MONTH; i > 0; i--) {
-          data_array.push(
-            this.get_revenue_each_month(
+          var revenue = this.get_revenue_each_month(
               this.get_bookings_each_month(
                 i,
                 this.get_bookings_from_branch(this.branch)
               )
-            )
-          );
+            )[0]
+          if (revenue === undefined) data_array.push(0);
+          else data_array.push(revenue);
         }
         return data_array.reverse();
       } else {
@@ -422,7 +425,7 @@ export default {
         this.is_not_null_or_undefined(branch) &&
         this.is_not_null_or_undefined(branch.employees)
       ) {
-        (branch.employees).map(employee => {
+        branch.employees.map(employee => {
           if (this.is_not_null_or_undefined(employee.bookings)) {
             return employee.bookings.map(booking => {
               bookings.push(booking);
@@ -444,23 +447,26 @@ export default {
     },
     get_revenue_each_month(bookings_each_month, type) {
       if (type === undefined) {
-        const revenue_each_month = bookings_each_month
-          .map(booking => {
-            return booking.products.map(product => {
+        const revenue_each_month = bookings_each_month.map(booking => {
+          return booking.products
+            .map(product => {
               return product.unit_price;
-            });
-          }).reduce((a, b) => a + b, 0);
-
+            })
+            .reduce((a, b) => a + b, 0);
+        });
         return revenue_each_month;
       } else {
         const revenue_each_month = bookings_each_month
           .map(booking => {
-            return (booking.products).filter(filtered_product => {
-              return filtered_product.type == type;
-            }).map(product => {
-              return product.unit_price;
-            });
-          }).reduce((a, b) => a + b, 0);
+            return booking.products
+              .filter(filtered_product => {
+                return filtered_product.type == type;
+              })
+              .map(product => {
+                return product.unit_price;
+              });
+          })
+          .reduce((a, b) => a + b, 0);
 
         return revenue_each_month;
       }
