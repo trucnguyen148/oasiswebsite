@@ -99,6 +99,56 @@
                 </sui-dropdown>
               </div>
             </sui-button>
+            <!-- Open details information-->
+            <sui-modal v-model="open.details">
+              <sui-modal-header style="display: flex; flex-direction: row; padding: 1.5rem">
+                <div style="margin-right: 1rem">
+                  <sui-image size="mini" :src="email" />
+                </div>
+                <div>
+                  <h3>{{ card.customer.name }}</h3>
+                </div>
+              </sui-modal-header>
+              <sui-tab style="margin: 2rem" :menu="{ secondary: true }">
+                <!-- Information -->
+                <sui-tab-pane title="Information" icon="users">
+                  <div>
+                    <sui-header>Contact Info</sui-header>
+                    <div>
+                      <label>
+                        <b>Email</b>
+                        : {{ card.customer.email }}
+                      </label>
+                    </div>
+                    <div>
+                      <label>
+                        <b>Phone</b>
+                        : {{ card.customer.phone }}
+                      </label>
+                    </div>
+                    <div>
+                      <label>
+                        <b>Facebook</b>
+                        : {{ card.customer.facebook }}
+                      </label>
+                    </div>
+                  </div>
+                  <sui-divider />
+                  <div>
+                    <sui-header>Recent Purchases</sui-header>
+                    <div>
+                      <label v-for="booking in card.customer.bookings" v-bind:key="booking.id">
+                        {{ booking.date_time }}
+                        <div v-for="product in booking.products" v-bind:key="product.id">
+                        {{ product.name }}
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                  <sui-divider />
+                </sui-tab-pane>
+              </sui-tab>
+            </sui-modal>
           </sui-card>
         </div>
         <!-- Open Add Card -->
@@ -132,59 +182,6 @@
               class="ui button size middle"
             >Add card</sui-button>
           </sui-modal-actions>
-        </sui-modal>
-        <!-- Open details: information, tasks and reminds and chatbox -->
-        <sui-modal v-model="open.details">
-          <sui-modal-header style="display: flex; flex-direction: row; padding: 1.5rem">
-            <div style="margin-right: 1rem">
-              <sui-image size="mini" :src="email" />
-            </div>
-            <div>
-              <h3>Name</h3>
-            </div>
-          </sui-modal-header>
-          <sui-tab style="margin: 2rem" :menu="{ secondary: true }">
-            <!-- Information -->
-            <sui-tab-pane title="Information" icon="users">
-              <div>
-                <sui-header>Contact Info</sui-header>
-                <div>
-                  <label>Email</label>
-                  <p>Email</p>
-                </div>
-              </div>
-              <sui-divider />
-              <div>
-                <sui-header>Member Info</sui-header>
-                <div>
-                  <label>Status</label>
-                  <sui-dropdown
-                    fluid
-                    selection
-                    :options="status"
-                    v-model="current"
-                    style="margin-top: 2.5rem"
-                    class="md-layout-item md-small-size-100 md-size-50"
-                  />
-                </div>
-              </div>
-              <sui-divider />
-              <div>
-                <sui-header>Labels</sui-header>
-                <div>
-                  <sui-dropdown
-                    fluid
-                    multiple
-                    selection
-                    :options="labels"
-                    v-model="current"
-                    style="margin-top: 2.5rem"
-                  />
-                </div>
-              </div>
-              <sui-divider />
-            </sui-tab-pane>
-          </sui-tab>
         </sui-modal>
       </sui-card>
     </sui-card-group>
@@ -322,7 +319,10 @@ const UPDATE_STEP = gql`
 `;
 const UPDATE_CARD = gql`
   mutation($id: ID!, $step_id: Int!, $customer_id: Int!) {
-    updateCard(id: $id, input: { step_id: $step_id, customer_id: $customer_id }) {
+    updateCard(
+      id: $id
+      input: { step_id: $step_id, customer_id: $customer_id }
+    ) {
       id
     }
   }
@@ -611,6 +611,17 @@ export default {
               customer {
                 id
                 name
+                email
+                phone
+                facebook
+                bookings {
+                  id
+                  date_time
+                  products {
+                    id
+                    name
+                  }
+                }
               }
             }
           }
