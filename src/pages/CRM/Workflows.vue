@@ -26,18 +26,26 @@
               <div class="md-layout-item md-size-100">
                 <md-field>
                   <label>Name</label>
-                  <md-input v-model="name" type="text" required></md-input>
+                  <md-input v-model="addWorkflowParams.name" type="text" required></md-input>
                 </md-field>
               </div>
             </div>
           </sui-modal-content>
+          <sui-modal-actions>
+            <sui-button
+              data-background-color="pink"
+              positive
+              @click.native="addWorkflow()"
+              class="ui button size middle"
+            >Add</sui-button>
+          </sui-modal-actions>
         </sui-modal>
       </div>
     </div>
     <p>Manage your sales, leads and contacts at a glance.</p>
     <!-- Workflow cards -->
     <sui-card-group :items-per-row="4">
-      <sui-card style="padding: 2rem 1rem" v-for="step in step_list" v-bind:key="step.id">
+      <sui-card style="padding: 2rem 1rem" v-for="step in steps" v-bind:key="step.id">
         <div class="setting">
           <div>
             <h4>{{step.name}}</h4>
@@ -45,11 +53,11 @@
           <div>
             <sui-dropdown button icon="ellipsis horizontal" floating>
               <sui-dropdown-menu>
-                <sui-button>
+                <sui-button @click="toggleEditStep(step)">
                   <sui-dropdown-item>Rename Step</sui-dropdown-item>
                 </sui-button>
                 <sui-dropdown-divider />
-                <sui-button>
+                <sui-button @click="deleteStep(step.id)">
                   <sui-dropdown-item>Delete Step</sui-dropdown-item>
                 </sui-button>
               </sui-dropdown-menu>
@@ -58,7 +66,7 @@
         </div>
         <div class="space md-layout-item md-size-100">
           <sui-card style="border: 2px solid pink; margin-left: auto; margin-right: auto">
-            <sui-button icon="plus" @click="toggle('addStep')">Add</sui-button>
+            <sui-button icon="plus" @click="toggle('addCard', step.id)">Add</sui-button>
           </sui-card>
           <sui-card
             style="margin-left: auto; margin-right: auto"
@@ -79,22 +87,12 @@
               <div style="float: right">
                 <sui-dropdown button icon="ellipsis horizontal" floating>
                   <sui-dropdown-menu>
-                    <sui-button>
-                      <sui-dropdown-item>Rename Card</sui-dropdown-item>
+                    <sui-dropdown-divider />
+                    <sui-button @click="toggleEditCard(card)">
+                      <sui-dropdown-item>Move to</sui-dropdown-item>
                     </sui-button>
                     <sui-dropdown-divider />
-
-                    <sui-button>
-                      <sui-dropdown-item>Send Price Quote</sui-dropdown-item>
-                    </sui-button>
-                    <sui-button>
-                      <sui-dropdown-item>Send Invoice</sui-dropdown-item>
-                    </sui-button>
-                    <sui-button>
-                      <sui-dropdown-item>Move to next card</sui-dropdown-item>
-                    </sui-button>
-                    <sui-dropdown-divider />
-                    <sui-button>
+                    <sui-button @click="deleteCard(card.id)">
                       <sui-dropdown-item>Delete Card</sui-dropdown-item>
                     </sui-button>
                   </sui-dropdown-menu>
@@ -103,32 +101,23 @@
             </sui-button>
           </sui-card>
         </div>
-        <!-- Open Add step -->
-        <sui-modal v-model="open.addStep">
-          <sui-modal-header>Add Step</sui-modal-header>
+        <!-- Open Add Card -->
+        <sui-modal v-model="open.addCard">
+          <sui-modal-header>Add Card</sui-modal-header>
           <sui-modal-content>
             <sui-grid :columns="2">
               <sui-grid-row>
                 <sui-grid-column :width="3">
-                  <label>Card Title (Optional)</label>
-                </sui-grid-column>
-                <sui-grid-column :width="6">
-                  <sui-input placeholder="e.g., Send Invoice" />
-                </sui-grid-column>
-              </sui-grid-row>
-              <sui-grid-row>
-                <sui-grid-column :width="3">
-                  <label>Link to contact *</label>
+                  <label>Customer</label>
                 </sui-grid-column>
                 <sui-grid-column :width="6">
                   <sui-dropdown
                     fluid
-                    multiple
-                    :options="contacts"
+                    :options="customer_list"
                     placeholder="Search Contacts"
                     search
                     selection
-                    v-model="current"
+                    v-model="selected_customer"
                     required
                   />
                 </sui-grid-column>
@@ -139,9 +128,9 @@
             <sui-button
               data-background-color="pink"
               positive
-              @click.native="toggle('addStep')"
+              @click.native="addCard()"
               class="ui button size middle"
-            >Add</sui-button>
+            >Add card</sui-button>
           </sui-modal-actions>
         </sui-modal>
         <!-- Open details: information, tasks and reminds and chatbox -->
@@ -159,15 +148,15 @@
             <sui-tab-pane title="Information" icon="users">
               <div>
                 <sui-header>Contact Info</sui-header>
-                <sui-content>
+                <div>
                   <label>Email</label>
                   <p>Email</p>
-                </sui-content>
+                </div>
               </div>
               <sui-divider />
               <div>
                 <sui-header>Member Info</sui-header>
-                <sui-content>
+                <div>
                   <label>Status</label>
                   <sui-dropdown
                     fluid
@@ -177,12 +166,12 @@
                     style="margin-top: 2.5rem"
                     class="md-layout-item md-small-size-100 md-size-50"
                   />
-                </sui-content>
+                </div>
               </div>
               <sui-divider />
               <div>
                 <sui-header>Labels</sui-header>
-                <sui-content>
+                <div>
                   <sui-dropdown
                     fluid
                     multiple
@@ -191,32 +180,95 @@
                     v-model="current"
                     style="margin-top: 2.5rem"
                   />
-                </sui-content>
+                </div>
               </div>
               <sui-divider />
-              <div>
-                <sui-header>Attachment</sui-header>
-                <sui-content>
-                  <div class="md-layout-item md-size-100">
-                    <md-field>
-                      <md-file v-model="single" accept="image/*" required />
-                    </md-field>
-                  </div>
-                </sui-content>
-                <sui-modal-actions>
-                  <sui-button
-                    data-background-color="pink"
-                    positive
-                    @click.native="toggle('details')"
-                    class="ui button size middle"
-                  >Add</sui-button>
-                </sui-modal-actions>
-              </div>
             </sui-tab-pane>
           </sui-tab>
         </sui-modal>
       </sui-card>
     </sui-card-group>
+    <div>
+      <sui-button
+        data-background-color="pink"
+        positive
+        class="ui button size middle"
+        @click.native="toggle('addStep')"
+      >Add step</sui-button>
+      <!-- Add more step -->
+      <sui-modal v-model="open.addStep">
+        <sui-modal-header>Add New Step</sui-modal-header>
+        <sui-modal-content>
+          <div class="md-layout">
+            <div class="md-layout-item md-size-100">
+              <md-field>
+                <label>Name</label>
+                <md-input v-model="addStepParams.name" type="text" required></md-input>
+              </md-field>
+            </div>
+          </div>
+        </sui-modal-content>
+        <sui-modal-actions>
+          <sui-button
+            data-background-color="pink"
+            positive
+            @click.native="addStep()"
+            class="ui button size middle"
+          >Add</sui-button>
+        </sui-modal-actions>
+      </sui-modal>
+      <!-- Edit step -->
+      <sui-modal v-model="openEdit.editStep">
+        <sui-modal-header>Edit Step</sui-modal-header>
+        <sui-modal-content>
+          <div class="md-layout">
+            <div class="md-layout-item md-size-100">
+              <md-field>
+                <label>Name</label>
+                <md-input v-model="updateStepParams.name" type="text" required></md-input>
+              </md-field>
+            </div>
+          </div>
+        </sui-modal-content>
+        <sui-modal-actions>
+          <sui-button
+            data-background-color="pink"
+            positive
+            @click.native="updateStep()"
+            class="ui button size middle"
+          >Edit</sui-button>
+        </sui-modal-actions>
+      </sui-modal>
+      <!-- Move card -->
+      <sui-modal v-model="openEdit.editCard">
+        <sui-modal-header>Move Card</sui-modal-header>
+        <sui-modal-content>
+          <div class="md-layout">
+            <div class="md-layout-item md-size-100">
+              <md-field>
+                <label>Step</label>
+                <sui-dropdown
+                  fluid
+                  :options="step_list"
+                  search
+                  selection
+                  v-model="updateCardParams.step_id"
+                  style="margin-top: 2.5rem; width: 30%; margin-right: 1.5rem"
+                />
+              </md-field>
+            </div>
+          </div>
+        </sui-modal-content>
+        <sui-modal-actions>
+          <sui-button
+            data-background-color="pink"
+            positive
+            @click.native="updateCard()"
+            class="ui button size middle"
+          >Move</sui-button>
+        </sui-modal-actions>
+      </sui-modal>
+    </div>
   </div>
 </template>
 <script>
@@ -224,6 +276,57 @@ import json from "./../../data/workflows.json";
 import { Information, TasksReminders } from "@/pages";
 import gql from "graphql-tag";
 
+const ADD_WORKFLOW = gql`
+  mutation($name: String!) {
+    createWorkflow(input: { name: $name }) {
+      id
+      name
+    }
+  }
+`;
+const ADD_STEP = gql`
+  mutation($name: String!, $workflow_id: Int!) {
+    createStep(input: { name: $name, workflow_id: $workflow_id }) {
+      id
+      name
+    }
+  }
+`;
+const ADD_CARD = gql`
+  mutation($step_id: Int!, $customer_id: Int!) {
+    createCard(input: { step_id: $step_id, customer_id: $customer_id }) {
+      id
+    }
+  }
+`;
+const DELETE_STEP = gql`
+  mutation($id: ID!) {
+    deleteStep(id: $id) {
+      id
+    }
+  }
+`;
+const DELETE_CARD = gql`
+  mutation($id: ID!) {
+    deleteCard(id: $id) {
+      id
+    }
+  }
+`;
+const UPDATE_STEP = gql`
+  mutation($id: ID!, $name: String!, $workflow_id: Int!) {
+    updateStep(id: $id, input: { name: $name, workflow_id: $workflow_id }) {
+      id
+    }
+  }
+`;
+const UPDATE_CARD = gql`
+  mutation($id: ID!, $step_id: Int!, $customer_id: Int!) {
+    updateCard(id: $id, input: { step_id: $step_id, customer_id: $customer_id }) {
+      id
+    }
+  }
+`;
 export default {
   name: "workflows",
   props: {
@@ -242,10 +345,32 @@ export default {
       open: {
         addWorkflow: false,
         addStep: false,
+        addCard: false,
         details: false
       },
+      openEdit: {
+        editStep: false,
+        editCard: false
+      },
       workflows: [],
-      selected_workflow: ""
+      selected_workflow: "",
+      selected_customer: "",
+      selected_step: "",
+      customers: [],
+      addWorkflowParams: {
+        name: ""
+      },
+      addStepParams: {
+        name: ""
+      },
+      updateStepParams: {
+        name: ""
+      },
+      updateCardParams: {
+        card_id: "",
+        step_id: "",
+        customer_id: ""
+      }
     };
   },
   computed: {
@@ -258,29 +383,215 @@ export default {
       });
     },
     step_list() {
+      return this.steps.map(step => {
+        return {
+          text: step.name,
+          value: step.id
+        };
+      });
+    },
+    steps() {
       if (this.selected_workflow != "") {
         let selected_workflow = this.workflows.filter(workflow => {
           return workflow.id == this.selected_workflow;
         });
-        return selected_workflow[0].steps.sort((a, b) =>
-          a.step > b.step ? 1 : -1
-        );
+        return selected_workflow[0].steps;
       } else return [];
+    },
+    customer_list() {
+      return this.customers.map(customer => {
+        return {
+          text: customer.name + " - " + customer.phone,
+          value: customer.id
+        };
+      });
     }
   },
   methods: {
-    toggle(value) {
+    toggle(value, step_id) {
       const keys = Object.keys(this.open);
       keys.forEach(key => {
         this.open[key] = false;
       });
       this.open[value] = true;
+      this.selected_step = step_id === undefined ? "" : step_id;
+    },
+    toggleEditStep(step) {
+      this.openEdit.editStep = !this.openEdit.editStep;
+      this.selected_step = step.id;
+      this.updateStepParams.name = step.name;
+    },
+    toggleEditCard(card) {
+      this.openEdit.editCard = !this.openEdit.editCard;
+      this.updateCardParams.card_id = card.id;
+      this.updateCardParams.step_id = card.step.id;
+      this.updateCardParams.customer_id = card.customer.id;
     },
     card_list(step_id) {
-      let current_step = this.step_list.filter(step => {
+      let current_step = this.steps.filter(step => {
         return step.id == step_id;
       });
       return current_step[0].cards;
+    },
+    addWorkflow() {
+      const name = this.addWorkflowParams.name;
+      // We clear it early to give the UI a snappy feel
+      this.addWorkflowParams = {
+        name: ""
+      };
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: ADD_WORKFLOW,
+          variables: {
+            name: name
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.open.addWorkflow = !this.open.addWorkflow;
+          this.$apollo.queries.workflows.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    addStep() {
+      const name = this.addStepParams.name;
+      const workflow_id = this.selected_workflow;
+      // We clear it early to give the UI a snappy feel
+      this.addStepParams = {
+        name: ""
+      };
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: ADD_STEP,
+          variables: {
+            name: name,
+            workflow_id: workflow_id
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.open.addStep = !this.open.addStep;
+          this.$apollo.queries.workflows.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    addCard() {
+      const step_id = this.selected_step;
+      const customer_id = this.selected_customer;
+
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: ADD_CARD,
+          variables: {
+            step_id: step_id,
+            customer_id: customer_id
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.open.addCard = !this.open.addCard;
+          this.$apollo.queries.workflows.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    deleteStep(id) {
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: DELETE_STEP,
+          variables: {
+            id: id
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.$apollo.queries.workflows.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    deleteCard(id) {
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: DELETE_CARD,
+          variables: {
+            id: id
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.$apollo.queries.workflows.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    updateStep() {
+      const id = this.selected_step;
+      const name = this.updateStepParams.name;
+      const workflow_id = this.selected_workflow;
+      // We clear it early to give the UI a snappy feel
+      this.updateStepParams = {
+        name: ""
+      };
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_STEP,
+          variables: {
+            id: id,
+            name: name,
+            workflow_id: workflow_id
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.openEdit.editStep = !this.openEdit.editStep;
+          this.$apollo.queries.workflows.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    updateCard() {
+      const id = this.updateCardParams.card_id;
+      const step_id = this.updateCardParams.step_id;
+      const customer_id = this.updateCardParams.customer_id;
+      // We clear it early to give the UI a snappy feel
+      this.updateCardParams = {
+        card_id: "",
+        step_id: "",
+        customer_id: ""
+      };
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: UPDATE_CARD,
+          variables: {
+            id: id,
+            step_id: step_id,
+            customer_id: customer_id
+          }
+        })
+        .then(data => {
+          console.log(data);
+          this.openEdit.editCard = !this.openEdit.editCard;
+          this.$apollo.queries.workflows.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   apollo: {
@@ -292,15 +603,26 @@ export default {
           steps {
             id
             name
-            step
             cards {
               id
+              step {
+                id
+              }
               customer {
                 id
                 name
               }
             }
           }
+        }
+      }
+    `,
+    customers: gql`
+      {
+        customers {
+          id
+          name
+          phone
         }
       }
     `

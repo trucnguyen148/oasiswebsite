@@ -86,7 +86,6 @@ export default {
   },
   data() {
     return {
-      myJson: json,
       open: false,
       selected_cus_id: "",
       customers: []
