@@ -269,7 +269,6 @@
   </div>
 </template>
 <script>
-import json from "./../../data/workflows.json";
 import { Information, TasksReminders } from "@/pages";
 import gql from "graphql-tag";
 
@@ -341,7 +340,6 @@ export default {
   },
   data() {
     return {
-      myJson: json,
       open: {
         addWorkflow: false,
         addStep: false,
