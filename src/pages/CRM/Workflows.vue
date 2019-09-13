@@ -350,11 +350,9 @@ export default {
         editStep: false,
         editCard: false
       },
-      workflows: [],
       selected_workflow: "",
       selected_customer: "",
       selected_step: "",
-      customers: [],
       addWorkflowParams: {
         name: ""
       },
@@ -373,7 +371,7 @@ export default {
   },
   computed: {
     workflow_list() {
-      return this.workflows.map(workflow => {
+      return this.$apolloData.data.workflows.map(workflow => {
         return {
           text: workflow.name,
           value: workflow.id
@@ -390,14 +388,14 @@ export default {
     },
     steps() {
       if (this.selected_workflow != "") {
-        let selected_workflow = this.workflows.filter(workflow => {
+        let selected_workflow = this.$apolloData.data.workflows.filter(workflow => {
           return workflow.id == this.selected_workflow;
         });
         return selected_workflow[0].steps;
       } else return [];
     },
     customer_list() {
-      return this.customers.map(customer => {
+      return this.$apolloData.data.customers.map(customer => {
         return {
           text: customer.name + " - " + customer.phone,
           value: customer.id
