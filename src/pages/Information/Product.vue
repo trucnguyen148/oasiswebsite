@@ -1,9 +1,9 @@
 <template>
         <!-- PRICE LIST -->
-        <div id="pricelist">
+        <div v-if="!$apolloData.queries.positions.loading" id="pricelist">
             <md-card>
                 <md-card-header data-background-color="black">
-                    <h3 class="title">Services</h3>
+                    <h3 class="title">Products</h3>
                 </md-card-header>
                 <md-card-content>
                     <div class="setting">
@@ -32,7 +32,7 @@
 
                     <!-- Show after add PRICE LIST-->
                     <ul 
-                        v-for="category in positions"
+                        v-for="category in $apolloData.data.positions"
                         v-bind:key="category.id"
                         
                     >
@@ -152,6 +152,9 @@
                 </md-card-content>
             </md-card>
         </div>
+        <div v-else>
+    <div class="md-layout"><h2>is loading...</h2></div>
+  </div>
 </template>
 
 
@@ -172,7 +175,6 @@ const ADD_CATEGORY = gql`
         }
     }
 `
-
 const ADD_SERVICE = gql`
     mutation(
         $name: String!,
@@ -203,7 +205,6 @@ const DELETE_SERVICE = gql`
         }
     }
 `
-
 const UPDATE_SERVICE = gql`
     mutation(
         $id: ID!
@@ -231,7 +232,6 @@ export default {
             openService: false,
             openEdit: false,
             
-            positions: [],
             addCategoryPrams: {
                 name: "",
             },

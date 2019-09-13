@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div v-if="!$apolloData.queries.customers.loading && !$apolloData.queries.workflows.loading" class="content">
     <div class="md-layout">
       <div
         class="md-layout-item md-size-100"
@@ -266,6 +266,9 @@
         </sui-modal-actions>
       </sui-modal>
     </div>
+  </div>
+  <div v-else class="content">
+    <div class="md-layout"><h2>is loading...</h2></div>
   </div>
 </template>
 <script>

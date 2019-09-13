@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div v-if="!$apolloData.queries.customers.loading" class="content">
     <div class="md-layout">
       <md-card>
         <md-card-content>
@@ -72,6 +72,9 @@
       </md-card>
     </div>
   </div>
+  <div v-else class="content">
+    <div class="md-layout"><h2>is loading...</h2></div>
+  </div>
 </template>
 
 <script>
@@ -88,12 +91,11 @@ export default {
     return {
       open: false,
       selected_cus_id: "",
-      customers: []
     };
   },
   computed: {
     customer_list(){
-      return this.customers.map(cus => {
+      return this.$apolloData.data.customers.map(cus => {
         return {
           text: cus.name + ' - ' + cus.phone,
           value: cus.id
@@ -102,7 +104,7 @@ export default {
     },
     selected_customer(){
       if (this.selected_cus_id !== ""){
-        return this.customers.filter(cus => {
+        return this.$apolloData.data.customers.filter(cus => {
           return cus.id == this.selected_cus_id
         });
       }

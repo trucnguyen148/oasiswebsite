@@ -1,5 +1,8 @@
 <template>
-  <div class="content md-layout">
+  <div
+    v-if="!$apolloData.queries.branches.loading && !$apolloData.queries.workTimes.loading && !$apolloData.queries.positions.loading"
+    class="content md-layout"
+  >
     <md-card>
       <!-- Select branch -->
       <div class="md-layout-item md-size-100">
@@ -29,9 +32,9 @@
       </div>
 
       <!-- Show after selected -->
-      <ul v-for="workTime in workTimes" v-bind:key="workTime.id">
+      <ul v-for="workTime in $apolloData.data.workTimes" v-bind:key="workTime.id">
         <li>{{ workTime.start }} - {{ workTime.end }}</li>
-        <ul v-for="position in positions" v-bind:key="position.id">
+        <ul v-for="position in $apolloData.data.positions" v-bind:key="position.id">
           <li>{{position.name}}</li>
           <!-- Show staffs -->
           <div class="md-layout-item md-size-100">
@@ -52,6 +55,11 @@
       </ul>
     </md-card>
   </div>
+  <div v-else class="content">
+    <div class="md-layout">
+      <h2>is loading...</h2>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -62,9 +70,6 @@ export default {
     return {
       open: false,
 
-      workTimes: [],
-      positions: [],
-      branches: [],
       selected_branch_id: "3",
       selected_date: []
     };
@@ -92,7 +97,7 @@ export default {
     },
     list_branches() {
       let branch_list = [];
-      this.branches.forEach(branch => {
+      this.$apolloData.data.branches.forEach(branch => {
         branch_list.push({
           value: branch.id,
           text: branch.name
@@ -112,7 +117,7 @@ export default {
       return emps;
     },
     get_selected_branch(branch_id) {
-      let selected_branch = this.branches.filter(branch => {
+      let selected_branch = this.$apolloData.data.branches.filter(branch => {
         return branch.id == branch_id;
       });
 

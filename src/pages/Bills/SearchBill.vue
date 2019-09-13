@@ -1,5 +1,5 @@
 <template>
-  <div id="search-bill">
+  <div v-if="!$apolloData.queries.bookings.loading" id="search-bill">
     <md-card class="md-card-profile">
       <md-card-header data-background-color="black">
         <h3 class="title">Bookings</h3>
@@ -91,6 +91,9 @@
       </md-card-content>
     </md-card>
   </div>
+  <div v-else class="content">
+    <div class="md-layout"><h2>is loading...</h2></div>
+  </div>
 </template>
 
 <script>
@@ -100,13 +103,12 @@ export default {
   name: "search-bill",
   data() {
     return {
-      bookings: [],
       selected_booking_id: ""
     };
   },
   computed: {
     booking_list() {
-      return this.bookings.map(booking => {
+      return this.$apolloData.data.bookings.map(booking => {
         return {
           text: booking.date_time + " - " + booking.cus.name,
           value: booking.id
@@ -114,8 +116,8 @@ export default {
       });
     },
     booking_info() {
-      if (!this.is_Null_or_Undefined(this.bookings)) {
-        return this.bookings.filter(booking => {
+      if (!this.is_Null_or_Undefined(this.$apolloData.data.bookings)) {
+        return this.$apolloData.data.bookings.filter(booking => {
           return booking.id == this.selected_booking_id;
         });
       } else return [];
