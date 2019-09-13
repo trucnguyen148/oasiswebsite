@@ -1,21 +1,5 @@
 <template>
-  <div class="content">
-    <keep-alive>
-      <sui-modal v-model="open">
-        <sui-modal-header>Select a Photo</sui-modal-header>
-        <sui-modal-content image>
-          <sui-image wrapped size="medium" src="static/images/avatar/large/rachel.png" />
-          <sui-modal-description>
-            <sui-header>Default Profile Image</sui-header>
-            <p>We've found the following gravatar image associated with your e-mail address.</p>
-            <p>Is it okay to use this photo?</p>
-          </sui-modal-description>
-        </sui-modal-content>
-        <sui-modal-actions>
-          <sui-button positive @click="rerender">OK</sui-button>
-        </sui-modal-actions>
-      </sui-modal>
-    </keep-alive>
+  <div v-if="!$apolloData.queries.branches.loading" class="content">
     <div class="md-layout">
       <md-card>
         <md-card-header data-background-color="black">
@@ -23,13 +7,13 @@
         </md-card-header>
         <md-card-content>
           <!-- Revenue in all branches -->
-          <div v-if="show" class="md-layout-item md-size-100">
+          <div class="md-layout-item md-size-100">
             <!-- <sui-button @click="rerender" ref="myBtn">Click</sui-button> -->
             <chart-card
               :chart-data="{
                   labels: this.generate_month_list(),
                   series: [
-                  this.get_sale_or_service_revenue('SALE')
+                  this.get_sale_revenue()
                   ]
                 }"
               :chart-options="dailySalesChart.options"
@@ -46,14 +30,14 @@
               </div>
             </template>
           </div>
-          <div v-if="show" style="display: flex; flex-direction: row">
+          <div style="display: flex; flex-direction: row">
             <!-- Revenue of services -->
             <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
               <chart-card
                 :chart-data="{
                     labels: this.generate_month_list(),
                     series: [
-                    this.get_sale_or_service_revenue('SERVICE'),
+                    this.get_service_revenue(),
                     ]
                   }"
                 :chart-options="dailySalesChart.options"
@@ -152,20 +136,19 @@
               <sui-dropdown
                 fluid
                 selection
-                :options="list_branches()"
+                :options="branch_list()"
                 v-model="selected_branch_id"
                 style="margin-top: 2.5rem"
               />
             </md-field>
           </div>
 
-          <!--Revenue in each branch-->
           <div v-if="show_branch" class="md-layout-item md-size-100">
             <chart-card
               :chart-data="{
                 labels: this.generate_month_list(),
                 series: [
-                 this.get_branch_revenue(),
+                 this.get_branch_revenue,
                 ]
               }"
               :chart-options="dailySalesChart.options"
@@ -255,6 +238,9 @@
       </md-card>
     </div>
   </div>
+  <div v-else class="content">
+    <div class="md-layout"><h2>is loading...</h2></div>
+  </div>
 </template>
 
 <script>
@@ -285,9 +271,6 @@ export default {
   },
   data() {
     return {
-      show: true,
-      show_branch: true,
-      open: true,
       dailySalesChart: {
         options: {
           lineSmooth: this.$Chartist.Interpolation.cardinal({
@@ -303,35 +286,141 @@ export default {
           }
         }
       },
-
-      bookings: [],
-      branches: [],
       selected_branch_id: "3",
-      branch: [],
-      test: ""
+      show_branch: true
     };
   },
   watch: {
     selected_branch_id: function() {
-      this.$apollo.queries.branch.refetch();
       this.show_branch = false;
       setTimeout(this.change_state, 700);
+    }
+  },
+  computed: {
+    branch() {
+      return this.$apolloData.data.branches.filter(branch => {
+        return branch.id == this.selected_branch_id;
+      })[0];
     },
-    show: function() {
-      this.open = false;
+    get_branch_revenue() {
+      let data_array = [];
+
+      if (!this.is_Null_or_Undefined(this.branch)) {
+        for (let i = 1; i <= CURRENT_MONTH; i++) {
+          var revenue = this.get_revenue_each_month(
+            this.get_bookings_each_month(
+              i,
+              this.get_bookings_from_branch(this.branch)
+            )
+          );
+          if (this.is_Null_or_Undefined(revenue)) data_array.push(0);
+          else data_array.push(revenue);
+        }
+      }
+      return data_array;
     }
   },
   methods: {
-    change_state() {
-      this.show_branch = true;
+    get_sale_revenue() {
+      let data_array = [];
+
+      for (let i = 1; i <= CURRENT_MONTH; i++) {
+        var revenue = this.get_revenue_each_month(
+          this.get_bookings_each_month(i, this.$apolloData.data.bookings)
+        );
+        if (this.is_Null_or_Undefined(revenue)) data_array.push(0);
+        else data_array.push(revenue);
+      }
+
+      return data_array;
     },
-    rerender() {
-      this.show = false;
-      this.show_branch = false;
-      this.$nextTick(() => {
-        this.show = true;
-        this.show_branch = true;
-      });
+    get_service_revenue() {
+      let data_array = [];
+
+      for (let i = 1; i <= CURRENT_MONTH; i++) {
+        var revenue = this.get_revenue_each_month(
+          this.get_bookings_each_month(i, this.$apolloData.data.bookings),
+          2
+        );
+        if (this.is_Null_or_Undefined(revenue)) data_array.push(0);
+        else data_array.push(revenue);
+      }
+
+      return data_array;
+    },
+
+    get_category_revenue(id) {
+      let products = this.get_products_from_bookings(
+        this.$apolloData.data.bookings
+      );
+
+      return products
+        .filter(product => {
+          return product.category.id == id;
+        })
+        .reduce((total, product) => total + product.unit_price, 0);
+    },
+    get_product_revenue(type) {
+      let bookings = this.get_bookings_from_branch(this.branch);
+      let products = this.get_products_from_bookings(bookings);
+
+      return products
+        .filter(product => {
+          return product.type == type;
+        })
+        .reduce((total, product) => total + product.unit_price, 0);
+    },
+    get_revenue_each_month(bookings_each_month, type) {
+      let products = this.get_products_from_bookings(bookings_each_month);
+
+      if (type === undefined) {
+        return products.reduce(
+          (total, product) => total + product.unit_price,
+          0
+        );
+      } else {
+        return products
+          .filter(product => {
+            return product.type == type;
+          })
+          .reduce((total, product) => total + product.unit_price, 0);
+      }
+    },
+    get_bookings_from_branch(branch) {
+      let bookings = [];
+
+      if (
+        !this.is_Null_or_Undefined(branch) &&
+        !this.is_Null_or_Undefined(branch.employees)
+      ) {
+        branch.employees.forEach(employee => {
+          if (!this.is_Null_or_Undefined(employee.bookings)) {
+            return employee.bookings.forEach(booking => {
+              bookings.push(booking);
+            });
+          }
+        });
+      }
+
+      return bookings;
+    },
+    get_bookings_each_month(month, bookings) {
+      if (!this.is_Null_or_Undefined(bookings)) {
+        return bookings.filter(booking => {
+          return new Date(booking.date_time).getMonth() + 1 == month;
+        });
+      } else return [];
+    },
+    get_products_from_bookings(bookings) {
+      let products = [];
+      if (!this.is_Null_or_Undefined(bookings)) {
+        bookings.forEach(booking => {
+          booking.products.forEach(product => {
+            products.push(product);
+          });
+        });
+      }
+      return products;
     },
     generate_month_list() {
       let current_month_array = [];
@@ -342,129 +431,21 @@ export default {
 
       return current_month_array;
     },
-    list_branches() {
-      return this.branches.map(branch => {
-        return {
-          value: branch.id,
-          text: branch.name
-        };
-      });
-    },
-    get_sale_or_service_revenue(SALE_or_SERVICE) {
-      let data_array = [];
-
-      for (let i = CURRENT_MONTH; i > 0; i--) {
-        if (SALE_or_SERVICE == "SALE") {
-            var revenue = this.get_revenue_each_month(
-              this.get_bookings_each_month(i, this.bookings)
-            )[0]
-            if (revenue === undefined) data_array.push(0)
-            else data_array.push(revenue);
-        } else {
-          var revenue = this.get_revenue_each_month(
-              this.get_bookings_each_month(i, this.bookings),
-              2
-            )[0]
-            if (revenue === undefined) data_array.push(0);
-            else data_array.push(revenue);
-        }
-      }
-
-      return data_array.reverse();
-    },
-    get_category_revenue(id) {
-      const revenue = this.bookings.map(booking => {
-        return booking.products
-          .filter(filtered_product => {
-            return filtered_product.category.id == id;
-          })
-          .reduce((total, product) => total + product.unit_price, 0);
-      });
-
-      return revenue[0] === undefined ? 0 : revenue[0];
-    },
-    get_product_revenue(type, bookings) {
-      if (bookings === undefined) {
-        bookings = this.get_bookings_from_branch(this.branch);
-      }
-
-      const revenue = bookings.map(booking => {
-        return booking.products
-          .filter(filtered_product => {
-            return filtered_product.type == type;
-          })
-          .reduce((total, product) => total + product.unit_price, 0);
-      });
-
-      return revenue[0] === undefined ? 0 : revenue[0];
-    },
-    get_branch_revenue() {
-      let data_array = [];
-
-      if (this.is_not_null_or_undefined(this.branch)) {
-        for (let i = CURRENT_MONTH; i > 0; i--) {
-          var revenue = this.get_revenue_each_month(
-              this.get_bookings_each_month(
-                i,
-                this.get_bookings_from_branch(this.branch)
-              )
-            )[0]
-          if (revenue === undefined) data_array.push(0);
-          else data_array.push(revenue);
-        }
-        return data_array.reverse();
-      } else {
-        return [];
-      }
-    },
-    get_bookings_from_branch(branch) {
-      let bookings = [];
-
-      if (
-        this.is_not_null_or_undefined(branch) &&
-        this.is_not_null_or_undefined(branch.employees)
-      ) {
-        branch.employees.map(employee => {
-          if (this.is_not_null_or_undefined(employee.bookings)) {
-            return employee.bookings.map(booking => {
-              bookings.push(booking);
-            });
-          }
+    branch_list() {
+      if (!this.is_Null_or_Undefined(this.$apolloData.data.branches)) {
+        return this.$apolloData.data.branches.map(branch => {
+          return {
+            value: branch.id,
+            text: branch.name
+          };
         });
       }
-
-      return bookings;
     },
-    get_bookings_each_month(month, bookings) {
-      return bookings.filter(booking => {
-        return new Date(booking.date_time).getMonth() + 1 == month;
-      });
+    is_Null_or_Undefined(array) {
+      return array === null || array === undefined ? true : false;
     },
-    get_revenue_each_month(bookings_each_month, type) {
-      if (type === undefined) {
-        return bookings_each_month.map(booking => {
-          return booking.products
-            .map(product => {
-              return product.unit_price;
-            })
-            .reduce((a, b) => a + b, 0);
-        });
-      } else {
-        return bookings_each_month
-          .map(booking => {
-            return booking.products
-              .filter(filtered_product => {
-                return filtered_product.type == type;
-              })
-              .map(product => {
-                return product.unit_price;
-              });
-          })
-          .reduce((a, b) => a + b, 0);
-      }
-    },
-    is_not_null_or_undefined(array) {
-      return (array !== null && array !== undefined) ? true : false
+    change_state() {
+      this.show_branch = true;
     }
   },
   apollo: {
@@ -492,45 +473,22 @@ export default {
           id
           name
           employees {
+            id
             name
+            email
             bookings {
+              id
+              date_time
               products {
+                id
+                type
                 unit_price
               }
             }
           }
         }
       }
-    `,
-    branch: {
-      query: gql`
-        query($id: ID!) {
-          branch(id: $id) {
-            id
-            name
-            employees {
-              id
-              name
-              email
-              bookings {
-                id
-                date_time
-                products {
-                  id
-                  type
-                  unit_price
-                }
-              }
-            }
-          }
-        }
-      `,
-      variables() {
-        return {
-          id: this.selected_branch_id
-        };
-      }
-    }
+    `
   }
 };
 </script>

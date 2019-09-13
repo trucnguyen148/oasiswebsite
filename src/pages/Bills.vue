@@ -8,7 +8,7 @@
         <sui-tab-pane title="Create Bills" icon="plus circle">
           <create-bill></create-bill>
         </sui-tab-pane>
-        <sui-tab-pane title="Search Bills" icon="search">
+        <sui-tab-pane title="Bookings" icon="search">
           <search-bill></search-bill>
         </sui-tab-pane>
       </sui-tab>
