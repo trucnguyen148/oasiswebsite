@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!$apolloData.queries.bookings.loading" id="search-bill">
+  <div v-if="!$apolloData.queries.bookings_progress.loading" id="search-bill">
     <md-card class="md-card-profile">
       <md-card-header data-background-color="black">
         <h3 class="title">Bookings</h3>
@@ -92,7 +92,9 @@
     </md-card>
   </div>
   <div v-else class="content">
-    <div class="md-layout"><h2>is loading...</h2></div>
+    <div class="md-layout">
+      <h2>is loading...</h2>
+    </div>
   </div>
 </template>
 
@@ -108,16 +110,18 @@ export default {
   },
   computed: {
     booking_list() {
-      return this.$apolloData.data.bookings.map(booking => {
-        return {
-          text: booking.date_time + " - " + booking.cus.name,
-          value: booking.id
-        };
-      });
+      if (!this.is_Null_or_Undefined(this.$apolloData.data.bookings_progress)) {
+        return this.$apolloData.data.bookings_progress.map(booking => {
+          return {
+            text: booking.date_time + " - " + booking.cus.name,
+            value: booking.id
+          };
+        });
+      }
     },
     booking_info() {
-      if (!this.is_Null_or_Undefined(this.$apolloData.data.bookings)) {
-        return this.$apolloData.data.bookings.filter(booking => {
+      if (!this.is_Null_or_Undefined(this.$apolloData.data.bookings_progress)) {
+        return this.$apolloData.data.bookings_progress.filter(booking => {
           return booking.id == this.selected_booking_id;
         });
       } else return [];
@@ -140,34 +144,39 @@ export default {
   methods: {
     is_Null_or_Undefined(array) {
       return array === null || array === undefined ? true : false;
-    }
+    },
   },
   apollo: {
-    bookings: gql`
-      {
-        bookings {
-          id
-          date_time
-          cus {
+    bookings_progress: {
+      query: gql`
+        query($progress: Int!) {
+          bookings_progress(progress: $progress) {
             id
-            name
-          }
-          emp {
-            id
-            name
-            branch {
+            date_time
+            cus {
+              id
               name
             }
-          }
-          products {
-            id
-            type
-            name
-            unit_price
+            emp {
+              id
+              name
+              branch {
+                name
+              }
+            }
+            products {
+              id
+              type
+              name
+              unit_price
+            }
           }
         }
+      `,
+      variables: {
+        progress: 2
       }
-    `
+    }
   }
 };
 </script>

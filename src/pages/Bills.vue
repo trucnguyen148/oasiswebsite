@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <md-card>
-      <sui-tab style="margin: 2rem"  :menu="{ secondary: true }">
+      <sui-tab style="margin: 2rem" :menu="{ secondary: true }">
         <sui-tab-pane title="Waiting Bills" icon="hourglass half">
           <waiting-bills></waiting-bills>
         </sui-tab-pane>
@@ -19,11 +19,11 @@
 <script>
 import { WaitingBills, CreateBill, SearchBill } from "@/pages";
 export default {
-    components: {
-        WaitingBills,
-        CreateBill,
-        SearchBill
-    }
+  components: {
+    WaitingBills,
+    CreateBill,
+    SearchBill
+  },
 };
 </script>
 

@@ -67,7 +67,7 @@
               <div class="md-layout-item md-smal-size-100 md-size-50">
                 <md-field>
                   <label>DOB</label>
-                  <md-input v-model="addEmpParams.dob" type="date"></md-input>
+                  <md-input v-model="addEmpParams.dob" type="date" place-holder="DD/MM/Y"></md-input>
                 </md-field>
               </div>
 
