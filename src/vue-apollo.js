@@ -8,8 +8,8 @@ Vue.use(VueApollo)
 // Name of the localStorage item
 const AUTH_TOKEN = 'apollo-token'
 
-// Http endpoint 'http://192.168.1.164:8000/graphql'
-const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://192.168.1.164:8000/graphql'
+// Http endpoint 'http://192.168.1.194:8080/graphql'
+const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || 'http://171.244.18.14:8888/graphql'
 
 // Config
 const defaultOptions = {
