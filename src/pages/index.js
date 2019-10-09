@@ -29,23 +29,16 @@ import Collection from "../pages/Contents/Collection.vue";
 export {HotDeal, Collection}
 
 // CRM
-import Inbox from "../pages/CRM/Inbox.vue";
 import Customers from "../pages/CRM/Customers.vue";
-import Automations from "../pages/CRM/Automations.vue";
 import Workflows from "../pages/CRM/Workflows.vue";
 
-export  { Inbox, Customers, Automations, Workflows }
-
-// CRM - Automation
-import CreateAutomation from "../pages/CRM/Automations/CreateAutomation.vue";
-
-export { CreateAutomation };
+export  { Customers, Workflows }
 
 // CRM - Customers
-import UserCard from "../pages/CRM/UserProfiles/UserCard.vue";
-import AddUser from "../pages/CRM/UserProfiles/AddUser.vue";
+// import UserCard from "../pages/CRM/UserProfiles/UserCard.vue";
+// import AddUser from "../pages/CRM/UserProfiles/AddUser.vue";
 
-export { UserCard, AddUser };
+// export { UserCard, AddUser };
 
 // CRM - Workflows
 

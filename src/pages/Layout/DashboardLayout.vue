@@ -54,13 +54,11 @@
 <script>
 import TopNavbar from "./TopNavbar.vue";
 import DashboardContent from "./Content.vue";
-import MobileMenu from "@/pages/Layout/MobileMenu.vue";
 
 export default {
   components: {
     TopNavbar,
     DashboardContent,
-    MobileMenu
   }
 };
 </script>

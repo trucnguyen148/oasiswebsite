@@ -7,7 +7,6 @@ import Content from "@/pages/Content.vue"
 import Bills from "@/pages/Bills.vue";
 import CRM from "@/pages/CRM.vue";
 import Settings from "@/pages/Settings.vue";
-import { CreateAutomation } from "../pages";
 
 const routes = [
   {
@@ -51,11 +50,7 @@ const routes = [
         name: "Settings",
         component: Settings
       },
-      {
-        path: "createautomation",
-        name: "New Automation",
-        component: CreateAutomation
-      }
+      
     ]
   }
 ];
