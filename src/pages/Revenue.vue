@@ -246,6 +246,7 @@
 <script>
 import { StatsCard, ChartCard, OrderedTable } from "@/components";
 import gql from "graphql-tag";
+import { $user } from "../components/user_info";
 
 const CURRENT_MONTH = new Date().getMonth() + 1;
 const MONTH_ARRAY = [
@@ -290,6 +291,9 @@ export default {
       show_branch: true
     };
   },
+  mounted() {
+    console.log($user)
+  },
   watch: {
     selected_branch_id: function() {
       this.show_branch = false;
@@ -331,7 +335,6 @@ export default {
         if (this.is_Null_or_Undefined(revenue)) data_array.push(0);
         else data_array.push(revenue);
       }
-
       return data_array;
     },
     get_service_revenue() {
@@ -348,7 +351,6 @@ export default {
 
       return data_array;
     },
-
     get_category_revenue(id) {
       let products = this.get_products_from_bookings(
         this.$apolloData.data.bookings
