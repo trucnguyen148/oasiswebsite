@@ -1,63 +1,66 @@
 <template>
-  <div
-    v-if="!$apolloData.queries.branches.loading && !$apolloData.queries.workTimes.loading && !$apolloData.queries.positions.loading"
-    class="content md-layout"
-  >
-    <md-card>
-      <!-- Select branch -->
-      <div class="md-layout-item md-size-100">
-        <md-field>
-          <label>Select Branches:</label>
-          <sui-dropdown
-            fluid
-            selection
-            :options="list_branches()"
-            v-model="selected_branch_id"
-            style="margin-top: 2.5rem"
+  <div v-if="!branch_permission"></div>
+  <div v-else>
+    <div
+      v-if="!$apolloData.queries.branches.loading && !$apolloData.queries.workTimes.loading && !$apolloData.queries.positions.loading"
+      class="content md-layout"
+    >
+      <md-card>
+        <!-- Select branch -->
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label>Select Branches:</label>
+            <sui-dropdown
+              fluid
+              selection
+              :options="list_branches()"
+              v-model="selected_branch_id"
+              style="margin-top: 2.5rem"
+            />
+          </md-field>
+        </div>
+
+        <!-- Select date -->
+        <div class="md-layout-item md-size-100">
+          <label>Select date:</label>
+          <vc-date-picker
+            :value="null"
+            color="pink"
+            is-dark
+            is-inline
+            style="display: block; margin-left: auto; margin-right: auto"
+            v-model="selected_date"
           />
-        </md-field>
-      </div>
+        </div>
 
-      <!-- Select date -->
-      <div class="md-layout-item md-size-100">
-        <label>Select date:</label>
-        <vc-date-picker
-          :value="null"
-          color="pink"
-          is-dark
-          is-inline
-          style="display: block; margin-left: auto; margin-right: auto"
-          v-model="selected_date"
-        />
-      </div>
-
-      <!-- Show after selected -->
-      <ul v-for="workTime in $apolloData.data.workTimes" v-bind:key="workTime.id">
-        <li>{{ workTime.start }} - {{ workTime.end }}</li>
-        <ul v-for="position in $apolloData.data.positions" v-bind:key="position.id">
-          <li>{{position.name}}</li>
-          <!-- Show staffs -->
-          <div class="md-layout-item md-size-100">
-            <md-field>
-              <md-table md-card>
-                <md-table-row
-                  v-for="emp in get_emp_with_position_and_worktime(workTime.id, position.id)"
-                  v-bind:key="emp.id"
-                >
-                  <md-table-cell md-label="Picture"></md-table-cell>
-                  <md-table-cell md-label="Name">{{emp.name}}</md-table-cell>
-                  <md-table-cell md-label="Phone number">{{emp.phone}}</md-table-cell>
-                </md-table-row>
-              </md-table>
-            </md-field>
-          </div>
+        <!-- Show after selected -->
+        <ul v-for="workTime in $apolloData.data.workTimes" v-bind:key="workTime.id">
+          <li>{{ workTime.start }} - {{ workTime.end }}</li>
+          <ul v-for="position in $apolloData.data.positions" v-bind:key="position.id">
+            <li>{{position.name}}</li>
+            <!-- Show staffs -->
+            <div class="md-layout-item md-size-100">
+              <md-field>
+                <md-table md-card>
+                  <md-table-row
+                    v-for="emp in get_emp_with_position_and_worktime(workTime.id, position.id)"
+                    v-bind:key="emp.id"
+                  >
+                    <md-table-cell md-label="Picture"></md-table-cell>
+                    <md-table-cell md-label="Name">{{emp.name}}</md-table-cell>
+                    <md-table-cell md-label="Phone number">{{emp.phone}}</md-table-cell>
+                  </md-table-row>
+                </md-table>
+              </md-field>
+            </div>
+          </ul>
         </ul>
-      </ul>
-    </md-card>
-  </div>
-  <div v-else class="content">
-    <div class="md-layout">
-      <h2>is loading...</h2>
+      </md-card>
+    </div>
+    <div v-else class="content">
+      <div class="md-layout">
+        <h2>is loading...</h2>
+      </div>
     </div>
   </div>
 </template>
@@ -74,7 +77,15 @@ export default {
       selected_date: []
     };
   },
+  mounted() {
+    if (!$user.permissions.includes(2)) {
+      this.$router.push("/content");
+    }
+  },
   computed: {
+    branch_permission() {
+      return $user.permissions.includes(2);
+    },
     format_selected_date() {
       let formated_date = "";
 

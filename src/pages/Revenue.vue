@@ -1,245 +1,255 @@
 <template>
-  <div v-if="!$apolloData.queries.branches.loading" class="content">
-    <div class="md-layout">
-      <md-card>
-        <md-card-header data-background-color="black">
-          <h3 class="title">TOTAL REVENUE</h3>
-        </md-card-header>
-        <md-card-content>
-          <!-- Revenue in all branches -->
-          <div class="md-layout-item md-size-100">
-            <!-- <sui-button @click="rerender" ref="myBtn">Click</sui-button> -->
-            <chart-card
-              :chart-data="{
+  <div v-if="!revenue_permission">
+    
+  </div>
+  <div v-else>
+    <div v-if="!$apolloData.queries.branches.loading" class="content">
+      <div class="md-layout">
+        <md-card>
+          <md-card-header data-background-color="black">
+            <h3 class="title">TOTAL REVENUE</h3>
+          </md-card-header>
+          <md-card-content>
+            <!-- Revenue in all branches -->
+            <div class="md-layout-item md-size-100">
+              <!-- <sui-button @click="rerender" ref="myBtn">Click</sui-button> -->
+              <chart-card
+                :chart-data="{
                   labels: this.generate_month_list(),
                   series: [
                   this.get_sale_revenue()
                   ]
                 }"
-              :chart-options="dailySalesChart.options"
-              :chart-type="'Line'"
-              data-background-color="pink"
-            />
-            <template slot="content">
-              <h4>Total revenue</h4>
-            </template>
-
-            <template slot="footer">
-              <div class="stats">
-                <md-icon>access_time</md-icon>updated just now
-              </div>
-            </template>
-          </div>
-          <div style="display: flex; flex-direction: row">
-            <!-- Revenue of services -->
-            <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-              <chart-card
-                :chart-data="{
-                    labels: this.generate_month_list(),
-                    series: [
-                    this.get_service_revenue(),
-                    ]
-                  }"
                 :chart-options="dailySalesChart.options"
                 :chart-type="'Line'"
-                data-background-color="orange"
-              >
-                <template slot="content">
-                  <h4>Revenue of service</h4>
-                  <p class="category">
-                    <span class="text-success">
-                      <i class="fas fa-long-arrow-alt-up"></i> 55%
-                    </span>
-                    increase in today sales.
-                  </p>
-                </template>
-
-                <template slot="footer">
-                  <div class="stats">
-                    <md-icon>access_time</md-icon>updated 26 minutes ago
-                  </div>
-                </template>
-              </chart-card>
-            </div>
-            <!-- Revenue of Nails -->
-            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
-              <stats-card data-background-color="orange">
-                <template slot="header">
-                  <md-icon>store</md-icon>
-                </template>
-
-                <template slot="content">
-                  <p class="category">Nails</p>
-                  <h3 class="title">€ {{ get_category_revenue(9) }}</h3>
-                </template>
-
-                <template slot="footer">
-                  <div class="stats">
-                    <md-icon>update</md-icon>Just Updated
-                  </div>
-                </template>
-              </stats-card>
-            </div>
-            <!-- Revenue of products -->
-            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
-              <stats-card data-background-color="red">
-                <template slot="header">
-                  <md-icon>shopping_basket</md-icon>
-                </template>
-
-                <template slot="content">
-                  <p class="category">Tattoo</p>
-                  <h3 class="title">€ {{ get_category_revenue(10) }}</h3>
-                </template>
-
-                <template slot="footer">
-                  <div class="stats">
-                    <md-icon>update</md-icon>Just Updated
-                  </div>
-                </template>
-              </stats-card>
-            </div>
-
-            <!-- Revenue of tattoo -->
-            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
-              <stats-card data-background-color="blue">
-                <template slot="header">
-                  <md-icon>event_note</md-icon>
-                </template>
-
-                <template slot="content">
-                  <p class="category">Makeup</p>
-                  <h3 class="title">€ {{ get_category_revenue(11) }}</h3>
-                </template>
-
-                <template slot="footer">
-                  <div class="stats">
-                    <md-icon>update</md-icon>Just Updated
-                  </div>
-                </template>
-              </stats-card>
-            </div>
-          </div>
-        </md-card-content>
-      </md-card>
-
-      <!-- Revenue in each branch -->
-      <md-card>
-        <md-card-header data-background-color="black">
-          <h3 class="title">REVENUE BASED ON BRANCH</h3>
-        </md-card-header>
-        <md-card-content>
-          <!-- Search branch -->
-          <div class="md-layout-item md-size-100">
-            <md-field>
-              <label>Select Branch</label>
-              <sui-dropdown
-                fluid
-                selection
-                :options="branch_list()"
-                v-model="selected_branch_id"
-                style="margin-top: 2.5rem"
+                data-background-color="pink"
               />
-            </md-field>
-          </div>
+              <template slot="content">
+                <h4>Total revenue</h4>
+              </template>
 
-          <div v-if="show_branch" class="md-layout-item md-size-100">
-            <chart-card
-              :chart-data="{
-                labels: this.generate_month_list(),
-                series: [
-                 this.get_branch_revenue,
-                ]
-              }"
-              :chart-options="dailySalesChart.options"
-              :chart-type="'Line'"
-              data-background-color="red"
-            >
               <template slot="footer">
                 <div class="stats">
                   <md-icon>access_time</md-icon>updated just now
                 </div>
               </template>
-            </chart-card>
-          </div>
+            </div>
+            <div style="display: flex; flex-direction: row">
+              <!-- Revenue of services -->
+              <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
+                <chart-card
+                  :chart-data="{
+                    labels: this.generate_month_list(),
+                    series: [
+                    this.get_service_revenue(),
+                    ]
+                  }"
+                  :chart-options="dailySalesChart.options"
+                  :chart-type="'Line'"
+                  data-background-color="orange"
+                >
+                  <template slot="content">
+                    <h4>Revenue of service</h4>
+                    <p class="category">
+                      <span class="text-success">
+                        <i class="fas fa-long-arrow-alt-up"></i> 55%
+                      </span>
+                      increase in today sales.
+                    </p>
+                  </template>
 
-          <div style="display: flex; flex-direction: row">
-            <!-- Revenue of services -->
-            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-              <stats-card data-background-color="orange">
-                <template slot="header">
-                  <md-icon>store</md-icon>
-                </template>
+                  <template slot="footer">
+                    <div class="stats">
+                      <md-icon>access_time</md-icon>updated 26 minutes ago
+                    </div>
+                  </template>
+                </chart-card>
+              </div>
+              <!-- Revenue of Nails -->
+              <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
+                <stats-card data-background-color="orange">
+                  <template slot="header">
+                    <md-icon>store</md-icon>
+                  </template>
 
-                <template slot="content">
-                  <p class="category">Services</p>
-                  <h3 class="title">€ {{ get_product_revenue(2) }}</h3>
-                </template>
+                  <template slot="content">
+                    <p class="category">Nails</p>
+                    <h3 class="title">€ {{ get_category_revenue(9) }}</h3>
+                  </template>
 
+                  <template slot="footer">
+                    <div class="stats">
+                      <md-icon>update</md-icon>Just Updated
+                    </div>
+                  </template>
+                </stats-card>
+              </div>
+              <!-- Revenue of products -->
+              <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
+                <stats-card data-background-color="red">
+                  <template slot="header">
+                    <md-icon>shopping_basket</md-icon>
+                  </template>
+
+                  <template slot="content">
+                    <p class="category">Tattoo</p>
+                    <h3 class="title">€ {{ get_category_revenue(10) }}</h3>
+                  </template>
+
+                  <template slot="footer">
+                    <div class="stats">
+                      <md-icon>update</md-icon>Just Updated
+                    </div>
+                  </template>
+                </stats-card>
+              </div>
+
+              <!-- Revenue of tattoo -->
+              <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-22">
+                <stats-card data-background-color="blue">
+                  <template slot="header">
+                    <md-icon>event_note</md-icon>
+                  </template>
+
+                  <template slot="content">
+                    <p class="category">Makeup</p>
+                    <h3 class="title">€ {{ get_category_revenue(11) }}</h3>
+                  </template>
+
+                  <template slot="footer">
+                    <div class="stats">
+                      <md-icon>update</md-icon>Just Updated
+                    </div>
+                  </template>
+                </stats-card>
+              </div>
+            </div>
+          </md-card-content>
+        </md-card>
+
+        <!-- Revenue in each branch -->
+        <md-card>
+          <md-card-header data-background-color="black">
+            <h3 class="title">REVENUE BASED ON BRANCH</h3>
+          </md-card-header>
+          <md-card-content>
+            <!-- Search branch -->
+            <div class="md-layout-item md-size-100">
+              <md-field>
+                <label>Select Branch</label>
+                <sui-dropdown
+                  fluid
+                  selection
+                  :options="branch_list()"
+                  v-model="selected_branch_id"
+                  style="margin-top: 2.5rem"
+                />
+              </md-field>
+            </div>
+
+            <div v-if="show_branch" class="md-layout-item md-size-100">
+              <chart-card
+                :chart-data="{
+                labels: this.generate_month_list(),
+                series: [
+                 this.get_branch_revenue,
+                ]
+              }"
+                :chart-options="dailySalesChart.options"
+                :chart-type="'Line'"
+                data-background-color="red"
+              >
                 <template slot="footer">
                   <div class="stats">
-                    <md-icon>update</md-icon>Just Updated
+                    <md-icon>access_time</md-icon>updated just now
                   </div>
                 </template>
-              </stats-card>
-            </div>
-            <!-- Revenue of products -->
-            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-              <stats-card data-background-color="red">
-                <template slot="header">
-                  <md-icon>shopping_basket</md-icon>
-                </template>
-
-                <template slot="content">
-                  <p class="category">Products</p>
-                  <h3 class="title">€ {{ get_product_revenue(1) }}</h3>
-                </template>
-
-                <template slot="footer">
-                  <div class="stats">
-                    <md-icon>update</md-icon>Just Updated
-                  </div>
-                </template>
-              </stats-card>
+              </chart-card>
             </div>
 
-            <!-- Revenue of courses -->
-            <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-              <stats-card data-background-color="blue">
-                <template slot="header">
-                  <md-icon>event_note</md-icon>
-                </template>
+            <div style="display: flex; flex-direction: row">
+              <!-- Revenue of services -->
+              <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
+                <stats-card data-background-color="orange">
+                  <template slot="header">
+                    <md-icon>store</md-icon>
+                  </template>
 
-                <template slot="content">
-                  <p class="category">Course</p>
-                  <h3 class="title">€ {{ get_product_revenue(3) }}</h3>
-                </template>
+                  <template slot="content">
+                    <p class="category">Services</p>
+                    <h3 class="title">€ {{ get_product_revenue(2) }}</h3>
+                  </template>
 
-                <template slot="footer">
-                  <div class="stats">
-                    <md-icon>update</md-icon>Just Updated
-                  </div>
-                </template>
-              </stats-card>
+                  <template slot="footer">
+                    <div class="stats">
+                      <md-icon>update</md-icon>Just Updated
+                    </div>
+                  </template>
+                </stats-card>
+              </div>
+              <!-- Revenue of products -->
+              <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
+                <stats-card data-background-color="red">
+                  <template slot="header">
+                    <md-icon>shopping_basket</md-icon>
+                  </template>
+
+                  <template slot="content">
+                    <p class="category">Products</p>
+                    <h3 class="title">€ {{ get_product_revenue(1) }}</h3>
+                  </template>
+
+                  <template slot="footer">
+                    <div class="stats">
+                      <md-icon>update</md-icon>Just Updated
+                    </div>
+                  </template>
+                </stats-card>
+              </div>
+
+              <!-- Revenue of courses -->
+              <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
+                <stats-card data-background-color="blue">
+                  <template slot="header">
+                    <md-icon>event_note</md-icon>
+                  </template>
+
+                  <template slot="content">
+                    <p class="category">Course</p>
+                    <h3 class="title">€ {{ get_product_revenue(3) }}</h3>
+                  </template>
+
+                  <template slot="footer">
+                    <div class="stats">
+                      <md-icon>update</md-icon>Just Updated
+                    </div>
+                  </template>
+                </stats-card>
+              </div>
             </div>
-          </div>
-          <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
-            <md-card>
-              <md-card-header data-background-color="orange">
-                <h4 class="title">Employees Stats</h4>
-                <p class="category"></p>
-              </md-card-header>
-              <md-card-content>
-                <ordered-table table-header-color="orange" :selected_branch_id="selected_branch_id"></ordered-table>
-              </md-card-content>
-            </md-card>
-          </div>
-        </md-card-content>
-      </md-card>
+            <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
+              <md-card>
+                <md-card-header data-background-color="orange">
+                  <h4 class="title">Employees Stats</h4>
+                  <p class="category"></p>
+                </md-card-header>
+                <md-card-content>
+                  <ordered-table
+                    table-header-color="orange"
+                    :selected_branch_id="selected_branch_id"
+                  ></ordered-table>
+                </md-card-content>
+              </md-card>
+            </div>
+          </md-card-content>
+        </md-card>
+      </div>
     </div>
-  </div>
-  <div v-else class="content">
-    <div class="md-layout"><h2>is loading...</h2></div>
+    <div v-else class="content">
+      <div class="md-layout">
+        <h2>is loading...</h2>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -291,16 +301,21 @@ export default {
       show_branch: true
     };
   },
-  mounted() {
-    console.log($user)
-  },
   watch: {
     selected_branch_id: function() {
       this.show_branch = false;
       setTimeout(this.change_state, 700);
     }
   },
+  mounted(){
+    if(!$user.permissions.includes(1)){
+      this.$router.push('/information');
+    }
+  },
   computed: {
+    revenue_permission() {
+      return $user.permissions.includes(1);
+    },
     branch() {
       return this.$apolloData.data.branches.filter(branch => {
         return branch.id == this.selected_branch_id;

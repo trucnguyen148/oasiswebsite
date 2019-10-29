@@ -39,6 +39,15 @@ const LOGIN = gql`
   query($phone: String!, $password: String!) {
     user_login(phone: $phone, password: $password) {
       id
+      type
+    }
+  }
+`;
+
+const PERMISSION = gql`
+  query($user_id: Int!) {
+    permission(user_id: $user_id) {
+      permission
     }
   }
 `;
@@ -59,7 +68,6 @@ export default {
       const phone = this.user.phone;
       const password = this.user.password;
 
-      // Call to the graphql mutation
       this.$apollo
         .query({
           query: LOGIN,
@@ -70,12 +78,36 @@ export default {
         })
         .then(data => {
           if (data.data.user_login !== null) {
-            this.user.login = true;
-            $user.login = true;
-            $user.login = data.data.user_login.id;
+            if (data.data.user_login.type === 2) {
+              $user.login = data.data.user_login.id;
+              this.get_permission(data.data.user_login.id);
+            } else {
+              alert("You dont have permission!");
+            }
           } else {
             alert("Wrong phone or password!");
           }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    get_permission(id) {
+      this.$apollo
+        .query({
+          query: PERMISSION,
+          variables: {
+            user_id: id
+          }
+        })
+        .then(data => {
+          $user.permissions = data.data.permission.map(el => {
+            return el.permission;
+          });
+        })
+        .then(() => {
+          this.user.login = true;
+          $user.login = true;
         })
         .catch(error => {
           console.log(error);

@@ -1,4 +1,5 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
+import { $user } from "../components/user_info";
 
 import Revenue from "@/pages/Revenue.vue";
 import Information from "@/pages/Information.vue";
@@ -24,7 +25,7 @@ const routes = [
         name: "Information",
         component: Information
       },
-        
+
       {
         path: "calendar",
         name: "Calendar",
@@ -50,7 +51,7 @@ const routes = [
         name: "Settings",
         component: Settings
       },
-      
+
     ]
   }
 ];

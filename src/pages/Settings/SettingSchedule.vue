@@ -1,74 +1,163 @@
 <template>
-  <md-card>
-    <md-card-header style="background-color: black; color: white; text-align: center; font-size: 1.5rem">Schedule Management</md-card-header>
-    <md-card-content>
-      <div class="setting">
-        <p style="margin: 0 2rem"> Add </p>
-        <sui-button @click.native="toggle"><font-awesome-icon icon="plus-circle" /></sui-button>    
-      </div>
-      <sui-modal v-model="open">
-        <sui-modal-header class="form-header" >Add new email</sui-modal-header>
-        <sui-modal-content>
-          <!-- Name -->
-          <div class="md-layout-item md-size-100">
-            <md-field>
-            <label>Staff</label>
-            <md-input v-model="staff" type="text" required></md-input>
-            </md-field>
-          </div>
-          <!-- Email -->
-          <div class="md-layout-item md-size-100">
-            <md-field>
-            <label>Email Address</label>
-            <md-input v-model="emailadress" type="email"></md-input>
-            </md-field>
-          </div>
-        </sui-modal-content>
-        <sui-modal-actions>
-          <sui-button         data-background-color="pink" positive @click.native="toggle"  class="ui button size middle space">Add</sui-button>
-        </sui-modal-actions>
-      </sui-modal>
-      <!-- Show after add -->
-      <div class="md-layout-item md-size-100 md-size-50">
-        <md-field>
-          <md-table v-model="staffs" md-card>
-            <md-table-row
-            v-for="data in myJson" 
-            v-bind:key="data.name" 
-            v-bind:name="data.name" 
-            v-bind:phone="data.email" 
-            >
-              <md-table-cell md-label="Branch">{{ data.name }}</md-table-cell>
-              <md-table-cell md-label="Email">{{ data.email }}</md-table-cell>
-              <md-table-cell md-label="remove" class="edit_button">
-                <sui-button>
-                  <font-awesome-icon icon="edit" />
-                </sui-button>
-                <sui-button>
-                  <font-awesome-icon icon="times-circle" />
-                </sui-button>
-              </md-table-cell>
-            </md-table-row>
-          </md-table>
-        </md-field>
-      </div>
-    </md-card-content>
-  </md-card>
+  <div v-if="!$apolloData.queries.users_permission.loading">
+    <md-card>
+      <md-card-header
+        style="background-color: black; color: white; text-align: center; font-size: 1.5rem"
+      >Schedule Management</md-card-header>
+      <md-card-content>
+        <div class="setting">
+          <p style="margin: 0 2rem">Add</p>
+          <sui-button @click.native="toggle">
+            <font-awesome-icon icon="plus-circle" />
+          </sui-button>
+        </div>
+        <sui-modal v-model="open">
+          <sui-modal-header class="form-header">Add user</sui-modal-header>
+          <sui-modal-content image>
+            <div class="md-layout">
+              <!-- Name -->
+              <div class="md-layout-item md-size-100">
+                <md-field>
+                  <label>Staff</label>
+                  <sui-dropdown
+                    fluid
+                    selection
+                    :options="emp_list()"
+                    v-model="selected_emp_id"
+                    style="margin-top: 2.5rem"
+                  />
+                </md-field>
+              </div>
+            </div>
+          </sui-modal-content>
+          <sui-modal-actions>
+            <sui-button positive @click.native="addEmpPermission()">Add</sui-button>
+          </sui-modal-actions>
+        </sui-modal>
+        <!-- Show after add -->
+        <div class="md-layout-item md-size-100 md-size-50">
+          <md-field>
+            <md-table md-card>
+              <md-table-row v-for="user in users_permission" v-bind:key="user.user.id">
+                <md-table-cell md-label="Branch">{{ user.user.name }}</md-table-cell>
+                <md-table-cell md-label="Email">{{ user.user.email }}</md-table-cell>
+                <md-table-cell md-label="remove" class="edit_button">
+                  <sui-button @click.native="deletePermission(user.id)">
+                    <font-awesome-icon icon="times-circle" />
+                  </sui-button>
+                </md-table-cell>
+              </md-table-row>
+            </md-table>
+          </md-field>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
+  <div v-else>
+    <div class="md-layout">
+      <h2>is loading...</h2>
+    </div>
+  </div>
 </template>
 <script>
-import json from "./../../data/settingbranches.json";
+import gql from "graphql-tag";
+
+const ADD_PERMISSION = gql`
+  mutation($user_id: Int!, $permission: Int!) {
+    createPermission(input: { user_id: $user_id, permission: $permission }) {
+      id
+    }
+  }
+`;
+
+const DELETE_PERMISSION = gql`
+  mutation($id: ID!) {
+    deletePermission(id: $id) {
+      id
+    }
+  }
+`;
 export default {
   name: "setting-schedule",
   data() {
     return {
       open: false,
-      myJson: json
+      selected_emp_id: ""
     };
   },
   methods: {
     toggle() {
       this.open = !this.open;
+    },
+    emp_list() {
+      if (!this.is_Null_or_Undefined(this.$apolloData.data.users_type)) {
+        return this.$apolloData.data.users_type.map(emp => {
+          return {
+            value: emp.id,
+            text: emp.name
+          };
+        });
+      }
+    },
+    is_Null_or_Undefined(array) {
+      return array === null || array === undefined ? true : false;
+    },
+    addEmpPermission() {
+      const user_id = this.selected_emp_id;
+
+      this.$apollo
+        .mutate({
+          mutation: ADD_PERMISSION,
+          variables: {
+            user_id: user_id,
+            permission: 2
+          }
+        })
+        .then(() => {
+          this.$apollo.queries.users_permission.refetch();
+          this.toggle();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    deletePermission(id) {
+      this.$apollo
+        .mutate({
+          mutation: DELETE_PERMISSION,
+          variables: {
+            id: id
+          }
+        })
+        .then(() => {
+          this.$apollo.queries.users_permission.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+  },
+  apollo: {
+    users_type: gql`
+      {
+        users_type(type: 2) {
+          id
+          name
+        }
+      }
+    `,
+    users_permission: gql`
+      {
+        users_permission(permission: 2) {
+          id
+          user {
+            id
+            name
+            email
+          }
+        }
+      }
+    `
   }
 };
 </script>
