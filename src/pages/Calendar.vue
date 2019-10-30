@@ -67,6 +67,7 @@
 
 <script>
 import gql from "graphql-tag";
+import { $user } from "../components/user_info";
 
 export default {
   data() {
