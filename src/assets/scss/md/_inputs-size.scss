@@ -79,6 +79,9 @@ output {
   min-height: ($mdb-input-line-height-computed + $mdb-input-font-size-base);
 }
 
+.photoInput {
+  margin: 0 0 0 5rem;
+}
 
 // Form control sizing
 //

@@ -19,6 +19,7 @@
                   <md-field>
                     <label>Photo</label>
                     <input
+                      class="photoInput"
                       type="file"
                       @change="onFileSelectedCreate($event)"
                       accept="image/*"
@@ -137,10 +138,11 @@
               <sui-modal-content image>
                 <div class="md-layout">
                   <!-- Photo -->
-                  <div class="md-layout-item md-size-100">
+                  <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field>
                       <label>Photo</label>
                       <input
+                        class="photoInput"
                         type="file"
                         @change="onFileSelectedUpdate($event)"
                         accept="image/*"
@@ -222,7 +224,7 @@
                     </md-field>
                   </div>
 
-                  <div class="md-layout-item md-size-100">
+                  <div class="md-layout-item md-small-size-100 md-size-30">
                     <md-card-media md-medium>
                       <img :src="updateHotdealParams.image" />
                     </md-card-media>
