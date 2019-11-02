@@ -334,7 +334,7 @@ export default {
       data.append("cus_rank_id", this.createHotdealParams.cus_rank_id);
       data.append(
         "image",
-        "http://127.0.0.1:8000/uploads/hotdeals/" +
+        "http://oasisvn.tk:8888/uploads/hotdeals/" +
           this.createHotdealParams.selectedPhoto.name
       );
       data.append("start_date", this.createHotdealParams.start_date);
@@ -359,7 +359,7 @@ export default {
       data.append("cus_rank_id", this.updateHotdealParams.cus_rank_id);
       data.append(
         "image",
-        "http://127.0.0.1:8000/uploads/hotdeals/" +
+        "http://oasisvn.tk:8888/uploads/hotdeals/" +
           this.updateHotdealParams.selectedPhoto.name
       );
       data.append("start_date", this.updateHotdealParams.start_date);
