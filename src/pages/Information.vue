@@ -13,7 +13,7 @@
           <sui-tab-pane title="Services" icon="opencart">
             <service></service>
           </sui-tab-pane>
-          <sui-tab-pane title="Staffs" icon="users">
+          <sui-tab-pane title="Staff" icon="users">
             <staff></staff>
           </sui-tab-pane>
           <sui-tab-pane title="Working Times" icon="clock">

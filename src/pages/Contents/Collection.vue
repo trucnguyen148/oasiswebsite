@@ -33,7 +33,7 @@
           </sui-modal>
         </div>
 
-        <!-- Show after add PRICE LIST-->
+        <!-- Show after add COLLECTION-->
         <ul v-for="collection in collections" v-bind:key="collection.id">
           <div class="md-layout-item md-size-100">
             <md-field>
@@ -60,22 +60,24 @@
           <sui-modal-content image>
             <div class="md-layout">
               <!-- Photo -->
-              <div class="md-layout-item md-size-100">
+              <div>
                 <md-field>
                   <div v-if="collection.id !== null">
-                    <label>Photo</label>
                     <div v-if="collection.id !== null">
+                      <div class="md-layout">
                       <md-card-media
-                        md-medium
+                        class="md-layout-item md-small-size md-size-25"
                         v-for="image in collection.images"
                         v-bind:key="image.id"
                       >
                         <img :src="image.image" />
                       </md-card-media>
+                      </div>
                     </div>
                     <div v-else>
                       <label>is Loading...</label>
                     </div>
+                    
                   </div>
 
                   <div
