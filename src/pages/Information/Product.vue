@@ -153,8 +153,10 @@
             </md-card>
         </div>
         <div v-else>
-    <div class="md-layout"><h2>is loading...</h2></div>
-  </div>
+            <div class="md-photo-loading">
+                <img src="@/../public/logo.png"/>
+            </div>
+        </div>
 </template>
 
 

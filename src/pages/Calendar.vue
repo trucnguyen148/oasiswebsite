@@ -58,8 +58,8 @@
       </md-card>
     </div>
     <div v-else class="content">
-      <div class="md-layout">
-        <h2>is loading...</h2>
+      <div class="md-photo-loading">
+        <img src="@/../public/logo.png"/>
       </div>
     </div>
   </div>
