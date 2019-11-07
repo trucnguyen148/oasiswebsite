@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!$apolloData.queries.bookings_progress.loading">
+  <div v-if="!$apolloData.queries.collections.loading">
     <!-- PRICE LIST -->
     <md-card>
       <md-card-header
@@ -18,21 +18,7 @@
               <div class="md-layout-item md-size-100">
                 <md-field>
                   <label>Name</label>
-                  <md-input v-model="name" type="text" required></md-input>
-                </md-field>
-              </div>
-              <!-- Descriptions -->
-              <div class="md-layout-item md-size-100">
-                <md-field>
-                  <label>Descriptions</label>
-                  <md-textarea v-model="autogrow" md-autogrow md-counter="250" required></md-textarea>
-                </md-field>
-              </div>
-              <!-- Photo -->
-              <div class="md-layout-item md-size-100">
-                <md-field>
-                  <label>Photo</label>
-                  <md-file v-model="multiple" multiple accept="image/*" required />
+                  <md-input v-model="addCollectionParams.name" type="text" required></md-input>
                 </md-field>
               </div>
             </sui-modal-content>
@@ -40,7 +26,7 @@
               <sui-button
                 data-background-color="pink"
                 positive
-                @click.native="toggle"
+                @click.native="addCollection"
                 class="ui button size middle"
               >Add</sui-button>
             </sui-modal-actions>
@@ -48,17 +34,16 @@
         </div>
 
         <!-- Show after add PRICE LIST-->
-        <ul v-for="booking in booking_list" v-bind:key="booking.id">
+        <ul v-for="collection in collections" v-bind:key="collection.id">
           <div class="md-layout-item md-size-100">
             <md-field>
               <md-table md-card>
                 <md-table-row>
-                  <md-table-cell md-label="ID">{{booking.id}}</md-table-cell>
-                  <md-table-cell md-label="Description">{{booking.cus.name}}</md-table-cell>
-                  <md-table-cell md-label="Date">{{booking.date_time}}</md-table-cell>
-                  <md-table-cell md-label="Pictures">{{booking.collections.length | amount}}</md-table-cell>
+                  <md-table-cell md-label="ID">{{collection.id}}</md-table-cell>
+                  <md-table-cell md-label="Description">{{collection.name}}</md-table-cell>
+                  <md-table-cell md-label="Pictures">{{collection.images.length | amount}}</md-table-cell>
                   <md-table-cell md-label="remove" class="edit_button">
-                    <sui-button @click.native="edit(booking.id)">
+                    <sui-button @click.native="edit(collection.id)">
                       <font-awesome-icon icon="edit" />
                     </sui-button>
                   </md-table-cell>
@@ -77,12 +62,12 @@
               <!-- Photo -->
               <div class="md-layout-item md-size-100">
                 <md-field>
-                  <div v-if="selectedBooking.id !== null">
+                  <div v-if="collection.id !== null">
                     <label>Photo</label>
-                    <div v-if="selectedBooking.id !== null">
+                    <div v-if="collection.id !== null">
                       <md-card-media
                         md-medium
-                        v-for="image in selectedBooking.images"
+                        v-for="image in collection.images"
                         v-bind:key="image.id"
                       >
                         <img :src="image.image" />
@@ -91,6 +76,23 @@
                     <div v-else>
                       <label>is Loading...</label>
                     </div>
+                  </div>
+
+                  <div
+                    v-if="collection.images == null || collection.images.length == 0"
+                    class="md-layout-item md-small-size-100 md-size-50"
+                  >
+                    <md-field>
+                      <input
+                        class="photoInput"
+                        type="file"
+                        @change="onFileSelectedUpdate($event)"
+                        accept="image/*"
+                        required
+                        multiple
+                      />
+                    </md-field>
+                    <sui-button positive @click.native="uploadImages(collection.id)">Upload</sui-button>
                   </div>
                 </md-field>
               </div>
@@ -115,10 +117,21 @@ import gql from "graphql-tag";
 import { URL, makeRequest } from "../../components/api";
 
 const GET_COLLECTION = gql`
-  query($booking_id: Int!) {
-    collection_booking(booking_id: $booking_id) {
+  query($id: ID!) {
+    collection(id: $id) {
       id
-      image
+      images {
+        id
+        image
+      }
+    }
+  }
+`;
+
+const ADD_COLLECTION = gql`
+  mutation($name: String!) {
+    createCollection(input: { name: $name }) {
+      id
     }
   }
 `;
@@ -129,27 +142,24 @@ export default {
     return {
       open: false,
       openEdit: false,
-      selectedBooking: {
+      collection: {
         id: null,
+        images: null
+      },
+      addCollectionParams: {
+        name: null
+      },
+      addImages: {
         images: null
       }
     };
   },
   filters: {
     amount: function(length) {
-        if (length == 1) {
-            return "1 picture"
-        }else{
-            return length + " pictures"
-        }
-    }
-  },
-  computed: {
-    booking_list() {
-      if (this.$apolloData.data.bookings_progress !== undefined) {
-        return this.$apolloData.data.bookings_progress.filter(booking => {
-          return booking.collections.length > 0;
-        });
+      if (length <= 1) {
+        return length + " picture";
+      } else {
+        return length + " pictures";
       }
     }
   },
@@ -161,39 +171,91 @@ export default {
       if (id === undefined) {
         this.openEdit = !this.openEdit;
       } else {
-        this.selectedBooking.id = id;
+        this.collection.id = id;
         this.get_collection(id);
         this.openEdit = !this.openEdit;
       }
     },
-    get_collection(booking_id) {
+    onFileSelectedUpdate(event) {
+      console.log(event.target.files);
+      return (this.addImages.images = event.target.files);
+    },
+    get_collection(id) {
       // Call to the graphql mutation
       this.$apollo
         .query({
           query: GET_COLLECTION,
           variables: {
-            booking_id: booking_id
+            id: id
           }
         })
         .then(data => {
-          return (this.selectedBooking.images = data.data.collection_booking);
+          this.collection.id = data.data.collection.id;
+          this.collection.images = data.data.collection.images;
         })
         .catch(error => {
           console.log(error);
         });
+    },
+    addCollection() {
+      const name = this.addCollectionParams.name;
+      // We clear it early to give the UI a snappy feel
+      this.addCollectionParams = {
+        name: ""
+      };
+      // Call to the graphql mutation
+      this.$apollo
+        .mutate({
+          mutation: ADD_COLLECTION,
+          variables: {
+            name: name
+          }
+        })
+        .then(data => {
+          this.toggle();
+          this.$apollo.queries.collections.refetch();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    async uploadImages(collection_id) {
+      if (this.addImages.images === null || this.addImages.length === 0) {
+        alert("Select images");
+      } else {
+        const images = this.addImages.images;
+
+        for (let i = 0; i < images.length; i++) {
+          let data = new FormData();
+          data.append("imageFile", images[i]);
+          data.append("collection_id", collection_id);
+          data.append(
+            "image",
+            "http://oasisvn.tk:8888/uploads/collections/" + images[i].name
+          );
+
+          await makeRequest("POST", URL + "collection-images/create", data)
+            .then(response => {
+              console.log("Done upload pic" + i)
+            })
+            .catch(err => {
+              console.error("There was an error in hotdeal!", err.statusText);
+            });
+        }
+        this.edit()
+        this.$apollo.queries.collections.refetch();
+      }
     }
   },
   apollo: {
-    bookings_progress: gql`
+    collections: gql`
       {
-        bookings_progress(progress: 2) {
+        collections {
           id
-          date_time
-          cus {
-            name
-          }
-          collections {
+          name
+          images {
             id
+            image
           }
         }
       }
